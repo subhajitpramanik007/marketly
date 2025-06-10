@@ -1,0 +1,19 @@
+{
+  "name": "@marketly/logger",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@marketly/config": "workspace:*",
+    "pino": "^8.0.0",
+    "pino-pretty": "^10.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0"
+  }
+}
