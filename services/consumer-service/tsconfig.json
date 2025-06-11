@@ -3,14 +3,19 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
     "baseUrl": ".",
+    "paths": {
+      "@/docs/*": ["../../docs/*"]
+    }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "swagger.js"],
   "references": [
     {
       "path": "../../packages/typescript-config/base.json"

@@ -19,11 +19,9 @@ export function zodValidation<T extends z.ZodTypeAny>(
 export function zodValidationMiddleware<T>(schema: z.ZodSchema<T>) {
   return async (req: Request, _: Response, next: NextFunction) => {
     try {
-      console.log('zodValidationMiddleware', req.body);
       req.body = zodValidation(schema, req.body);
       next();
     } catch (error: any) {
-      console.log(error);
       next(new ValidationError(error.message));
     }
   };

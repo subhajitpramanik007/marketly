@@ -21,15 +21,18 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use(cookieParser());
 
-app.use('/api/consumers/health', async (req, res) => {
-  res.status(200).json({
-    status: 'ok',
-    message: 'Consumer service is healthy',
-  });
-});
+// Routes
+import router from './routes';
 
+app.use('/api/consumers', router);
 
+// Swagger docs
+import swaggerUi from 'swagger-ui-express';
+import consumersDocs from '@/docs/consumers-swagger.json';
 
+app.use('/api/consumers/docs', swaggerUi.serve, swaggerUi.setup(consumersDocs, { explorer: true }));
+
+// Error handlers
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
 

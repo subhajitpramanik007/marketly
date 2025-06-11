@@ -7,7 +7,7 @@ async function bootstrap() {
   try {
     app.listen(PORT, () => {
       logger.info(`Consumers service at http://localhost:${PORT}`);
-      logger.info(`Consumers service at http://localhost:${PORT}/api/consumers/health`);
+      logger.info(`Consumers service docs at http://localhost:${PORT}/api/consumers/docs`);
     });
   } catch (error) {
     console.log(error);
