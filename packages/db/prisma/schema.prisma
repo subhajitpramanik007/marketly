@@ -54,12 +54,13 @@ model Account {
 }
 
 model Consumer {
-    id         String  @id @default(uuid())
-    first_name String
-    last_name  String?
-    email      String  @unique
-    phone      String?
-    account_id String  @unique
+    id             String  @id @default(uuid())
+    first_name     String
+    last_name      String?
+    email          String  @unique
+    phone          String?
+    account_id     String  @unique
+    email_verified Boolean @default(false)
 
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
@@ -99,7 +100,9 @@ model Vendor {
 
     created_by_id String @unique // account id
 
-    staffs VendorStaff[]
+    staffs               VendorStaff[]
+    email_verified       Boolean       @default(false)
+    is_verified_by_admin Boolean       @default(false)
 
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
@@ -131,6 +134,52 @@ model VendorStaff {
     updated_at DateTime @updatedAt
 
     @@map("vendor_staffs")
+}
+model Admin {
+  id         String       @id @default(uuid())
+  username   String       @unique
+  password   String
+
+  staffs     AdminStaff[]
+
+  last_login_at DateTime?
+  last_active_at DateTime?
+
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  deleted_at DateTime?
+
+  @@map("admins")
+}
+
+enum AdminStaffPermission {
+  SuperAdmin
+  Moderator
+  Support
+}
+
+model AdminStaff {
+  id           String             @id @default(uuid())
+  username     String
+  password     String
+
+  permission   AdminStaffPermission
+
+  admin_id     String?           
+  admin        Admin?             @relation(fields: [admin_id], references: [id])
+
+  added_by_id  String?            
+  added_by     AdminStaff?        @relation("AddedBy", fields: [added_by_id], references: [id])
+  added_staffs AdminStaff[]       @relation("AddedBy")
+
+  last_login_at DateTime?
+  last_active_at DateTime?
+
+  created_at   DateTime           @default(now())
+  updated_at   DateTime           @updatedAt
+  deleted_at   DateTime?
+
+  @@map("admin_staffs")
 }
 
 model Session {
