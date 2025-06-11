@@ -8,7 +8,7 @@ export const envSchema = z.object({
   CORS_ORIGIN: z
     .string()
     .transform(s => s.split(','))
-    .array(),
+    .default('http://localhost:3000'),
 
   // Auth
   JWT_SECRET: z.string().min(10),

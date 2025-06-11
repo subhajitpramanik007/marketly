@@ -1,0 +1,36 @@
+{
+  "name": "@marketly/http",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./api-error": {
+      "import": "./dist/api-error/index.js",
+      "require": "./dist/api-error/index.js"
+    },
+    "./error-handler": {
+      "import": "./dist/error-handler/index.js",
+      "require": "./dist/error-handler/index.js"
+    },
+    "./middleware": {
+      "import": "./dist/middleware/index.js",
+      "require": "./dist/middleware/index.js"
+    },
+    "./api-response": {
+      "import": "./dist/api-response/index.js",
+      "require": "./dist/api-response/index.js"
+    }
+  }
+}
