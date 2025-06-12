@@ -5,8 +5,8 @@ const router = Router();
 router.get(
   '/',
   /**
-   * #swagger.tags = ['Healthcheck']
-   * #swagger.summary = 'Healthcheck'
+   * #swagger.tags = ['Consumers - Healthcheck']
+   * #swagger.summary = 'Consumer healthcheck'
    * #swagger.responses[200] = { description: 'Consumer service is healthy' }
    */
   async (req, res) => {

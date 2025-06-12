@@ -49,7 +49,7 @@ async function bootstrap() {
   try {
     app.listen(PORT, () => {
       logger.info(`API Gateway at http://localhost:${PORT}`);
-      logger.info(`API Gateway at http://localhost:${PORT}/api/health`);
+      logger.info(`API Gateway docs at http://localhost:${PORT}/api/docs`);
     });
   } catch (error) {
     logger.error(error);

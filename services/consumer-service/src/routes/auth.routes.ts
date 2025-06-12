@@ -24,7 +24,7 @@ const router = Router();
 router.route('/register').post(
   zodValidationMiddleware(registerSchema),
   /**
-   * #swagger.tags = ['Auth']
+   * #swagger.tags = ['Consumers - Auth']
    * #swagger.summary = 'User registration'
    * #swagger.parameters['body'] = {
       in: 'body',
@@ -45,7 +45,7 @@ router.route('/register').post(
 router.route('/verify-email').post(
   zodValidationMiddleware(verifyUserRegistrationOtpSchema),
   /**
-   * #swagger.tags = ['Auth']
+   * #swagger.tags = ['Consumers - Auth']
    * #swagger.summary = 'Verify user registration otp'
    * #swagger.parameters['body'] = {
       in: 'body',
@@ -67,7 +67,7 @@ router.route('/verify-email').post(
 router.route('/resend-verification-email').post(
   zodValidationMiddleware(resendUserRegistrationOtpSchema),
   /**
-   * #swagger.tags = ['Auth']
+   * #swagger.tags = ['Consumers - Auth']
    * #swagger.summary = 'Resend user registration otp'
    * #swagger.parameters['body'] = {
       in: 'body',
@@ -88,7 +88,7 @@ router.route('/resend-verification-email').post(
 router.route('/login').post(
   zodValidationMiddleware(loginSchema),
   /**
-   * #swagger.tags = ['Auth']
+   * #swagger.tags = ['Consumers - Auth']
    * #swagger.summary = 'User login'
    * #swagger.parameters['body'] = {
       in: 'body',
@@ -106,7 +106,7 @@ router.route('/login').post(
 
 router.route('/logout').post(
   /**
-   * #swagger.tags = ['Auth']
+   * #swagger.tags = ['Consumers - Auth']
    * #swagger.summary = 'User logout'
    * #swagger.responses[200] = { description: 'User logged out successfully' }
    * */
@@ -116,7 +116,7 @@ router.route('/logout').post(
 router.route('/forgot-password').post(
   zodValidationMiddleware(forgotPasswordSchema),
   /**
-   * #swagger.tags = ['Auth']
+   * #swagger.tags = ['Consumers - Auth']
    * #swagger.summary = 'Forgot password'
    * #swagger.parameters['body'] = {
       in: 'body',
@@ -134,7 +134,7 @@ router.route('/forgot-password').post(
 router.route('/reset-password').post(
   zodValidationMiddleware(resetPasswordSchema),
   /**
-   * #swagger.tags = ['Auth']
+   * #swagger.tags = ['Consumers - Auth']
    * #swagger.summary = 'Reset password'
    * #swagger.parameters['body'] = {
       in: 'body',

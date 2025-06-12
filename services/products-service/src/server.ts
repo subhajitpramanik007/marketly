@@ -1,7 +1,6 @@
 import { logger } from '@marketly/logger';
 import app from './app';
-
-const PORT = process.env.PORT || 6002;
+import { PORT } from './constants';
 
 async function bootstrap() {
   try {

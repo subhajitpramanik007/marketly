@@ -1,12 +1,12 @@
 {
-  "name": "consumers-service",
+  "name": "vendor-service",
   "version": "1.0.0",
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc -b",
     "start": "node dist/server.js",
-    "swagger": "node swagger.js"
+    "swagger": "node src/swagger.js"
   },
   "dependencies": {
     "@marketly/config": "workspace:*",
@@ -17,8 +17,7 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1",
-    "zod": "^3.25.57"
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.9",

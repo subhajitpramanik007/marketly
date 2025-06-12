@@ -10,7 +10,7 @@ const swaggerOptions = {
   basePath: '/api/consumers',
 };
 
-const outputFile = "../../docs/consumers-swagger.json";
+const outputFile = '../../docs/services/consumers-swagger.json';
 const routes = ['./src/routes/index.ts'];
 
 swaggerAutoGen(outputFile, routes, swaggerOptions);

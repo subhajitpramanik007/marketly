@@ -5,21 +5,25 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc -b",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "swagger": "node src/swagger.js"
   },
   "dependencies": {
-    "@marketly/http": "workspace:*",
     "@marketly/config": "workspace:*",
+    "@marketly/http": "workspace:*",
     "@marketly/logger": "workspace:*",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.0.0",
+    "@types/swagger-ui-express": "^4.1.8",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   }

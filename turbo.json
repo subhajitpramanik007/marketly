@@ -16,6 +16,14 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "dev:apps": {
+      "cache": false,
+      "persistent": true
+    },
+    "swagger": {
+      "cache": true,
+      "persistent": true
     }
   }
 }

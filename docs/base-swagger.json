@@ -1,22 +1,67 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Marketly Consumers API",
-    "description": "Marketly Consumers API",
+    "title": "Marketly API Gateway",
+    "description": "Marketly API Gateway",
     "version": "1.0.0"
   },
-  "host": "localhost:6001",
-  "basePath": "/api/consumers",
+  "host": "localhost:8080",
+  "basePath": "/",
   "schemes": [
     "http"
   ],
+  "consumes": [],
+  "produces": [],
+  "tags": [],
   "paths": {
-    "/health/": {
+    "/api/admin/health/": {
       "get": {
         "tags": [
-          "Healthcheck"
+          "Admin - Healthcheck"
         ],
         "summary": "Healthcheck",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Admin service is healthy"
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "ApiGateway - Welcome"
+        ],
+        "summary": "Welcome",
+        "description": "Welcome to Marketly API Gateway",
+        "responses": {
+          "200": {
+            "description": "Welcome to Marketly API Gateway"
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "tags": [
+          "ApiGateway - Healthcheck"
+        ],
+        "summary": "Healthcheck",
+        "description": "Healthcheck",
+        "responses": {
+          "200": {
+            "description": "API Gateway is healthy"
+          }
+        }
+      }
+    },
+    "/api/consumers/health/": {
+      "get": {
+        "tags": [
+          "Consumers - Healthcheck"
+        ],
+        "summary": "Consumer healthcheck",
         "description": "",
         "responses": {
           "200": {
@@ -25,10 +70,10 @@
         }
       }
     },
-    "/auth/register": {
+    "/api/consumers/auth/register": {
       "post": {
         "tags": [
-          "Auth"
+          "Consumers - Auth"
         ],
         "summary": "User registration",
         "description": "",
@@ -68,10 +113,10 @@
         }
       }
     },
-    "/auth/verify-email": {
+    "/api/consumers/auth/verify-email": {
       "post": {
         "tags": [
-          "Auth"
+          "Consumers - Auth"
         ],
         "summary": "Verify user registration otp",
         "description": "",
@@ -115,10 +160,10 @@
         }
       }
     },
-    "/auth/resend-verification-email": {
+    "/api/consumers/auth/resend-verification-email": {
       "post": {
         "tags": [
-          "Auth"
+          "Consumers - Auth"
         ],
         "summary": "Resend user registration otp",
         "description": "",
@@ -158,10 +203,10 @@
         }
       }
     },
-    "/auth/login": {
+    "/api/consumers/auth/login": {
       "post": {
         "tags": [
-          "Auth"
+          "Consumers - Auth"
         ],
         "summary": "User login",
         "description": "",
@@ -193,10 +238,10 @@
         }
       }
     },
-    "/auth/logout": {
+    "/api/consumers/auth/logout": {
       "post": {
         "tags": [
-          "Auth"
+          "Consumers - Auth"
         ],
         "summary": "User logout",
         "description": "",
@@ -207,10 +252,10 @@
         }
       }
     },
-    "/auth/forgot-password": {
+    "/api/consumers/auth/forgot-password": {
       "post": {
         "tags": [
-          "Auth"
+          "Consumers - Auth"
         ],
         "summary": "Forgot password",
         "description": "",
@@ -238,10 +283,10 @@
         }
       }
     },
-    "/auth/reset-password": {
+    "/api/consumers/auth/reset-password": {
       "post": {
         "tags": [
-          "Auth"
+          "Consumers - Auth"
         ],
         "summary": "Reset password",
         "description": "",
@@ -277,6 +322,34 @@
         "responses": {
           "200": {
             "description": "Password reset successfully"
+          }
+        }
+      }
+    },
+    "/api/products/health/": {
+      "get": {
+        "tags": [
+          "Products - Healthcheck"
+        ],
+        "summary": "Products Healthcheck",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Products service is healthy"
+          }
+        }
+      }
+    },
+    "/api/vendors/health/": {
+      "get": {
+        "tags": [
+          "Vendor - Healthcheck"
+        ],
+        "summary": "Vendor Healthcheck",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Vendor service is healthy"
           }
         }
       }
