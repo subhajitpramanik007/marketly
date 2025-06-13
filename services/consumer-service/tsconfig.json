@@ -10,12 +10,9 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/docs/*": ["../../docs/*"]
-    }
+    "baseUrl": "."
   },
-  "include": ["src/**/*", "swagger.js"],
+  "include": ["src/**/*"],
   "references": [
     {
       "path": "../../packages/typescript-config/base.json"

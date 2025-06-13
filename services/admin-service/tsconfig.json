@@ -15,10 +15,5 @@
       "@/docs/*": ["../../docs/*"]
     }
   },
-  "include": ["src/**/*", "swagger.js"],
-  "references": [
-    {
-      "path": "../../packages/typescript-config/base.json"
-    }
-  ]
+  "include": ["./src/**/*"]
 }
