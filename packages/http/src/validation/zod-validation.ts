@@ -19,7 +19,18 @@ export function zodValidation<T extends z.ZodTypeAny>(
 export function zodValidationMiddleware<T>(schema: z.ZodSchema<T>) {
   return async (req: Request, _: Response, next: NextFunction) => {
     try {
-      req.body = zodValidation(schema, req.body);
+      zodValidation(schema, req.body);
+      next();
+    } catch (error: any) {
+      next(new ValidationError(error.message));
+    }
+  };
+}
+
+export function zodValidationQueryMiddleware<T>(schema: z.ZodSchema<T>) {
+  return async (req: Request, _: Response, next: NextFunction) => {
+    try {
+      zodValidation(schema, req.query);
       next();
     } catch (error: any) {
       next(new ValidationError(error.message));

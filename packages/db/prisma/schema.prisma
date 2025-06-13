@@ -46,7 +46,9 @@ model Account {
 
     password UserPassword? @relation(fields: [id], references: [user_id])
 
-    created_at DateTime @default(now())
+    created_at    DateTime      @default(now())
+    vendor_staffs VendorStaff[]
+    consumers      Consumer[]
 
     @@index([email, role])
     @@index([email])
@@ -58,8 +60,9 @@ model Consumer {
     first_name     String
     last_name      String?
     email          String  @unique
-    phone          String?
+    phone_number   String?
     account_id     String  @unique
+    account        Account @relation(fields: [account_id], references: [id])
     email_verified Boolean @default(false)
 
     created_at DateTime @default(now())
@@ -95,8 +98,8 @@ model Vendor {
     store_logo      Image?  @relation("vendor_logo", fields: [store_logo_id], references: [id])
     store_banner    Image?  @relation("vendor_banner", fields: [store_banner_id], references: [id])
 
-    email String   @unique
-    phone String[]
+    email         String   @unique
+    phone_numbers String[]
 
     created_by_id String @unique // account id
 
@@ -117,11 +120,14 @@ enum VendorPermission {
 }
 
 model VendorStaff {
-    id         String @id @default(uuid())
-    first_name String
-    last_name  String
-    email      String @unique
-    phone      String
+    id           String  @id @default(uuid())
+    first_name   String
+    last_name    String
+    email        String  @unique
+    phone_number String
+    password     String
+    account_id   String
+    account      Account @relation(fields: [account_id], references: [id])
 
     vendor_id String
     vendor    Vendor @relation(fields: [vendor_id], references: [id])
@@ -133,53 +139,56 @@ model VendorStaff {
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
 
+    @@index([vendor_id, permission])
+    @@index([vendor_id, id])
     @@map("vendor_staffs")
 }
+
 model Admin {
-  id         String       @id @default(uuid())
-  username   String       @unique
-  password   String
+    id       String @id @default(uuid())
+    username String @unique
+    password String
 
-  staffs     AdminStaff[]
+    staffs AdminStaff[]
 
-  last_login_at DateTime?
-  last_active_at DateTime?
+    last_login_at  DateTime?
+    last_active_at DateTime?
 
-  created_at DateTime     @default(now())
-  updated_at DateTime     @updatedAt
-  deleted_at DateTime?
+    created_at DateTime  @default(now())
+    updated_at DateTime  @updatedAt
+    deleted_at DateTime?
 
-  @@map("admins")
+    @@map("admins")
 }
 
 enum AdminStaffPermission {
-  SuperAdmin
-  Moderator
-  Support
+    SuperAdmin
+    Moderator
+    Support
 }
 
 model AdminStaff {
-  id           String             @id @default(uuid())
-  username     String
-  password     String
+    id       String @id @default(uuid())
+    username String
+    password String
 
-  permission   AdminStaffPermission
+    permission AdminStaffPermission
 
-  admin_id     String?           
-  admin        Admin?             @relation(fields: [admin_id], references: [id])
+    admin_id String?
+    admin    Admin?  @relation(fields: [admin_id], references: [id])
 
-  added_by_id  String?            
-  added_by     AdminStaff?        @relation("AddedBy", fields: [added_by_id], references: [id])
-  added_staffs AdminStaff[]       @relation("AddedBy")
+    added_by_id  String?
+    added_by     AdminStaff?  @relation("AddedBy", fields: [added_by_id], references: [id])
+    added_staffs AdminStaff[] @relation("AddedBy")
 
-  last_login_at DateTime?
-  last_active_at DateTime?
+    last_login_at  DateTime?
+    last_active_at DateTime?
 
-  created_at   DateTime           @default(now())
-  updated_at   DateTime           @updatedAt
-  deleted_at   DateTime?
+    created_at DateTime  @default(now())
+    updated_at DateTime  @updatedAt
+    deleted_at DateTime?
 
-  @@map("admin_staffs")
+    @@map("admin_staffs")
 }
 
 model Session {
