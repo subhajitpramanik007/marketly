@@ -9,7 +9,8 @@
     "prepare": "husky",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "swagger": "turbo run swagger && cd apps/api-gateway && pnpm run swagger-merge"
+    "swagger": "turbo run swagger && cd apps/api-gateway && pnpm run swagger-merge",
+    "vendor-service": "pnpm dev --filter=api-gateway --filter=vendor-service"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,md,css,scss}": [

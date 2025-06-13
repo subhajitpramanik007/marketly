@@ -9,6 +9,8 @@
     "swagger": "node src/swagger.js"
   },
   "dependencies": {
+    "@marketly/auth": "workspace:*",
+    "@marketly/lib": "workspace:*",
     "@marketly/config": "workspace:*",
     "@marketly/db": "workspace:*",
     "@marketly/http": "workspace:*",

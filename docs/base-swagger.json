@@ -353,6 +353,689 @@
           }
         }
       }
+    },
+    "/api/vendors/auth/register": {
+      "post": {
+        "tags": [
+          "Vendors - Auth"
+        ],
+        "summary": "Vendor registration",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Vendor registration details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "storeName": {
+                  "type": "string",
+                  "example": "Store Name"
+                },
+                "firstName": {
+                  "type": "string",
+                  "example": "Owner Name"
+                },
+                "lastName": {
+                  "type": "string",
+                  "example": "Owner Last Name"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "rahul@example.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SecurePassword123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verify vendor registration otp"
+          }
+        }
+      }
+    },
+    "/api/vendors/auth/verify-email": {
+      "post": {
+        "tags": [
+          "Vendors - Auth"
+        ],
+        "summary": "Verify vendor registration otp",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Vendor registration details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "storeName": {
+                  "type": "string",
+                  "example": "Store Name"
+                },
+                "firstName": {
+                  "type": "string",
+                  "example": "Owner Name"
+                },
+                "lastName": {
+                  "type": "string",
+                  "example": "Owner Last Name"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "rahul@example.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SecurePassword123"
+                },
+                "otp": {
+                  "type": "string",
+                  "example": "123456"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Vendor created successfully"
+          }
+        }
+      }
+    },
+    "/api/vendors/auth/resend-verification-email": {
+      "post": {
+        "tags": [
+          "Vendors - Auth"
+        ],
+        "summary": "Resend vendor registration otp",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Vendor registration details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "storeName": {
+                  "type": "string",
+                  "example": "Store Name"
+                },
+                "firstName": {
+                  "type": "string",
+                  "example": "Owner Name"
+                },
+                "lastName": {
+                  "type": "string",
+                  "example": "Owner Last Name"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "rahul@example.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SecurePassword123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Vendor created successfully"
+          }
+        }
+      }
+    },
+    "/api/vendors/auth/login": {
+      "post": {
+        "tags": [
+          "Vendors - Auth"
+        ],
+        "summary": "Vendor login",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Vendor login details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "rahul@example.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SecurePassword123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vendor logged in successfully"
+          }
+        }
+      }
+    },
+    "/api/vendors/auth/logout": {
+      "post": {
+        "tags": [
+          "Vendors - Auth"
+        ],
+        "summary": "Vendor logout",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Vendor logged out successfully"
+          }
+        }
+      }
+    },
+    "/api/vendors/auth/refresh-token": {
+      "post": {
+        "tags": [
+          "Vendors - Auth"
+        ],
+        "summary": "Vendor refresh token",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Vendor refresh token"
+          }
+        }
+      }
+    },
+    "/api/vendors/auth/forgot-password": {
+      "post": {
+        "tags": [
+          "Vendors - Auth"
+        ],
+        "summary": "Forgot password",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Forgot password details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "rahul@example.com"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password reset otp sent successfully"
+          }
+        }
+      }
+    },
+    "/api/vendors/auth/reset-password": {
+      "post": {
+        "tags": [
+          "Vendors - Auth"
+        ],
+        "summary": "Reset password",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Reset password details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "rahul@example.com"
+                },
+                "otp": {
+                  "type": "string",
+                  "example": "123456"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SecurePassword123"
+                },
+                "confirmPassword": {
+                  "type": "string",
+                  "example": "SecurePassword123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password reset successfully"
+          }
+        }
+      }
+    },
+    "/api/vendors/{vendorId}/profile/": {
+      "get": {
+        "tags": [
+          "Vendors - Profile"
+        ],
+        "summary": "Vendor profile",
+        "description": "",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vendor profile"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Vendors - Profile"
+        ],
+        "summary": "Update vendor profile",
+        "description": "",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Vendor profile details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "storeName": {
+                  "type": "string",
+                  "example": "Store Name"
+                },
+                "firstName": {
+                  "type": "string",
+                  "example": "Owner Name"
+                },
+                "lastName": {
+                  "type": "string",
+                  "example": "Owner Last Name"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vendor profile updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Vendors - Profile"
+        ],
+        "summary": "Delete vendor profile",
+        "description": "",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Vendor account details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "storeName": {
+                  "type": "string",
+                  "example": "store name"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SecurePassword123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vendor profile deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/vendors/{vendorId}/profile/logo": {
+      "patch": {
+        "tags": [
+          "Vendors - Profile"
+        ],
+        "summary": "Update vendor logo",
+        "description": "",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Vendor logo details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "image": {
+                  "type": "string",
+                  "example": "image data"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vendor logo updated successfully"
+          }
+        }
+      }
+    },
+    "/api/vendors/{vendorId}/profile/banner": {
+      "patch": {
+        "tags": [
+          "Vendors - Profile"
+        ],
+        "summary": "Update vendor banner",
+        "description": "",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Vendor banner details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "image": {
+                  "type": "string",
+                  "example": "image data"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vendor banner updated successfully"
+          }
+        }
+      }
+    },
+    "/api/vendors/{vendorId}/staffs/": {
+      "get": {
+        "tags": [
+          "Vendors - Staffs"
+        ],
+        "summary": "Vendor staffs list by vendor id, only admin can access",
+        "description": "",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vendor staffs"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Vendors - Staffs"
+        ],
+        "summary": "Create vendor staff by vendor id, only admin can access",
+        "description": "",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Vendor staff details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string",
+                  "example": "Owner Name"
+                },
+                "lastName": {
+                  "type": "string",
+                  "example": "Owner Last Name"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "rahul@example.com"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "1234567890"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SecurePassword123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vendor staff created successfully"
+          }
+        }
+      }
+    },
+    "/api/vendors/{vendorId}/staffs/{staffId}": {
+      "get": {
+        "tags": [
+          "Vendors - Staffs"
+        ],
+        "summary": "Vendor staff by staff id, only admin can access",
+        "description": "",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "staffId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vendor staff"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Vendors - Staffs"
+        ],
+        "summary": "Update vendor staff by staff id, only admin can access",
+        "description": "",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "staffId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Vendor staff details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string",
+                  "example": "Owner Name"
+                },
+                "lastName": {
+                  "type": "string",
+                  "example": "Owner Last Name"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "rahul@example.com"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "1234567890"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vendor staff updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Vendors - Staffs"
+        ],
+        "summary": "Delete vendor staff by staff id, only admin can access",
+        "description": "",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "staffId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vendor staff deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/vendors/{vendorId}/staffs/{staffId}/permission": {
+      "patch": {
+        "tags": [
+          "Vendors - Staffs"
+        ],
+        "summary": "Update vendor staff permissions by staff id, only admin can access",
+        "description": "",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "staffId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Vendor staff permissions",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "permission": {
+                  "type": "string",
+                  "example": "Update permission"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vendor staff permissions updated successfully"
+          }
+        }
+      }
     }
   }
 }

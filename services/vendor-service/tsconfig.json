@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
+    // "declaration": true,
+    // "declarationMap": true,
     "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "outDir": "dist",
     "strict": true,
@@ -10,15 +12,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/docs/*": ["../../docs/*"]
-    }
+    "baseUrl": "."
   },
-  "include": ["src/**/*"],
-  "references": [
-    {
-      "path": "../../packages/typescript-config/base.json"
-    }
-  ]
+  "include": ["src/**/*"]
 }
