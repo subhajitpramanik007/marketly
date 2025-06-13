@@ -1,0 +1,42 @@
+{
+  "name": "@marketly/auth",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@marketly/config": "workspace:*",
+    "@marketly/db": "workspace:*",
+    "@marketly/http": "workspace:*",
+    "@marketly/lib": "workspace:*",
+    "@marketly/logger": "workspace:*",
+    "argon2": "^0.43.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "ms": "^2.1.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/ms": "^2.1.0"
+  },
+  "exports": {
+    "./constants": {
+      "import": "./dist/constants.js",
+      "require": "./dist/constants.js"
+    },
+    "./services": {
+      "import": "./dist/services/index.js",
+      "require": "./dist/services/index.js"
+    },
+    "./password": {
+      "import": "./dist/password.js",
+      "require": "./dist/password.js"
+    },
+    "./middleware": {
+      "import": "./dist/middlewares/index.js",
+      "require": "./dist/middlewares/index.js"
+    }
+  }
+}
