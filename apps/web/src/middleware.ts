@@ -1,6 +1,6 @@
+import { cookies } from 'next/headers';
 import { type NextRequest, NextResponse } from 'next/server';
-
-export const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'localhost:3000';
+import { rootDomain } from './lib/utils';
 
 function extractSubdomain(request: NextRequest): string | null {
   const url = request.url;
@@ -32,28 +32,43 @@ function extractSubdomain(request: NextRequest): string | null {
 }
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, origin } = request.nextUrl;
   const subdomain = extractSubdomain(request);
+  const cookieStore = await cookies();
+  const useAs = cookieStore.get('useAs')?.value;
 
-  // if (isAdmin) {
-  //   const baseUrl = request.nextUrl.origin.replace('localhost', `admin.localhost`);
-  //   return NextResponse.redirect(baseUrl);
-  // }
+  // Redirect to root domain if subdomain is set but no useAs cookie
+  //   if ((subdomain === 'admin' || subdomain === 'sellers') && !useAs) {
+  //     const baseDomainUrl = new URL(request.url);
+  //     baseDomainUrl.hostname = 'localhost';
+  //     baseDomainUrl.pathname = '/';
+  //     return NextResponse.rewrite(origin);
+  //   }
 
-  if (subdomain === 'admin') {
-    if (pathname === '/') {
-      return NextResponse.rewrite(new URL(`/admin`, request.url));
-    } else {
-      return NextResponse.rewrite(new URL(`/admin${pathname}`, request.url));
+  // Avoid redirect loop: only redirect if subdomain !== useAs and subdomain is not null
+  if (useAs && ['sellers', 'admin'].includes(useAs)) {
+    if (subdomain !== useAs) {
+      const redirectUrl = new URL(request.url);
+      redirectUrl.hostname = `${useAs}.localhost`; // Adjust for production if needed
+      return NextResponse.redirect(redirectUrl);
     }
   }
 
-  if (subdomain === 'vendors') {
-    if (pathname === '/') {
-      return NextResponse.rewrite(new URL(`/vendors`, request.url));
-    } else {
-      return NextResponse.rewrite(new URL(`/vendors${pathname}`, request.url));
-    }
+  // Rewrite logic
+  if (subdomain === 'admin') {
+    return NextResponse.rewrite(new URL(`/admin${pathname === '/' ? '' : pathname}`, request.url));
+  }
+
+  if (subdomain === 'sellers') {
+    return NextResponse.rewrite(
+      new URL(`/sellers${pathname === '/' ? '' : pathname}`, request.url),
+    );
+  }
+
+  if (!subdomain && useAs === 'consumer') {
+    return NextResponse.rewrite(
+      new URL(`/consumers${pathname === '/' ? '' : pathname}`, request.url),
+    );
   }
 
   return NextResponse.next();

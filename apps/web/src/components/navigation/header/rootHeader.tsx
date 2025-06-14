@@ -1,9 +1,27 @@
+'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Store } from 'lucide-react';
 import { HeaderLayout } from './headerLayout';
+import { setUserType as setUserTypeCookie } from '@/actions/setUserType.action';
+import { useRouter } from 'next/navigation';
 
 export const RootHeader = () => {
+  const router = useRouter();
+
+  async function setUserType(userType: 'consumer' | 'sellers' | 'admin') {
+    const result = await setUserTypeCookie(userType);
+
+    localStorage.setItem('useAs', userType);
+
+    if (result) {
+      if (userType === 'consumer') {
+        router.push('/auth/login');
+      }
+    }
+  }
+
   return (
     <HeaderLayout>
       <div className="flex h-16 items-center justify-between">
@@ -16,35 +34,27 @@ export const RootHeader = () => {
           </div>
         </div>
         <nav className="hidden md:flex items-center space-x-8">
-          <Link
-            href="#consumers"
-            className="text-sm font-medium hover:text-primary transition-colors"
-          >
-            For Consumers
-          </Link>
-          <Link
-            href="#vendors"
-            className="text-sm font-medium hover:text-primary transition-colors"
+          <div
+            className="text-sm font-medium hover:text-primary transition-colors cursor-pointer"
+            onClick={() => setUserType('sellers')}
           >
             For Vendors
-          </Link>
-          <Link
-            href="#administrators"
-            className="text-sm font-medium hover:text-primary transition-colors"
+          </div>
+          <div
+            className="text-sm font-medium hover:text-primary transition-colors cursor-pointer"
+            onClick={() => setUserType('admin')}
           >
             For Admins
-          </Link>
+          </div>
           <Link href="#about" className="text-sm font-medium hover:text-primary transition-colors">
             About
           </Link>
         </nav>
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="sm" onClick={() => {}}>
+          <Button variant="outline" onClick={() => setUserType('consumer')}>
             Sign In
           </Button>
-          <Button size="sm" onClick={() => {}}>
-            Get Started
-          </Button>
+          <Button onClick={() => {}}>Get Started</Button>
         </div>
       </div>
     </HeaderLayout>

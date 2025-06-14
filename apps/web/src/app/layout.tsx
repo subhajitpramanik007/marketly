@@ -30,11 +30,8 @@ export default function RootLayout({
         cz-shortcut-listen="true"
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="min-h-screen w-full bg-background text-foreground">
-          {children}
-
-          <Footer />
-        </div>
+        <div className="min-h-screen w-full bg-background text-foreground">{children}</div>
+        <Footer />
       </body>
     </html>
   );
