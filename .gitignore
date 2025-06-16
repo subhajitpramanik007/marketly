@@ -39,3 +39,5 @@ yarn-error.log*
 
 # Ignore the services docs
 docs/services/*.json
+
+tests

@@ -28,20 +28,28 @@ export async function setAuthCookies(res: Response, accessToken: string, refresh
     secure: env.NODE_ENV === 'production',
     maxAge: ms(env.REFRESH_TOKEN_EXPIRES_IN as StringValue),
   });
+  await setCookie(res, 'isAuthenticated', 'true', {
+    httpOnly: true,
+    secure: env.NODE_ENV === 'production',
+  });
 }
 
 export async function removeAuthCookies(res: Response) {
   await removeCookie(res, '_accessToken');
   await removeCookie(res, '_refreshToken');
+  await removeCookie(res, 'isAuthenticated');
 }
 
-
-export async function setVendorAuthCookies(res: Response, accessToken: string, refreshToken: string) {
-    await setAuthCookies(res, accessToken, refreshToken);
-    await setCookie(res, 'isVendor', 'true', {
-      httpOnly: true,
-      secure: env.NODE_ENV === 'production',
-    });
+export async function setVendorAuthCookies(
+  res: Response,
+  accessToken: string,
+  refreshToken: string,
+) {
+  await setAuthCookies(res, accessToken, refreshToken);
+  await setCookie(res, 'isVendor', 'true', {
+    httpOnly: true,
+    secure: env.NODE_ENV === 'production',
+  });
 }
 
 export async function removeVendorAuthCookies(res: Response) {

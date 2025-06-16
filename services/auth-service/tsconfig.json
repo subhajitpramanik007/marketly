@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    // "declaration": true,
+    // "declarationMap": true,
+    "target": "ESNext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "baseUrl": "."
+  },
+  "include": ["src/**/*"]
+}

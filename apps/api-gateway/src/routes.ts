@@ -37,14 +37,12 @@ router.get(
   },
 );
 
-try {
-  const baseDocs = require('../../../docs/base-swagger.json');
-  router.use('/api/docs', swaggerUi.serve, swaggerUi.setup(baseDocs));
-} catch {
-  logger.warn('No docs found, If you want to generate docs, run `pnpm run swagger`');
-}
-
 const proxyServers = [
+  {
+    service: 'Auth',
+    route: '/api/auth',
+    targetUrl: 'http://localhost:5999/api/auth',
+  },
   {
     service: 'Consumers',
     route: '/api/consumers',
@@ -70,5 +68,12 @@ const proxyServers = [
 proxyServers.forEach(({ service, route, targetUrl }) => {
   router.use(route, createProxyMiddleware({ target: targetUrl, changeOrigin: true }));
 });
+
+try {
+  const baseDocs = require('../../../docs/base-swagger.json');
+  router.use('/api/docs', swaggerUi.serve, swaggerUi.setup(baseDocs));
+} catch {
+  logger.warn('No docs found, If you want to generate docs, run `pnpm run swagger`');
+}
 
 export default router;

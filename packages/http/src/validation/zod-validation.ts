@@ -2,16 +2,20 @@ import { Request, Response, NextFunction } from 'express';
 import { ValidationError } from '../api-error';
 import z from 'zod';
 
+import { logger } from '@marketly/logger';
+
 export function zodValidation<T extends z.ZodTypeAny>(
   schema: T,
   dataForValidation: unknown,
 ): z.infer<T> {
   if (!dataForValidation) {
-    throw new Error('All fields are required');
+    logger.error('Schema not found', 'Zod validation error');
+    throw new ValidationError('All fields are required');
   }
   const result = schema.safeParse(dataForValidation);
   if (!result.success) {
-    throw new Error(result.error.errors[0].message);
+    logger.error(result.error.errors, 'Zod validation error');
+    throw new ValidationError(result.error.errors[0].message);
   }
   return result.data;
 }
@@ -36,4 +40,18 @@ export function zodValidationQueryMiddleware<T>(schema: z.ZodSchema<T>) {
       next(new ValidationError(error.message));
     }
   };
+}
+
+/**
+ * Zod validation from schemas
+ */
+export function zodValidationFromSchemas<Schema extends Record<string, z.ZodSchema>>(
+  schemas: Schema,
+  validateType: keyof Schema,
+  data: unknown,
+): z.infer<Schema[typeof validateType]> {
+  const schema = schemas[validateType];
+  if (!schema) throw new ValidationError('Validation failed');
+
+  return zodValidation(schema, data);
 }

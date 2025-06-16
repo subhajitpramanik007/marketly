@@ -1,27 +1,33 @@
-import { NextFunction, Request, Response } from "express";
-import { ApiError } from "../api-error";
+import { NextFunction, Request, Response } from 'express';
+import { ApiError } from '../api-error';
+import { logger } from '@marketly/logger';
 
-export const errorMiddleware = (
-  err: Error,
-  req: Request,
-  res: Response,
-  _: NextFunction
-) => {
+export const errorMiddleware = (err: Error, req: Request, res: Response, _: NextFunction) => {
+  const errorMsg = {
+    method: req.method,
+    url: req.url,
+    body: req.body,
+    params: req.params,
+    query: req.query,
+    error: err.message,
+  };
+
   if (err instanceof ApiError) {
-    console.log(`Error ${req.method} ${req.path}:: ${err.message}`);
+    logger.error(errorMsg, 'Api error');
 
     res.status(err.statusCode).json({
       statusCode: err.statusCode,
-      status: "error",
+      status: 'error',
       message: err.message,
       ...(err.details && { details: err.details }),
     });
+    return;
   }
 
-  console.log(`Uncaught error ${req.method} ${req.path}:: ${err.message}`);
+  logger.error(errorMsg, 'Internal server error');
   res.status(500).json({
     statusCode: 500,
-    status: "error",
+    status: 'error',
     message: err.message,
   });
 };
