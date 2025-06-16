@@ -1,39 +1,40 @@
-import { Mail, MapPin, Phone, Store } from 'lucide-react';
-import Link from 'next/link';
+import { Mail, MapPin, Phone, Store } from "lucide-react";
+import Link from "next/link";
 
 export const Footer = () => {
   return (
-    <footer className="bg-muted/30 py-8 border-t">
+    <footer className="bg-muted/30 border-t py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid gap-8 md:grid-cols-4">
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <Store className="h-5 w-5 text-primary-foreground" />
+            <div className="mb-4 flex items-center space-x-2">
+              <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
+                <Store className="text-primary-foreground h-5 w-5" />
               </div>
               <span className="text-xl font-bold">Marketly</span>
             </div>
             <p className="text-muted-foreground mb-4">
-              The complete multi-tenant e-commerce platform for modern businesses.
+              The complete multi-tenant e-commerce platform for modern
+              businesses.
             </p>
             <div className="space-y-2">
               <div className="flex items-center space-x-2 text-sm">
-                <Phone className="w-4 h-4" />
+                <Phone className="h-4 w-4" />
                 <span>+91 123 456 7890</span>
               </div>
               <div className="flex items-center space-x-2 text-sm">
-                <Mail className="w-4 h-4" />
+                <Mail className="h-4 w-4" />
                 <span>support@marketly.com</span>
               </div>
               <div className="flex items-center space-x-2 text-sm">
-                <MapPin className="w-4 h-4" />
+                <MapPin className="h-4 w-4" />
                 <span>123 Main Street, Kolkata, India</span>
               </div>
             </div>
           </div>
           <div>
-            <h3 className="font-semibold mb-4">For Consumers</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <h3 className="mb-4 font-semibold">For Consumers</h3>
+            <ul className="text-muted-foreground space-y-2 text-sm">
               <li>
                 <Link href="#browse-products" className="hover:text-foreground">
                   Browse Products
@@ -45,7 +46,10 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="#customer-support" className="hover:text-foreground">
+                <Link
+                  href="#customer-support"
+                  className="hover:text-foreground"
+                >
                   Customer Support
                 </Link>
               </li>
@@ -57,10 +61,13 @@ export const Footer = () => {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-4">For Vendors</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <h3 className="mb-4 font-semibold">For Vendors</h3>
+            <ul className="text-muted-foreground space-y-2 text-sm">
               <li>
-                <Link href="#seller-dashboard" className="hover:text-foreground">
+                <Link
+                  href="#seller-dashboard"
+                  className="hover:text-foreground"
+                >
                   Seller Dashboard
                 </Link>
               </li>
@@ -70,20 +77,26 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="#seller-resources" className="hover:text-foreground">
+                <Link
+                  href="#seller-resources"
+                  className="hover:text-foreground"
+                >
                   Seller Resources
                 </Link>
               </li>
               <li>
-                <Link href="#api-documentation" className="hover:text-foreground">
+                <Link
+                  href="#api-documentation"
+                  className="hover:text-foreground"
+                >
                   API Documentation
                 </Link>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-4">Company</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <h3 className="mb-4 font-semibold">Company</h3>
+            <ul className="text-muted-foreground space-y-2 text-sm">
               <li>
                 <Link href="#about" className="hover:text-foreground">
                   About Us
@@ -95,7 +108,10 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="#terms-of-service" className="hover:text-foreground">
+                <Link
+                  href="#terms-of-service"
+                  className="hover:text-foreground"
+                >
                   Terms of Service
                 </Link>
               </li>
@@ -107,8 +123,10 @@ export const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="border-t mt-12 pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Marketly. All rights reserved.</p>
+        <div className="text-muted-foreground mt-12 border-t pt-8 text-center text-sm">
+          <p>
+            &copy; {new Date().getFullYear()} Marketly. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

@@ -1,26 +1,34 @@
-import Image from 'next/image';
-import { LandingSection } from './LandingSection';
-import { Button } from '../ui/button';
-import { ArrowRight, CheckCircle, Heart, Shield, ShoppingCart, Zap } from 'lucide-react';
-import { Badge } from '../ui/badge';
+import Image from "next/image";
+import { LandingSection } from "./LandingSection";
+import { Button } from "../ui/button";
+import {
+  ArrowRight,
+  CheckCircle,
+  Heart,
+  Shield,
+  ShoppingCart,
+  Zap,
+} from "lucide-react";
+import { Badge } from "../ui/badge";
 
 export const ConsumerSection = () => (
-  <LandingSection className='bg-gradient-to-bl from-amber-100 via-background to-amber-200'>
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 w-full max-w-7xl">
-      <div className="flex flex-col lg:flex-row gap-12 items-center w-full">
+  <LandingSection className="via-background bg-gradient-to-bl from-amber-100 to-amber-200">
+    <div className="container mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="flex w-full flex-col items-center gap-12 lg:flex-row">
         <div className="w-full lg:w-1/2">
           <Badge variant="secondary" className="mb-4">
-            <ShoppingCart className="w-4 h-4 mr-2" />
+            <ShoppingCart className="mr-2 h-4 w-4" />
             For Consumers
           </Badge>
-          <h2 className="text-3xl font-bold mb-6">
+          <h2 className="mb-6 text-3xl font-bold">
             Discover Amazing Products from Trusted Vendors
           </h2>
-          <p className="text-lg text-muted-foreground mb-8">
-            Shop from thousands of verified vendors offering millions of products. Enjoy secure
-            checkout, fast delivery, and exceptional customer service.
+          <p className="text-muted-foreground mb-8 text-lg">
+            Shop from thousands of verified vendors offering millions of
+            products. Enjoy secure checkout, fast delivery, and exceptional
+            customer service.
           </p>
-          <div className="space-y-4 mb-8">
+          <div className="mb-8 space-y-4">
             <div className="flex items-center space-x-3">
               <CheckCircle className="h-5 w-5 text-green-500" />
               <span>Vast product selection from verified vendors</span>
@@ -52,7 +60,7 @@ export const ConsumerSection = () => (
             alt="Consumer shopping experience"
             width={600}
             height={500}
-            className="rounded-lg shadow-2xl object-cover w-full aspect-square"
+            className="aspect-square w-full rounded-lg object-cover shadow-2xl"
           />
         </div>
       </div>

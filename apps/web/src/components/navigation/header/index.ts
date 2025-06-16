@@ -1,2 +1,2 @@
-export * from "./headerLayout"
-export * from "./rootHeader"
+export * from "./headerLayout";
+export * from "./rootHeader";
