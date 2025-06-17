@@ -45,7 +45,12 @@ export async function checkRestrictionsForRegistration(
 
 export async function sendVerificationOtp(userType: TUserType, email: string) {
   const otp = generateOtp(6);
-  await sendEmail(email, 'Verify your email', 'verify-email', { otp });
+  await sendEmail(
+    email,
+    'Verify your email',
+    { otp },
+    { path: 'public/email-templates', name: 'verify-email' },
+  );
   await setOtpRestrictions(email, otp, userType);
 }
 
@@ -139,7 +144,15 @@ export const createNewAccount = async <T extends TUserType>(
 export async function sendPasswordResetOtp(userType: TUserType, email: string) {
   const otp = generateOtp(6);
 
-  await sendEmail(email, 'Reset your password', 'reset-password', { otp });
+  await sendEmail(
+    email,
+    'Reset your password',
+    { otp },
+    {
+      path: '../../public/email-templates',
+      name: 'reset-password',
+    },
+  );
   await setOtpRestrictions(email, otp, 'consumer');
 }
 

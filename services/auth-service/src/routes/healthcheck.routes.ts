@@ -1,3 +1,4 @@
+import { ApiResponse } from '@marketly/http';
 import { Router } from 'express';
 
 const router = Router();
@@ -10,10 +11,7 @@ router.get(
    * #swagger.responses[200] = { description: 'Auth service is healthy' }
    */
   async (req, res) => {
-    res.status(200).json({
-      status: 'ok',
-      message: 'Auth service is healthy',
-    });
+    res.status(200).json(new ApiResponse(200, {}, 'Auth service is healthy'));
   },
 );
 
