@@ -16,11 +16,11 @@ export async function getStoredOtp(email: string, otpType: TUserType | string) {
 
 export async function checkOtpRestrictions(email: string, otpType: TUserType | string) {
   // check otp restrictions - spam check, cool down check, no of attempts
-  const isSpamLocked = await redisClient.exists(`otp:spam_lock::${otpType}:${email}`);
+  const isSpamLocked = await redisClient.get(`otp:spam_lock::${otpType}:${email}`);
   if (isSpamLocked) {
     throw new BadRequestError('Please try again later, too many requests');
   }
-  const isCoolDown = await redisClient.exists(`otp:cool_own::${otpType}:${email}`);
+  const isCoolDown = await redisClient.get(`otp:cool_down::${otpType}:${email}`);
   if (isCoolDown) {
     throw new BadRequestError('Wait for 1 minute before trying again');
   }
@@ -39,7 +39,7 @@ export async function checkOtpRestrictions(email: string, otpType: TUserType | s
 export async function setOtpRestrictions(email: string, otp: string, otpType: TUserType | string) {
   // set otp restrictions - cool down, no of attempts
   await redisClient.set(`otp::${otpType}:${email}`, otp, 'EX', OTP_EXPIRY_TIME);
-  await redisClient.set(`otp:cool_own::${otpType}:${email}`, Date.now(), 'EX', OTP_COOL_DOWN_TIME);
+  await redisClient.set(`otp:cool_down::${otpType}:${email}`, Date.now(), 'EX', OTP_COOL_DOWN_TIME);
 
   const noOfAttempts = await redisClient.get(`otp:attempts::${otpType}:${email}`);
   if (noOfAttempts) {
@@ -61,7 +61,7 @@ export async function setOtpRestrictions(email: string, otp: string, otpType: TU
 
 export async function deleteOtpRestrictions(email: string, otpType: TUserType | string) {
   await redisClient.del(`otp::${otpType}:${email}`);
-  await redisClient.del(`otp:cool_own::${otpType}:${email}`);
+  await redisClient.del(`otp:cool_down::${otpType}:${email}`);
   await redisClient.del(`otp:spam_lock::${otpType}:${email}`);
   await redisClient.del(`otp:attempts::${otpType}:${email}`);
 }

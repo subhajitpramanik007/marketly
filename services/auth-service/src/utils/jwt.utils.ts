@@ -4,12 +4,12 @@ import ms, { StringValue } from 'ms';
 import { ForbiddenError, UnauthorizedError } from '@marketly/http';
 import { TUserType } from '@marketly/lib/schemas/auth';
 
-type JwtPayload = {
+export type JwtPayload = {
   id: string;
   email: string;
 };
 
-type JwtPayloadWithRole = JwtPayload & {
+export type JwtPayloadWithRole = JwtPayload & {
   role: TUserType;
 };
 
@@ -27,7 +27,7 @@ async function generateRefreshToken(
   options?: jwt.SignOptions,
 ) {
   return generateJwtToken(payload, secret ?? env.REFRESH_TOKEN_SECRET, {
-    expiresIn: ms(env.REFRESH_TOKEN_EXPIRES_IN as StringValue),
+    expiresIn: env.REFRESH_TOKEN_EXPIRES_IN as StringValue,
     ...options,
   });
 }
@@ -38,7 +38,7 @@ async function generateAccessToken(
   options?: jwt.SignOptions,
 ) {
   return generateJwtToken(payload, secret ?? env.JWT_SECRET, {
-    expiresIn: ms(env.JWT_EXPIRES_IN as StringValue),
+    expiresIn: env.JWT_EXPIRES_IN as StringValue,
     ...options,
   });
 }

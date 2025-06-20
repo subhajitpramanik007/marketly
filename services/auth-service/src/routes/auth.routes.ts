@@ -2,12 +2,12 @@ import { Router } from 'express';
 import {
   registrationController,
   verifyRegistrationController,
-  resendRegistrationEmailController,
+  //   resendRegistrationEmailController,
   loginController,
   logoutController,
-  refreshSessionController,
-  forgotPasswordController,
-  resetPasswordController,
+  refreshTokenController,
+  //   forgotPasswordController,
+  //   resetPasswordController,
 } from '../controllers/auth.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
 
@@ -55,24 +55,24 @@ router.route('/verify-registration').post(
   verifyRegistrationController,
 );
 
-router.route('/resend-registration-email').post(
-  /**
-     * #swagger.tags = ['Auth']
-     * #swagger.summary = 'Resend user registration email'
-     * #swagger.parameters['body'] = {
-         in: 'body',
-         description: 'User registration details',
-         required: true,
-         schema: {
-           firstName: 'Rahul',
-           lastName: 'Pramanik',
-           email: 'rahul@example.com',
-         }
-       }
-     * #swagger.responses[200] = { description: 'OTP sent' }
-     */
-  resendRegistrationEmailController,
-);
+// router.route('/resend-registration-email').post(
+//   /**
+//      * #swagger.tags = ['Auth']
+//      * #swagger.summary = 'Resend user registration email'
+//      * #swagger.parameters['body'] = {
+//          in: 'body',
+//          description: 'User registration details',
+//          required: true,
+//          schema: {
+//            firstName: 'Rahul',
+//            lastName: 'Pramanik',
+//            email: 'rahul@example.com',
+//          }
+//        }
+//      * #swagger.responses[200] = { description: 'OTP sent' }
+//      */
+//   resendRegistrationEmailController,
+// );
 
 router.route('/login').post(
   /**
@@ -108,43 +108,43 @@ router.route('/refresh-session').post(
    * #swagger.summary = 'Refresh user session'
    * #swagger.responses[200] = { description: 'Session refreshed successfully' }
    */
-  refreshSessionController,
+  refreshTokenController,
 );
 
-router.route('/forgot-password').post(
-  /**
-     * #swagger.tags = ['Auth']
-     * #swagger.summary = 'Forgot password'
-     * #swagger.parameters['body'] = {
-         in: 'body',
-         description: 'User forgot password details',
-         required: true,
-         schema: {
-           email: 'rahul@example.com',
-         }
-       }
-     * #swagger.responses[200] = { description: 'OTP sent' }
-     */
-  forgotPasswordController,
-);
+// router.route('/forgot-password').post(
+//   /**
+//      * #swagger.tags = ['Auth']
+//      * #swagger.summary = 'Forgot password'
+//      * #swagger.parameters['body'] = {
+//          in: 'body',
+//          description: 'User forgot password details',
+//          required: true,
+//          schema: {
+//            email: 'rahul@example.com',
+//          }
+//        }
+//      * #swagger.responses[200] = { description: 'OTP sent' }
+//      */
+//   forgotPasswordController,
+// );
 
-router.route('/reset-password').post(
-  /**
-     * #swagger.tags = ['Auth']
-     * #swagger.summary = 'Reset password'
-     * #swagger.parameters['body'] = {
-         in: 'body',
-         description: 'User reset password details',
-         required: true,
-         schema: {
-           email: 'rahul@example.com',
-           otp: '123456',
-           password: 'SecurePassword123',
-         }
-       }
-     * #swagger.responses[200] = { description: 'Password reset successfully' }
-     */
-  resetPasswordController,
-);
+// router.route('/reset-password').post(
+//   /**
+//      * #swagger.tags = ['Auth']
+//      * #swagger.summary = 'Reset password'
+//      * #swagger.parameters['body'] = {
+//          in: 'body',
+//          description: 'User reset password details',
+//          required: true,
+//          schema: {
+//            email: 'rahul@example.com',
+//            otp: '123456',
+//            password: 'SecurePassword123',
+//          }
+//        }
+//      * #swagger.responses[200] = { description: 'Password reset successfully' }
+//      */
+//   resetPasswordController,
+// );
 
 export { router as authRoutes };
