@@ -41,3 +41,5 @@ yarn-error.log*
 docs/services/*.json
 
 tests
+
+packages/dashboard
