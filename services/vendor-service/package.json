@@ -9,10 +9,9 @@
     "swagger": "node src/swagger.js"
   },
   "dependencies": {
-    "@marketly/auth": "workspace:*",
     "@marketly/lib": "workspace:*",
     "@marketly/config": "workspace:*",
-    "@marketly/db": "workspace:*",
+    "@marketly/drizzle": "workspace:*",
     "@marketly/http": "workspace:*",
     "@marketly/logger": "workspace:*",
     "cookie-parser": "^1.4.7",

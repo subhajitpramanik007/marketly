@@ -5,16 +5,6 @@ import cookieParser from 'cookie-parser';
 import { env } from '@marketly/config';
 import { errorMiddleware, notFoundMiddleware } from '@marketly/http';
 
-declare global {
-  namespace Express {
-    interface Request {
-      user: any;
-      currentUser: any;
-      role: 'consumer' | 'vendor';
-    }
-  }
-}
-
 const app = express();
 
 app.use(

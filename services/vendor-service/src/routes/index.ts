@@ -3,14 +3,12 @@ import swaggerUi from 'swagger-ui-express';
 import { logger } from '@marketly/logger';
 
 import { healthRoutes } from './heathcheck.routes';
-import { authRoutes } from './auth.routes';
 import { profileRoutes } from './profile.routes';
 import { staffsRoutes } from './staffs.routes';
 
 const router = Router();
 
 router.use('/health', healthRoutes);
-router.use('/auth', authRoutes);
 router.use('/:vendorId/profile', profileRoutes);
 router.use('/:vendorId/staffs', staffsRoutes);
 

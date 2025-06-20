@@ -9,10 +9,13 @@ import {
   updateVendorStaffPermission,
 } from '../controllers/staffs.controller';
 
-import { authMiddleware } from '@marketly/auth/middleware';
 import { vendorAuthMiddleware } from '../middleware';
 
-import { zodValidationMiddleware, zodValidationQueryMiddleware } from '@marketly/http';
+import {
+  authMiddleware,
+  zodValidationMiddleware,
+  zodValidationQueryMiddleware,
+} from '@marketly/http';
 
 import {
   staffOfVendorParamsSchema,

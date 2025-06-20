@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@marketly/config": "workspace:*",
-    "@marketly/db": "workspace:*",
+    "@marketly/drizzle": "workspace:*",
     "@marketly/http": "workspace:*",
     "@marketly/logger": "workspace:*",
     "cookie-parser": "^1.4.7",

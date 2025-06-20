@@ -1,19 +1,14 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
+    "baseUrl": "."
   },
-  "include": ["src/**/*"],
-  "references": [
-    {
-      "path": "../../packages/typescript-config/base.json"
-    }
-  ]
+  "include": ["src/**/*"]
 }
