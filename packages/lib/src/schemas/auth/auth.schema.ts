@@ -12,6 +12,7 @@ export const consumerRegistrationSchema = z.object({
   password: zodString('Password').min(6).max(32),
   firstName: zodString('First Name').min(3).max(50),
   lastName: zodString('Last Name').optional(),
+  otp: z.string().optional(),
 });
 
 export const consumerRegistrationEmailVerificationSchema = consumerRegistrationSchema.extend({

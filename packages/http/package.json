@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "@marketly/logger": "workspace:*",
+    "@marketly/config": "workspace:*",
+    "@marketly/lib": "workspace:*",
     "express": "^5.1.0"
   },
   "devDependencies": {

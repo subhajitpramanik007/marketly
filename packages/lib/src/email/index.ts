@@ -1,1 +1,1 @@
-export * from "./email.config"
+export * from './email.config';

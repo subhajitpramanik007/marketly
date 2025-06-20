@@ -8,7 +8,7 @@ import {
   vendorForgotPasswordSchema,
   vendorResetPasswordSchema,
   vendorChangePasswordSchema,
-} from "./auth.schema";
+} from './auth.schema';
 
 export type TVendorRegistration = z.infer<typeof vendorRegistrationSchema>;
 export type TVendorRegistrationEmailVerification = z.infer<
