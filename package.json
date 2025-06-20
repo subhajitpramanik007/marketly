@@ -11,7 +11,9 @@
     "check-types": "turbo run check-types",
     "swagger": "turbo run swagger && cd apps/api-gateway && pnpm run swagger-merge",
     "vendor-service": "pnpm dev --filter=./apps/* --filter=vendor-service",
-    "auth-service": "pnpm dev --filter=./apps/* --filter=auth-service"
+    "auth-service": "pnpm dev --filter=./apps/* --filter=auth-service",
+    "clean": "bash ./scripts/clean.sh",
+    "project-setup": "bash ./scripts/setup.sh"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,md,css,scss}": [
