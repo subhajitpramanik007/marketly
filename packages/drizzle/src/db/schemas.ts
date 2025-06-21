@@ -21,7 +21,7 @@ export const accountTable = pgTable(
   {
     id: serial('id').primaryKey(),
     email: varchar('email', { length: 255 }).notNull(),
-    password: varchar('password', { length: 255 }).notNull(),
+    password: varchar('password', { length: 255 }),
     role: userRoleEnum().notNull(),
 
     createdAt: timestamp('created_at').notNull().defaultNow(),
