@@ -4,15 +4,12 @@
   "main": "dist/app.js",
   "scripts": {
     "dev": "tsx watch src/app.ts",
-    "build": "tsc -b",
+    "build": "tsup",
     "start": "node dist/app.js",
     "swagger": "node src/swagger.js",
     "swagger-merge": "node src/swagger-merge.js"
   },
   "dependencies": {
-    "@marketly/config": "workspace:*",
-    "@marketly/http": "workspace:*",
-    "@marketly/logger": "workspace:*",
     "@types/express-http-proxy": "^1.6.6",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -32,6 +29,7 @@
     "@types/node": "^24.0.0",
     "@types/swagger-ui-express": "^4.1.8",
     "swagger-merge": "^0.4.0",
+    "tsup": "^8.5.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   }

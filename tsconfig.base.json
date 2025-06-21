@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@marketly/config": ["./packages/config/src"],
+      "@marketly/lib": ["./packages/lib/src"],
+      "@marketly/logger": ["./packages/logger/src"],
+      "@marketly/http": ["./packages/http/src"],
+      "@marketly/drizzle": ["./packages/drizzle/src"]
+    },
+    "target": "ES2020",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}

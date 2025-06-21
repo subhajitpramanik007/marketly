@@ -1,18 +1,8 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "outDir": "dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/docs/*": ["../../docs/*"]
-    }
+    "rootDir": "../../",
+    "outDir": "dist"
   },
-  "include": ["src/**/*"]
+  "include": ["src"]
 }
