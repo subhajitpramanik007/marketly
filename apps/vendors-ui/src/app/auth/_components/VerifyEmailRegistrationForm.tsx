@@ -4,7 +4,7 @@ import * as React from 'react';
 import {
   TVendorRegistrationEmailVerification,
   vendorRegistrationEmailVerificationSchema,
-} from '@marketly/lib/schemas/vendor';
+} from '@/schemas/auth.schemas';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -99,7 +99,7 @@ export const VerifyEmailRegistrationForm: React.FC<{
 
         {error ||
           (resendOtpMutation.error && (
-            <p className="text-destructive text-sm py-2 px-3 bg-destructive/30">
+            <p className="text-destructive text-sm py-2 px-3 bg-destructive/30 rounded-md">
               {error || resendOtpMutation.error?.message}
             </p>
           ))}

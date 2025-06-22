@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Providers from './provider';
+import { SessionProvider } from '@/providers/sessionProvider';
+import { GradientLayout } from '@/components/gradientLayout';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,7 +32,14 @@ export default function RootLayout({
         cz-shortcut-listen="true"
       >
         <Providers>
-          <div className="bg-background text-foreground min-h-screen w-full">{children}</div>
+          <SessionProvider>
+            <div className="flex w-full bg-background min-h-screen items-center justify-center">
+              {/* <GradientLayout> */}
+              {children}
+              {/* <Toaster /> */}
+              {/* </GradientLayout> */}
+            </div>
+          </SessionProvider>
         </Providers>
       </body>
     </html>

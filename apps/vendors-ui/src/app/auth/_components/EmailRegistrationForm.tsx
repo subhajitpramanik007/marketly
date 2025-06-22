@@ -1,10 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import {
-  vendorRegistrationEmailSchema,
-  TVendorRegistrationEmail,
-} from '@marketly/lib/schemas/vendor';
+import { vendorRegistrationEmailSchema, TVendorRegistrationEmail } from '@/schemas/auth.schemas';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {

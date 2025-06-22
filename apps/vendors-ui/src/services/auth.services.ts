@@ -2,7 +2,7 @@ import {
   TVendorLogin,
   TVendorRegistrationEmail,
   TVendorRegistrationEmailVerification,
-} from '@marketly/lib/schemas/vendor';
+} from '@/schemas/auth.schemas';
 import api from './axios';
 
 export const register = (data: TVendorRegistrationEmail) => {
@@ -23,4 +23,8 @@ export const login = (data: TVendorLogin) => {
 
 export const logout = () => {
   return api.post('/auth/vendors/logout');
+};
+
+export const refreshSession = () => {
+  return api.post('/auth/sessions/refresh');
 };

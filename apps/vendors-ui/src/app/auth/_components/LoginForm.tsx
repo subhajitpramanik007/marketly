@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { vendorLoginSchema, TVendorLogin } from '@marketly/lib/schemas/vendor';
+import { vendorLoginSchema, TVendorLogin } from '@/schemas/auth.schemas';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -15,6 +15,8 @@ import {
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useMutation } from '@tanstack/react-query';
+import { login } from '@/services/auth.services';
 
 export const LoginForm: React.FC = () => {
   const form = useForm<TVendorLogin>({
@@ -25,7 +27,22 @@ export const LoginForm: React.FC = () => {
     },
   });
 
-  const onSubmit = (data: TVendorLogin) => console.log(data);
+  const {
+    isPending,
+    mutate: loginMutation,
+    isError,
+    error,
+  } = useMutation({
+    mutationKey: ['login'],
+    mutationFn: login,
+    onSuccess: () => {
+      form.reset();
+    },
+  });
+
+  const onSubmit = (data: TVendorLogin) => {
+    loginMutation(data);
+  };
 
   return (
     <Form {...form}>
@@ -59,7 +76,13 @@ export const LoginForm: React.FC = () => {
           )}
         />
 
-        <Button type="submit" className="w-full">
+        {isError && (
+          <p className="text-destructive text-sm py-2 px-3 bg-destructive/30 rounded-md">
+            {error?.message}
+          </p>
+        )}
+
+        <Button type="submit" className="w-full" disabled={isPending}>
           Login
         </Button>
       </form>
