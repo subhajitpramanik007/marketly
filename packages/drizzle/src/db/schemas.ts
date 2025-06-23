@@ -10,6 +10,7 @@ import {
   text,
   integer,
   index,
+  PgEnumObject,
 } from 'drizzle-orm/pg-core';
 
 // Enum for user roles
@@ -23,6 +24,9 @@ export const accountTable = pgTable(
     email: varchar('email', { length: 255 }).notNull(),
     password: varchar('password', { length: 255 }),
     role: userRoleEnum().notNull(),
+
+    isOnboarded: boolean('is_onboarded').notNull().default(false),
+    isVerified: boolean('is_verified').notNull().default(false),
 
     createdAt: timestamp('created_at').notNull().defaultNow(),
     updatedAt: timestamp('updated_at')
@@ -156,7 +160,21 @@ export const vendorStaffRelations = relations(vendorStaffTable, ({ one }) => ({
   }),
 }));
 
-// Vendor Store Table (after staff, but circular ref supported via arrow function)
+// Address Table
+export const addressTable = pgTable('addresses', {
+  id: serial('id').primaryKey(),
+  addressLine1: varchar('address_line_1', { length: 255 }).notNull(),
+  addressLine2: varchar('address_line_2', { length: 255 }),
+  city: varchar('city', { length: 255 }).notNull(),
+  state: varchar('state', { length: 255 }).notNull(),
+  zipCode: varchar('zip_code', { length: 20 }).notNull(),
+  country: varchar('country', { length: 255 }).notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
 export const vendorStoreTable = pgTable(
   'vendor_stores',
   {
@@ -166,12 +184,16 @@ export const vendorStoreTable = pgTable(
       .references(() => accountTable.id, { onDelete: 'set null' }),
     storeName: varchar('store_name', { length: 255 }).notNull(),
     storeDescription: varchar('store_description', { length: 255 }),
-    storeAddress: varchar('store_address', { length: 255 }),
-    storePhoneNumber: varchar('store_phone_number', { length: 255 }),
+    storeCategory: text('store_category').notNull(),
+    storeAddress: integer('store_address').references(() => addressTable.id, {
+      onDelete: 'set null',
+    }),
+    storePhoneNumber: varchar('store_phone_number', { length: 20 }).notNull(),
     storeEmail: varchar('store_email', { length: 255 }).notNull(),
     storeLogoId: integer('store_logo_id').references(() => imageTable.id),
     storeCoverId: integer('store_cover_id').references(() => imageTable.id),
 
+    isOnboard: boolean('is_onboard').notNull().default(false),
     isApproved: boolean('is_approved').notNull().default(false),
     isVerified: boolean('is_verified').notNull().default(false),
 
@@ -185,4 +207,19 @@ export const vendorStoreTable = pgTable(
     uniqueIndex('vendor_stores_email_idx').on(table.storeEmail),
     index('vendor_stores_created_by_idx').on(table.createdById),
   ],
+);
+
+export const vendorPaymentTable = pgTable(
+  'vendor_payments',
+  {
+    id: serial('id').primaryKey(),
+    vendorStoreId: integer('vendor_store_id')
+      .notNull()
+      .references(() => vendorStoreTable.id, { onDelete: 'cascade' }),
+    paymentProvider: varchar('payment_provider', { length: 100 }),
+    paymentAccountId: varchar('payment_account_id', { length: 255 }),
+    isPaymentSetup: boolean('is_payment_setup').notNull().default(false),
+    createdAt: timestamp('created_at').defaultNow(),
+  },
+  table => [index('vendor_payment_store_id_idx').on(table.vendorStoreId)],
 );
