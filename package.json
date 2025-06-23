@@ -10,7 +10,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "swagger": "turbo run swagger && cd apps/api-gateway && pnpm run swagger-merge",
-    "vendor-service": "pnpm dev --filter=./apps/* --filter=vendor-service",
+    "vendor-service": "pnpm dev --filter=vendor-service --filter=api-gateway --filter=auth-service",
     "auth-service": "pnpm dev --filter=./apps/* --filter=auth-service",
     "clean": "bash ./scripts/clean.sh",
     "project-setup": "bash ./scripts/setup.sh"

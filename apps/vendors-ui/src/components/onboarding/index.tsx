@@ -1,6 +1,7 @@
 export * from './OnboardingHeader';
 export * from './OnboardingSidebar';
 export * from './OnboardingContent';
+export * from './OnboardingCompleted';
 
 export * from './AddStoreInfo';
 export * from './AddPersonalInfo';

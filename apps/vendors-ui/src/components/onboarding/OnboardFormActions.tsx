@@ -5,24 +5,44 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-interface OnboardFormActionsProps {
-  onPrevious: () => void;
-  onSkip: () => void;
+type PreviousActionProps =
+  | {
+      isShowPrevious?: true;
+      onPrevious: () => void;
+    }
+  | {
+      isShowPrevious?: false;
+      onPrevious?: undefined;
+    };
+
+type SkipActionProps =
+  | {
+      isShowSkip: true;
+      onSkip: () => void;
+    }
+  | {
+      isShowSkip?: false;
+      onSkip?: undefined;
+    };
+
+// Final union type
+export type OnboardFormActionsProps = {
   isDisabled?: boolean;
-  isShowSkip?: boolean;
-  isShowPrevious?: boolean;
-}
+  onNext: () => void;
+} & PreviousActionProps &
+  SkipActionProps;
 
 export const OnboardFormActions: React.FC<OnboardFormActionsProps> = ({
   onPrevious,
   onSkip,
   isDisabled = false,
-  isShowSkip = true,
-  isShowPrevious = true,
+  isShowSkip = false,
+  isShowPrevious = false,
+  onNext,
 }) => {
   return (
     <div className="w-full flex justify-between items-center">
-      <div>
+      <div className="basis-1/3">
         {isShowPrevious && (
           <Button
             type="button"
@@ -46,12 +66,18 @@ export const OnboardFormActions: React.FC<OnboardFormActionsProps> = ({
             className="w-full md:w-auto mr-4"
             disabled={isDisabled}
           >
-            Skip
+            Skip for now
             <span className="sr-only">Skip this step</span>
           </Button>
         )}
       </div>
-      <Button type="submit" className="w-full md:w-auto" size="lg" disabled={isDisabled}>
+      <Button
+        onClick={onNext}
+        type="button"
+        className="w-full md:w-auto basis-1/3"
+        size="lg"
+        disabled={isDisabled}
+      >
         Continue to next step
         <span className="sr-only">Continue to next step</span>
         <ArrowRight className="ml-2 h-4 w-4" />

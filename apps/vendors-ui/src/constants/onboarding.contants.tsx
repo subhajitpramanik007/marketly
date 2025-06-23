@@ -1,15 +1,6 @@
 import { Store, User2, LocationEdit, CreditCard, ImageIcon, ShoppingBag } from 'lucide-react';
 import React from 'react';
 
-import {
-  AddStoreInfo,
-  AddPersonalInfo,
-  AddAddress,
-  AddPaymentMethods,
-  AddLogo,
-  AddFirstProducts,
-} from '@/components/onboarding';
-
 export const ONBOARDING_STEPS = [
   {
     id: 1,
@@ -50,12 +41,3 @@ export const ONBOARDING_STEPS = [
 ] as const;
 
 export type TOnboardingStep = (typeof ONBOARDING_STEPS)[number];
-
-export const OnboardingStepComponents: Record<TOnboardingStep['id'], React.ReactNode> = {
-  1: <AddPersonalInfo />,
-  2: <AddStoreInfo />,
-  3: <AddAddress />,
-  4: <AddPaymentMethods />,
-  5: <AddLogo />,
-  6: <AddFirstProducts />,
-};

@@ -8,14 +8,14 @@ import React from 'react';
 interface OnboardingSidebarProps {
   onboardingSteps: TOnboardingStep[];
   currentStep: number;
-  completedStep: number | null;
+  completedSteps: TOnboardingStep[];
   setCurrentStep: (id: number) => void;
 }
 
 export const OnboardingSidebar: React.FC<OnboardingSidebarProps> = ({
   onboardingSteps,
   currentStep,
-  completedStep,
+  completedSteps,
   setCurrentStep,
 }) => {
   return (
@@ -25,7 +25,7 @@ export const OnboardingSidebar: React.FC<OnboardingSidebarProps> = ({
           key={index}
           card={data}
           currentStep={currentStep}
-          completedStep={completedStep}
+          completedSteps={completedSteps}
           onClick={id => setCurrentStep(id)}
         />
       ))}
@@ -36,31 +36,30 @@ export const OnboardingSidebar: React.FC<OnboardingSidebarProps> = ({
 interface StepCardProps {
   card: TOnboardingStep;
   currentStep: number;
-  completedStep: number | null;
+  completedSteps: TOnboardingStep[];
   onClick: (id: number) => void;
 }
 
-const StepCard: React.FC<StepCardProps> = ({ card, currentStep, completedStep, onClick }) => {
-  const isCompleted =
-    (completedStep !== null && completedStep >= card.id) || currentStep === card.id;
+const StepCard: React.FC<StepCardProps> = ({ card, currentStep, completedSteps, onClick }) => {
+  const isCompleted = completedSteps.some(step => step.id === card.id);
+  console.log(completedSteps);
 
   return (
     <Card
       className={cn(
-        'cursor-pointer transition-all duration-500 ease-in-out hover:scale-[1.01] hover:shadow-lg',
-        !isCompleted
-          ? 'opacity-50 hover:shadow-none hover:scale-none cursor-not-allowed'
-          : currentStep === card.id
-            ? 'bg-primary text-primary-foreground'
-            : 'bg-secondary text-secondary-foreground',
+        'cursor-pointer transition-all duration-500 ease-in-out hover:shadow-lg',
+        isCompleted
+          ? 'bg-emerald-400 text-emerald-900 dark:bg-emerald-600 dark:text-emerald-50'
+          : currentStep !== card.id
+            ? 'opacity-50 hover:shadow-none hover:scale-none cursor-not-allowed'
+            : 'bg-secondary text-secondary-foreground opacity-100',
       )}
-      onClick={() => isCompleted && onClick(card.id)}
     >
       <CardContent className="flex items-center gap-4">
         {card.icon}
         <div>
           <h2 className="text-lg font-semibold">{card.title}</h2>
-          <p className="text-sm text-muted-foreground">{card.description}</p>
+          <p className="text-sm">{card.description}</p>
         </div>
       </CardContent>
     </Card>
