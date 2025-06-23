@@ -5,10 +5,12 @@ import { logger } from '@marketly/logger';
 import { healthRoutes } from './heathcheck.routes';
 import { profileRoutes } from './profile.routes';
 import { staffsRoutes } from './staffs.routes';
+import { onboardingRoutes } from './onboarding.routes';
 
 const router = Router();
 
 router.use('/health', healthRoutes);
+router.use('/onboarding', onboardingRoutes);
 router.use('/:vendorId/profile', profileRoutes);
 router.use('/:vendorId/staffs', staffsRoutes);
 
