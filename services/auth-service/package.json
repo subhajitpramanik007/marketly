@@ -4,16 +4,14 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc -b",
+    "build": "tsup",
+    "build:watch": "tsup --watch",
     "start": "node dist/server.js",
+    "serve": "pnpm build && pnpm start",
     "swagger": "node src/swagger.js"
   },
   "dependencies": {
-    "@marketly/config": "workspace:*",
-    "@marketly/drizzle": "workspace:*",
-    "@marketly/http": "workspace:*",
-    "@marketly/lib": "workspace:*",
-    "@marketly/logger": "workspace:*",
+    "argon2": "^0.43.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "express": "^5.1.0",

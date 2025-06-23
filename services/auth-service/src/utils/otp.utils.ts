@@ -6,7 +6,7 @@ import {
   OTP_MAX_ATTEMPTS,
   OTP_NO_OF_ATTEMPTS_RESET_TIME,
   OTP_SPAM_LOCK_TIME,
-} from '../constants/otp.constants';
+} from '@/constants/otp.constants';
 import { TUserType } from '@marketly/lib/schemas/auth';
 
 export async function getStoredOtp(email: string, otpType: TUserType | string) {

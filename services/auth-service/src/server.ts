@@ -1,6 +1,6 @@
 import app from './app';
 import { logger } from '@marketly/logger';
-import { PORT } from './constants';
+import { PORT } from '@/constants';
 
 async function bootstrap() {
   try {

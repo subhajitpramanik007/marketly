@@ -1,6 +1,6 @@
 import { asyncHandler, UnauthorizedError } from '@marketly/http';
-import { ACCESS_TOKEN_NAMESPACE } from '../constants/tokens.constants';
-import { verifyAccessToken } from '../utils/jwt.utils';
+import { ACCESS_TOKEN_NAMESPACE } from '@/constants/tokens.constants';
+import { verifyAccessToken } from '@/utils/jwt.utils';
 import { TUserType } from '@marketly/lib/schemas/auth';
 
 declare global {

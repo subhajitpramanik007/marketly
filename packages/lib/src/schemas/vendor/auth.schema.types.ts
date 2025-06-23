@@ -1,6 +1,7 @@
 import z from 'zod';
 
 import {
+  vendorRegistrationEmailSchema,
   vendorRegistrationSchema,
   vendorRegistrationEmailVerificationSchema,
   resendVendorRegistrationEmailSchema,
@@ -10,6 +11,7 @@ import {
   vendorChangePasswordSchema,
 } from './auth.schema';
 
+export type TVendorRegistrationEmail = z.infer<typeof vendorRegistrationEmailSchema>;
 export type TVendorRegistration = z.infer<typeof vendorRegistrationSchema>;
 export type TVendorRegistrationEmailVerification = z.infer<
   typeof vendorRegistrationEmailVerificationSchema

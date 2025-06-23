@@ -7,7 +7,7 @@ import {
   REFRESH_TOKEN_NAMESPACE,
   IS_AUTHENTICATED_NAMESPACE,
   LOGGED_IN_AS_NAMESPACE,
-} from '../constants/tokens.constants';
+} from '@/constants/tokens.constants.js';
 
 export async function setCookie(
   res: Response,

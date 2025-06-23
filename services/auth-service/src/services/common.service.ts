@@ -1,5 +1,5 @@
-import { dbClient, eq } from '@marketly/drizzle/client';
-import { accountTable, sessionTable } from '@marketly/drizzle/schema';
+import { dbClient, eq } from '@marketly/drizzle';
+import { accountTable, sessionTable } from '@marketly/drizzle/db/schemas';
 import { sendEmail } from '@marketly/lib/email';
 import { generateOtp } from '@marketly/lib/otp';
 import { TUserType, userTypeQuerySchema } from '@marketly/lib/schemas/auth';

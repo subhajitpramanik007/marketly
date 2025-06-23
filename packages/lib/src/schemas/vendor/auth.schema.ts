@@ -1,18 +1,22 @@
 import * as z from 'zod';
 import { otpType, zodString } from '../utils.schema';
 
+const vendorRegistrationEmailSchema = z.object({
+  email: zodString('Email').email(),
+});
+
+const vendorRegistrationEmailVerificationSchema = vendorRegistrationEmailSchema.extend({
+  otp: otpType(6),
+  password: zodString('Password').min(6).max(32),
+});
+
 const vendorRegistrationSchema = z.object({
   firstName: zodString('First Name').min(3).max(50),
   lastName: zodString('Last Name').min(3).max(50),
-  email: zodString('Email').email(),
-  password: zodString('Password').min(6).max(32),
   storeName: zodString('Store Name').min(2).max(50),
-  // FIXME: Add validation for phone number
+  description: z.string().max(200).optional(),
   phoneNumber: z.string().default('1234567890'),
-});
-
-const vendorRegistrationEmailVerificationSchema = vendorRegistrationSchema.extend({
-  otp: otpType(6),
+  address: z.string().optional(),
 });
 
 const resendVendorRegistrationEmailSchema = vendorRegistrationSchema;
@@ -41,6 +45,7 @@ const vendorChangePasswordSchema = z.object({
 });
 
 export {
+  vendorRegistrationEmailSchema,
   vendorRegistrationSchema,
   vendorRegistrationEmailVerificationSchema,
   resendVendorRegistrationEmailSchema,

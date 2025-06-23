@@ -21,11 +21,13 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 
 // Routes
-import { healthRoutes } from './routes/healthcheck.routes';
-import { authRoutes } from './routes/auth.routes';
+import { healthRoutes } from './routes/healthcheck.routes.js';
+import { vendorAuthRoutes } from './routes/vendor.auth.routes.js';
+import { sessionRoutes } from './routes/session.routes.js';
 
 app.use('/api/auth/health', healthRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/auth/vendors', vendorAuthRoutes);
+app.use('/api/auth/sessions', sessionRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
