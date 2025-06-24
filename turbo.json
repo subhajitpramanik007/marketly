@@ -24,6 +24,12 @@
     "swagger": {
       "cache": true,
       "persistent": true
+    },
+    "start": {
+      "cache": true,
+      "persistent": true,
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "dependsOn": ["^start"]
     }
   }
 }

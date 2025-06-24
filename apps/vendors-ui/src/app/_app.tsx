@@ -1,6 +1,7 @@
 'use client';
 
 import { useOnboardingStatus } from '@/hooks/onborading/useOnboardingStatus';
+import { useLocalStore } from '@/hooks/useLocalStore';
 import { useSession } from '@/hooks/useSession';
 import { useAppInitChecks } from '@/stores/appStatus.store';
 import { usePathname, useRouter } from 'next/navigation';
@@ -10,6 +11,8 @@ export default function AppProvider({ children }: { children: React.ReactNode })
   const { isAuthenticated, status } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+
+  const { removeItem } = useLocalStore();
 
   const { data } = useOnboardingStatus();
   const { isOnboardedCheck, setIsOnboardedCheck } = useAppInitChecks();
@@ -27,6 +30,11 @@ export default function AppProvider({ children }: { children: React.ReactNode })
       router.push('/auth/login');
     }
   }, [isAuthenticated]);
+
+  React.useEffect(() => {
+    removeItem('session');
+    // return () => {};
+  }, []);
 
   return <>{children}</>;
 }

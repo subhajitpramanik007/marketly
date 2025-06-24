@@ -28,7 +28,7 @@ export const usePersonalInfo = () => {
     if (isCompleted || form.formState.isValid) {
       setIsCompleted(true);
       setCurrentStep(currentStep + 1);
-      setCompletedStep("Add Personal Info");
+      setCompletedStep('Add Personal Info');
     } else {
       setIsCompleted(false);
     }

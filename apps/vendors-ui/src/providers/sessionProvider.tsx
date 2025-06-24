@@ -78,12 +78,6 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(interval);
   }, [sessionRefresh]);
 
-  useEffect(() => {
-    return () => {
-      removeItem('session');
-    };
-  }, []);
-
   let session: Session = {
     status: 'loading',
     user: null,

@@ -18,7 +18,11 @@ export const useAddress = () => {
     },
   });
 
-  const { mutate: addAddress, isPending, error } = useMutation({
+  const {
+    mutate: addAddress,
+    isPending,
+    error,
+  } = useMutation({
     mutationKey: ['onboarding', 'address'],
     mutationFn: (data: TAddressSchema & { storeId: string }) => addStoreAddress(data.storeId, data),
     onSuccess: () => {
