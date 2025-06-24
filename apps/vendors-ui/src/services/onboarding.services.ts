@@ -1,3 +1,4 @@
+import { ApiResponse } from '@/types';
 import api from './axios';
 
 import {
@@ -16,4 +17,13 @@ export const storeOnboarding = (data: TPersonalInfoSchema & TAddStoreOnboardingS
 
 export const addStoreAddress = (storeId: string, data: TAddressSchema) => {
   return api.post(`/vendors/onboarding/${storeId}/address`, data);
+};
+
+export const getOnboardingStatus = (): Promise<
+  ApiResponse<{
+    status: 'Completed' | 'Pending';
+    onboardingSteps: string[];
+  }>
+> => {
+  return api.get(`/vendors/onboarding/status`);
 };

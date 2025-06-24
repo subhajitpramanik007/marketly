@@ -175,6 +175,14 @@ export const addressTable = pgTable('addresses', {
     .$onUpdate(() => new Date()),
 });
 
+export const vendorPaymentTable = pgTable('vendor_payments', {
+  id: serial('id').primaryKey(),
+  paymentProvider: varchar('payment_provider', { length: 100 }),
+  paymentAccountId: varchar('payment_account_id', { length: 255 }),
+  isPaymentSetup: boolean('is_payment_setup').notNull().default(false),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
 export const vendorStoreTable = pgTable(
   'vendor_stores',
   {
@@ -192,6 +200,10 @@ export const vendorStoreTable = pgTable(
     storeEmail: varchar('store_email', { length: 255 }).notNull(),
     storeLogoId: integer('store_logo_id').references(() => imageTable.id),
     storeCoverId: integer('store_cover_id').references(() => imageTable.id),
+    storePaymentMethodId: integer('store_payment_method_id').references(
+      () => vendorPaymentTable.id,
+      { onDelete: 'set null' },
+    ),
 
     isOnboard: boolean('is_onboard').notNull().default(false),
     isApproved: boolean('is_approved').notNull().default(false),
@@ -209,17 +221,25 @@ export const vendorStoreTable = pgTable(
   ],
 );
 
-export const vendorPaymentTable = pgTable(
-  'vendor_payments',
-  {
-    id: serial('id').primaryKey(),
-    vendorStoreId: integer('vendor_store_id')
-      .notNull()
-      .references(() => vendorStoreTable.id, { onDelete: 'cascade' }),
-    paymentProvider: varchar('payment_provider', { length: 100 }),
-    paymentAccountId: varchar('payment_account_id', { length: 255 }),
-    isPaymentSetup: boolean('is_payment_setup').notNull().default(false),
-    createdAt: timestamp('created_at').defaultNow(),
-  },
-  table => [index('vendor_payment_store_id_idx').on(table.vendorStoreId)],
-);
+export const vendorStoreRelations = relations(vendorStoreTable, ({ one }) => ({
+  createdBy: one(accountTable, {
+    fields: [vendorStoreTable.createdById],
+    references: [accountTable.id],
+  }),
+  storeAddress: one(addressTable, {
+    fields: [vendorStoreTable.storeAddress],
+    references: [addressTable.id],
+  }),
+  storeLogo: one(imageTable, {
+    fields: [vendorStoreTable.storeLogoId],
+    references: [imageTable.id],
+  }),
+  storeCover: one(imageTable, {
+    fields: [vendorStoreTable.storeCoverId],
+    references: [imageTable.id],
+  }),
+  storePaymentMethod: one(vendorPaymentTable, {
+    fields: [vendorStoreTable.storePaymentMethodId],
+    references: [vendorPaymentTable.id],
+  }),
+}));

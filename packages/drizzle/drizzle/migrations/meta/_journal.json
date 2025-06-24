@@ -50,6 +50,13 @@
       "when": 1750660323062,
       "tag": "0006_lowly_blacklash",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1750737062924,
+      "tag": "0007_clumsy_black_crow",
+      "breakpoints": true
     }
   ]
 }

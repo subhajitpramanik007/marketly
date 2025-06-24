@@ -11,3 +11,5 @@ export * from './AddLogo';
 export * from './AddFirstProducts';
 
 export * from './OnboardingProvider';
+
+export * from './OnboardingSkeleton';

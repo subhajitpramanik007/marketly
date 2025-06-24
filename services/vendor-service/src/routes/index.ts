@@ -6,11 +6,13 @@ import { healthRoutes } from './heathcheck.routes';
 import { profileRoutes } from './profile.routes';
 import { staffsRoutes } from './staffs.routes';
 import { onboardingRoutes } from './onboarding.routes';
+import { meRoutes } from './me.routes';
 
 const router = Router();
 
 router.use('/health', healthRoutes);
 router.use('/onboarding', onboardingRoutes);
+router.use('/me', meRoutes);
 router.use('/:vendorId/profile', profileRoutes);
 router.use('/:vendorId/staffs', staffsRoutes);
 

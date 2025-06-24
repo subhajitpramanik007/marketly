@@ -4,6 +4,7 @@ import {
   TVendorRegistrationEmailVerification,
 } from '@/schemas/auth.schemas';
 import api from './axios';
+import { ApiResponse } from '@/types';
 
 export const register = (data: TVendorRegistrationEmail) => {
   return api.post('/auth/vendors/register', data);
@@ -25,6 +26,6 @@ export const logout = () => {
   return api.post('/auth/vendors/logout');
 };
 
-export const refreshSession = () => {
+export const refreshSession = (): Promise<ApiResponse<{ accessToken: string }>> => {
   return api.post('/auth/sessions/refresh');
 };

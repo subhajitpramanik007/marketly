@@ -3,6 +3,7 @@ import {
   asyncHandler,
   BadRequestError,
   ConflictError,
+  UnauthorizedError,
   zodValidation,
 } from '@marketly/http';
 import { dbClient, eq } from '@marketly/drizzle';
@@ -129,4 +130,47 @@ export const addressOnboarding = asyncHandler(async (req, res) => {
   res
     .status(200)
     .json(new ApiResponse(200, { address, store: vendorStore }, 'Address created successfully'));
+});
+
+export const vendorOnboardingStatus = asyncHandler(async (req, res) => {
+  let onboardingSteps = [
+    'Add Personal Info',
+    'Add Store Info',
+    'Add Address',
+    'Add Payment Methods',
+    'Add your Logo',
+    'Add your First Products',
+  ];
+  let status: 'Completed' | 'Pending' = 'Pending';
+
+  // get vendor onboarding status
+  const accountId = req.user?.id;
+  if (!accountId) {
+    throw new UnauthorizedError('You are not authorized to access this resource');
+  }
+
+  const vendor = await dbClient.query.vendorStoreTable.findFirst({
+    where: eq(vendorStoreTable.createdById, accountId),
+  });
+
+  if (!vendor) {
+    throw new BadRequestError('Vendor not found');
+  }
+
+  //   idOnboard - means complete upto address
+  if (vendor.isOnboard) {
+    onboardingSteps = onboardingSteps.slice(3);
+  } else {
+    onboardingSteps = onboardingSteps.slice(2);
+  }
+
+  //   idOnboard & storePaymentMethodId - means complete
+  if (vendor.isOnboard && vendor.storePaymentMethodId) {
+    status = 'Completed';
+    onboardingSteps = [];
+  }
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, { onboardingSteps, status }, 'Onboarding status fetched'));
 });

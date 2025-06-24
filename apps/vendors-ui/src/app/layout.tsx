@@ -4,6 +4,7 @@ import './globals.css';
 import Providers from './provider';
 import { SessionProvider } from '@/providers/sessionProvider';
 import { GradientLayout } from '@/components/gradientLayout';
+import AppProvider from './_app';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,12 +34,11 @@ export default function RootLayout({
       >
         <Providers>
           <SessionProvider>
-            <div className="flex w-full bg-background min-h-screen items-center justify-center">
-              {/* <GradientLayout> */}
-              {children}
-              {/* <Toaster /> */}
-              {/* </GradientLayout> */}
-            </div>
+            <AppProvider>
+              <div className="flex w-full bg-background min-h-screen items-center justify-center">
+                {children}
+              </div>
+            </AppProvider>
           </SessionProvider>
         </Providers>
       </body>
