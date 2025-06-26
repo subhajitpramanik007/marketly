@@ -4,6 +4,7 @@ import './globals.css';
 import Providers from './provider';
 import { SessionProvider } from '@/providers/sessionProvider';
 import AppProvider from './_app';
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -29,20 +30,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         cz-shortcut-listen="true"
       >
-        <Providers>
-          <SessionProvider>
-            <AppProvider>
-              <div className="flex w-full bg-background min-h-screen items-center justify-center">
-                {children}
-              </div>
-            </AppProvider>
-          </SessionProvider>
-        </Providers>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Providers>
+            <SessionProvider>
+              <AppProvider>
+                <div className="flex w-full bg-background min-h-screen items-center justify-center">
+                  {children}
+                </div>
+              </AppProvider>
+            </SessionProvider>
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

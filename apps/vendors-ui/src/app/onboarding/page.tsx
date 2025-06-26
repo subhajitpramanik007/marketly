@@ -34,7 +34,7 @@ export default function OnboardingPage() {
   const { currentStep, completedStep, setCurrentStep, setCompletedStep } = useOnboarding();
   const [isOnboardingCompleted, setIsOnboardingCompleted] = React.useState(false);
 
-  const { data, isPending, isLoading } = useOnboardingStatus();
+  const { data, isLoading } = useOnboardingStatus();
 
   React.useEffect(() => {
     if (completedStep.length === ONBOARDING_STEPS.length) {
@@ -59,7 +59,7 @@ export default function OnboardingPage() {
     }
   }, [data]);
 
-  if (isPending || isLoading) {
+  if (isLoading) {
     return <OnboardingSkeleton />;
   }
 

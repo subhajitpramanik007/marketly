@@ -1,10 +1,20 @@
 'use client';
 
-import { Home, Inbox, LayoutDashboard, ShoppingBasketIcon, User2Icon } from 'lucide-react';
+import {
+  ChevronRight,
+  ChevronUp,
+  Home,
+  Inbox,
+  LayoutDashboard,
+  ShoppingBasketIcon,
+  User2,
+  User2Icon,
+} from 'lucide-react';
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -12,7 +22,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
+import { useSession } from '@/hooks/useSession';
 
 const items = [
   {
@@ -43,6 +65,9 @@ const items = [
 ];
 
 export function ASidebar() {
+  const { themes, theme: currentTheme, setTheme } = useTheme();
+  const { user } = useSession();
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -70,6 +95,47 @@ export function ASidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton>
+                  <User2 /> {user?.firstName}
+                  <ChevronRight className="ml-auto" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                side="right"
+                sideOffset={12}
+                className="w-[--radix-popper-anchor-width]"
+              >
+                <DropdownMenuItem>
+                  <Link href="/profile">Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent sideOffset={8}>
+                    {themes.map(theme => (
+                      <DropdownMenuCheckboxItem
+                        key={theme}
+                        onClick={() => setTheme(theme)}
+                        className="capitalize"
+                        checked={theme === currentTheme}
+                      >
+                        {theme}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+                <DropdownMenuItem>
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

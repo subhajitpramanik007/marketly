@@ -28,7 +28,7 @@ export const personalInfoSchema = z.object({
 export type TPersonalInfoSchema = z.infer<typeof personalInfoSchema>;
 
 // Add store onboarding schema
-export const StoreCategory = z.enum([
+export const CATEGORIES = [
   'electronics',
   'fashion',
   'home appliances',
@@ -42,7 +42,9 @@ export const StoreCategory = z.enum([
   'furniture',
   'pet supplies',
   'music',
-]);
+] as const;
+
+export const StoreCategory = z.enum(CATEGORIES);
 
 export const addStoreOnboardingSchema = z.object({
   storeName: zodString('Store name', 5, 50),

@@ -19,7 +19,8 @@ export default function AppProvider({ children }: { children: React.ReactNode })
 
   React.useEffect(() => {
     if (!isOnboardedCheck && data?.data.status === 'Pending' && pathname !== '/onboarding') {
-      router.push('/onboarding');
+      // TODO: check if the user has completed the onboarding
+      //   router.push('/onboarding');
 
       setIsOnboardedCheck(true);
     }

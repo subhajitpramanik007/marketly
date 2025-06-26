@@ -3,6 +3,7 @@
 import { useLocalStore } from '@/hooks/useLocalStore';
 import { refreshSession } from '@/services/auth.services';
 import { getCurrentSessionData } from '@/services/me.services';
+import { TVendor, TVendorStore } from '@/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 
@@ -15,8 +16,8 @@ interface InitialSession {
 
 interface AuthSession {
   status: 'Authenticated';
-  user: any;
-  store: any;
+  user: TVendor;
+  store: TVendorStore;
   isAuthenticated: true;
 }
 

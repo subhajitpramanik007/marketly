@@ -73,7 +73,7 @@ export const VerifyEmailRegistrationForm: React.FC<{
                   type="button"
                   variant="link"
                   disabled={resendOtpMutation.isPending}
-                  onSubmit={() => resendOtpMutation.mutate({ email })}
+                  onClick={() => resendOtpMutation.mutate({ email })}
                 >
                   Resend OTP
                 </Button>

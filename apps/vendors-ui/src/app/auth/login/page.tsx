@@ -7,12 +7,12 @@ import { LoginForm } from '../_components/LoginForm';
 
 export default function LoginPage() {
   return (
-    <AuthLayout title="Register">
+    <AuthLayout title="Login">
       <AuthCardWrapper
-        cardTitle="Welcome to Marketly"
+        cardTitle="Welcome Back"
         footerAs="link"
-        footerText="Already have an account?"
-        footerLink={{ href: '/auth/login', text: 'login' }}
+        footerText="Don't have an account?"
+        footerLink={{ href: '/auth/register', text: 'register' }}
       >
         <LoginForm />
       </AuthCardWrapper>

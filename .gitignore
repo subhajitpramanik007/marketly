@@ -43,3 +43,4 @@ docs/services/*.json
 tests
 
 packages/dashboard
+apps/vendors-ui/src/app/playground/
