@@ -10,7 +10,8 @@ import {
   text,
   integer,
   index,
-  PgEnumObject,
+  decimal,
+  json,
 } from 'drizzle-orm/pg-core';
 
 // Enum for user roles
@@ -242,4 +243,282 @@ export const vendorStoreRelations = relations(vendorStoreTable, ({ one }) => ({
     fields: [vendorStoreTable.storePaymentMethodId],
     references: [vendorPaymentTable.id],
   }),
+}));
+
+export const productImageTable = pgTable(
+  'product_images',
+  {
+    id: serial('id').primaryKey(),
+
+    url: varchar('url', { length: 255 }).notNull(),
+    fileId: varchar('file_id', { length: 255 }),
+    alt: varchar('alt', { length: 255 }),
+
+    productId: integer('product_id')
+      .notNull()
+      .references(() => productTable.id, { onDelete: 'cascade' }),
+    isPrimary: boolean('is_primary').notNull().default(false),
+    order: integer('order').notNull().default(0),
+
+    metadata: json('metadata').$type<{
+      width?: number;
+      height?: number;
+      size?: number;
+      mimeType?: string;
+    }>(),
+
+    createdAt: timestamp('created_at').defaultNow(),
+  },
+  table => [index('product_images_product_idx').on(table.productId)],
+);
+
+export const productTable = pgTable(
+  'products',
+  {
+    id: serial('id').primaryKey(),
+    storeId: integer('store_id')
+      .notNull()
+      .references(() => vendorStoreTable.id, { onDelete: 'cascade' }),
+    addedById: integer('added_by_id')
+      .notNull()
+      .references(() => accountTable.id, { onDelete: 'set null' }), // added by vendor staff id
+    name: varchar('name', { length: 255 }).notNull(),
+    slug: varchar('slug', { length: 255 }).notNull().unique(),
+
+    description: varchar('description', { length: 1000 }),
+    category: varchar('category', { length: 100 }),
+
+    price: decimal('price', { precision: 10, scale: 2 }).notNull(),
+    discount: decimal('discount', { precision: 5, scale: 2 }).default('0.00'),
+
+    stock: integer('stock').notNull().default(0),
+    isAvailable: boolean('is_available').notNull().default(true),
+
+    images: json('images').$type<string[]>().default([]),
+    tags: json('tags').$type<string[]>().default([]),
+    isDeleted: boolean('is_deleted').notNull().default(false),
+
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at')
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  table => [
+    index('products_store_id_idx').on(table.storeId),
+    index('products_slug_idx').on(table.slug),
+    index('products_category_idx').on(table.category),
+  ],
+);
+
+export const productImageRelations = relations(productImageTable, ({ one }) => ({
+  product: one(productTable, {
+    fields: [productImageTable.productId],
+    references: [productTable.id],
+  }),
+}));
+
+export const productRelations = relations(productTable, ({ one, many }) => ({
+  store: one(vendorStoreTable, {
+    fields: [productTable.storeId],
+    references: [vendorStoreTable.id],
+  }),
+  addedBy: one(vendorStaffTable, {
+    fields: [productTable.addedById], // added by vendor staff id of account
+    references: [vendorStaffTable.accountId],
+  }),
+  images: many(productImageTable),
+}));
+
+export const productRatingTable = pgTable(
+  'product_ratings',
+  {
+    id: serial('id').primaryKey(),
+    productId: integer('product_id')
+      .notNull()
+      .references(() => productTable.id, { onDelete: 'cascade' }),
+    accountId: integer('account_id')
+      .notNull()
+      .references(() => accountTable.id, { onDelete: 'cascade' }),
+    rating: integer('rating').notNull(),
+    comment: varchar('comment', { length: 1000 }),
+    imageId: integer('image_id').references(() => imageTable.id, { onDelete: 'set null' }),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at')
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  table => [
+    index('product_ratings_product_id_idx').on(table.productId),
+    index('product_ratings_account_id_idx').on(table.accountId),
+  ],
+);
+
+export const productRatingRelations = relations(productRatingTable, ({ one }) => ({
+  product: one(productTable, {
+    fields: [productRatingTable.productId],
+    references: [productTable.id],
+  }),
+  customer: one(consumerTable, {
+    fields: [productRatingTable.accountId],
+    references: [consumerTable.accountId],
+  }),
+  image: one(imageTable, {
+    fields: [productRatingTable.imageId],
+    references: [imageTable.id],
+  }),
+}));
+
+export const cartTable = pgTable(
+  'carts',
+  {
+    id: serial('id').primaryKey(),
+    accountId: integer('account_id')
+      .notNull()
+      .references(() => accountTable.id, { onDelete: 'cascade' }),
+    productId: integer('product_id')
+      .notNull()
+      .references(() => productTable.id, { onDelete: 'cascade' }),
+    quantity: integer('quantity').notNull(),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at')
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  table => [index('carts_account_id_idx').on(table.accountId)],
+);
+
+export const cartRelations = relations(cartTable, ({ one }) => ({
+  product: one(productTable, {
+    fields: [cartTable.productId],
+    references: [productTable.id],
+  }),
+  addedBy: one(consumerTable, {
+    fields: [cartTable.accountId],
+    references: [consumerTable.accountId],
+  }),
+}));
+
+export const wishlistTable = pgTable(
+  'wishlists',
+  {
+    id: serial('id').primaryKey(),
+    accountId: integer('account_id')
+      .notNull()
+      .references(() => accountTable.id, { onDelete: 'cascade' }),
+    productId: integer('product_id')
+      .notNull()
+      .references(() => productTable.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at').defaultNow(),
+  },
+  table => [index('wishlists_account_id_idx').on(table.accountId)],
+);
+
+export const wishlistRelations = relations(wishlistTable, ({ one }) => ({
+  product: one(productTable, {
+    fields: [wishlistTable.productId],
+    references: [productTable.id],
+  }),
+  addedBy: one(consumerTable, {
+    fields: [wishlistTable.accountId],
+    references: [consumerTable.accountId],
+  }),
+}));
+
+// Payment data table
+export const paymentStatusEnum = pgEnum('payment_status', [
+  'pending',
+  'completed',
+  'failed',
+  'cancelled',
+  'refunded',
+]);
+
+export const paymentTable = pgTable('payments', {
+  id: serial('id').primaryKey(),
+
+  status: paymentStatusEnum('status').notNull().default('pending'),
+  method: varchar('method', { length: 100 }).notNull(),
+
+  transactionId: varchar('transaction_id', { length: 255 }).unique(),
+  provider: varchar('provider', { length: 255 }).notNull(),
+
+  amount: decimal('amount', { precision: 10, scale: 2 }).notNull(),
+  currency: varchar('currency', { length: 10 }).default('INR'),
+
+  metadata: json('metadata').$type<Record<string, any>>().default({}),
+
+  paidAt: timestamp('paid_at'),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+// Order items table
+export const orderItemTable = pgTable(
+  'order_items',
+  {
+    id: serial('id').primaryKey(),
+    orderId: integer('order_id')
+      .notNull()
+      .references(() => orderTable.id, { onDelete: 'cascade' }),
+    productId: integer('product_id')
+      .notNull()
+      .references(() => productTable.id, { onDelete: 'cascade' }),
+    quantity: integer('quantity').notNull(),
+    priceAtPurchase: decimal('price_at_purchase', { precision: 10, scale: 2 }).notNull(),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at')
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  table => [
+    index('order_items_order_id_idx').on(table.orderId),
+    index('order_items_product_id_idx').on(table.productId),
+  ],
+);
+
+export const orderStatusEnum = pgEnum('order_status', [
+  'pending',
+  'processing',
+  'shipped',
+  'delivered',
+  'cancelled',
+]);
+
+export const orderTable = pgTable(
+  'orders',
+  {
+    id: serial('id').primaryKey(),
+    accountId: integer('account_id')
+      .notNull()
+      .references(() => accountTable.id, { onDelete: 'cascade' }),
+    paymentId: integer('payment_id').references(() => paymentTable.id, { onDelete: 'cascade' }),
+    status: orderStatusEnum('status').notNull(),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at')
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  table => [index('orders_account_id_idx').on(table.accountId)],
+);
+
+export const orderItemRelations = relations(orderItemTable, ({ one }) => ({
+  order: one(orderTable, {
+    fields: [orderItemTable.orderId],
+    references: [orderTable.id],
+  }),
+  product: one(productTable, {
+    fields: [orderItemTable.productId],
+    references: [productTable.id],
+  }),
+}));
+
+export const orderRelations = relations(orderTable, ({ one, many }) => ({
+  account: one(accountTable, {
+    fields: [orderTable.accountId],
+    references: [accountTable.id],
+  }),
+  payment: one(paymentTable, {
+    fields: [orderTable.paymentId],
+    references: [paymentTable.id],
+  }),
+  items: many(orderItemTable),
 }));
