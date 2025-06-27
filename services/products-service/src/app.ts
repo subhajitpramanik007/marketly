@@ -22,7 +22,6 @@ app.use(cookieParser());
 
 // Routes
 import router from './routes';
-import { logger } from '@marketly/logger';
 
 app.use('/api/products', router);
 

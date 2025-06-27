@@ -4,14 +4,12 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc -b",
+    "build": "tsup",
+    "build:watch": "tsup --watch",
     "start": "node dist/server.js",
     "swagger": "node src/swagger.js"
   },
   "dependencies": {
-    "@marketly/config": "workspace:*",
-    "@marketly/http": "workspace:*",
-    "@marketly/logger": "workspace:*",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "express": "^5.1.0",

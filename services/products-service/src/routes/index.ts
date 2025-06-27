@@ -3,10 +3,12 @@ import swaggerUi from 'swagger-ui-express';
 import { logger } from '@marketly/logger';
 
 import { healthRoutes } from './heathcheck.routes';
+import { productRoutes } from './products.routes';
 
 const router = Router();
 
 router.use('/health', healthRoutes);
+router.use('/', productRoutes);
 
 // Docs
 try {
