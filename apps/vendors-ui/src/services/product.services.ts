@@ -1,26 +1,39 @@
-import { NewProductSchema, UpdateProductSchema } from '@/schemas/product.schemas';
 import api from './axios';
+import { ApiResponse, IProduct } from '@/types';
 
-export const getProducts = (page = 1, limit = 10, search = '') => {
-  return api.get(`/vendors/products?page=${page}&limit=${limit}&search=${search}`);
+import { NewProductSchema, UpdateProductSchema } from '@/schemas/product.schemas';
+
+export const getProducts = (
+  page = 1,
+  limit = 10,
+): Promise<ApiResponse<{ products: IProduct[] }>> => {
+  return api.get(`/products/me?page=${page}&limit=${limit}`);
 };
 
-export const addNewProduct = (data: NewProductSchema) => {
-  return api.post('/vendors/products', data);
+export const addNewProduct = (
+  data: NewProductSchema,
+): Promise<ApiResponse<{ product: IProduct }>> => {
+  return api.post('/products', data);
 };
 
-export const updateProduct = (id: string, data: UpdateProductSchema) => {
-  return api.put(`/vendors/products/${id}`, data);
+export const updateProduct = (
+  id: string,
+  data: UpdateProductSchema,
+): Promise<ApiResponse<{ product: IProduct }>> => {
+  return api.put(`/products/${id}`, data);
 };
 
-export const getProduct = (id: string) => {
-  return api.get(`/vendors/products/${id}`);
+export const getProductDetails = (slug: string): Promise<ApiResponse<{ product: IProduct }>> => {
+  return api.get(`/products/${slug}/details`);
 };
 
-export const changeProductStatus = (id: string, data: { isAvailable: boolean }) => {
-  return api.patch(`/vendors/products/${id}`, data);
+export const changeProductStatus = (
+  id: number,
+  data: { isAvailable: boolean },
+): Promise<ApiResponse<{ product: IProduct }>> => {
+  return api.patch(`/products/${id}`, data);
 };
 
-export const deleteProduct = (id: string) => {
-  return api.delete(`/vendors/products/${id}`);
+export const deleteProduct = (id: number) => {
+  return api.delete(`/products/${id}`);
 };

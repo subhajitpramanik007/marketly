@@ -5,9 +5,12 @@ import { newProductSchema, NewProductSchema } from '@/schemas/product.schemas';
 import { addNewProduct } from '@/services/product.services';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 export default function NewProductPage() {
+  const router = useRouter();
+
   const form = useForm<NewProductSchema>({
     resolver: zodResolver(newProductSchema),
     defaultValues: {
@@ -24,7 +27,10 @@ export default function NewProductPage() {
   const { mutate: addProduct } = useMutation({
     mutationKey: ['products', 'new'],
     mutationFn: addNewProduct,
-    onSuccess: () => {},
+    onSuccess: () => {
+      form.reset();
+      router.push('/products');
+    },
   });
 
   function onSubmit(data: NewProductSchema) {
