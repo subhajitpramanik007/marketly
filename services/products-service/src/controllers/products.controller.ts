@@ -1,8 +1,15 @@
 import { asyncHandler } from '@marketly/http';
-import { and, asc, dbClient, desc, eq, placeholder } from '@marketly/drizzle/index';
-import { productImageTable, productTable } from '@marketly/drizzle/db/schemas';
+import { and, asc, dbClient, desc, eq, sql } from '@marketly/drizzle/index';
+import {
+  accountTable,
+  productImageTable,
+  productTable,
+  vendorStaffTable,
+} from '@marketly/drizzle/db/schemas';
 import { newProductSchema, paginationSchema, updateProductSchema } from '@/schemas';
 import { ApiResponse, BadRequestError, UnauthorizedError, zodValidation } from '@marketly/http';
+import { logger } from '@marketly/logger';
+import { getAllProductsAsVendor, getAProductDetailsAsVendor } from '@/services/product.service';
 
 // get all products - for public
 export const getProducts = asyncHandler(async (req, res) => {
@@ -23,6 +30,7 @@ export const getProducts = asyncHandler(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, { products }, 'Products fetched successfully'));
   } catch (error) {
+    logger.error(error, 'Failed to fetch products');
     throw new BadRequestError('Failed to fetch products');
   }
 });
@@ -59,6 +67,7 @@ export const getProduct = asyncHandler(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, { product }, 'Product fetched successfully'));
   } catch (error) {
+    logger.error(error, 'Failed to fetch product');
     throw new BadRequestError('Failed to fetch product');
   }
 });
@@ -73,19 +82,12 @@ export const getVendorProducts = asyncHandler(async (req, res) => {
   }
 
   try {
-    const currentStoreProducts = await dbClient.query.productTable.findMany({
-      where: eq(productTable.storeId, req.vendor?.storeId),
-      limit: limit,
-      offset: (page - 1) * limit,
-      orderBy: [sort === 'asc' ? asc(productTable.createdAt) : desc(productTable.createdAt)],
-      with: {
-        addedBy: true,
-        images: {
-          where: eq(productImageTable.isPrimary, true),
-          limit: 1,
-        },
-      },
-    });
+    const currentStoreProducts = await getAllProductsAsVendor(
+      req.vendor.storeId,
+      limit,
+      page,
+      sort,
+    );
 
     res
       .status(200)
@@ -93,6 +95,7 @@ export const getVendorProducts = asyncHandler(async (req, res) => {
         new ApiResponse(200, { products: currentStoreProducts }, 'Products fetched successfully'),
       );
   } catch (error) {
+    logger.error(error, 'Failed to fetch products');
     throw new BadRequestError('Failed to fetch products');
   }
 });
@@ -124,14 +127,15 @@ export const addNewProduct = asyncHandler(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, { product }, 'Product added successfully'));
   } catch (error) {
+    logger.error(error, 'Failed to add product');
     throw new BadRequestError('Failed to add product');
   }
 });
 
 // get product details - for vendor
 export const getProductDetails = asyncHandler(async (req, res) => {
-  const productId = req.params.id;
-  if (!productId) {
+  const productSlug = req.params.productSlug;
+  if (!productSlug) {
     throw new BadRequestError('Product ID is required');
   }
   if (!req.vendor) {
@@ -139,16 +143,7 @@ export const getProductDetails = asyncHandler(async (req, res) => {
   }
 
   try {
-    const product = await dbClient.query.productTable.findFirst({
-      where: and(
-        eq(productTable.id, parseInt(productId)),
-        eq(productTable.storeId, req.vendor?.storeId),
-      ),
-      with: {
-        addedBy: true,
-        images: true,
-      },
-    });
+    const product = await getAProductDetailsAsVendor(req.vendor.storeId, productSlug);
 
     if (!product) {
       throw new BadRequestError('Product not found');
@@ -156,13 +151,14 @@ export const getProductDetails = asyncHandler(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, { product }, 'Product details fetched successfully'));
   } catch (error) {
+    logger.error(error, 'Failed to fetch product details');
     throw new BadRequestError('Failed to fetch product details');
   }
 });
 
 // update product details - for vendor
 export const updateProductDetails = asyncHandler(async (req, res) => {
-  const productId = req.params.id;
+  const productId = req.params.productId;
   if (!productId) {
     throw new BadRequestError('Product ID is required');
   }
@@ -200,13 +196,14 @@ export const updateProductDetails = asyncHandler(async (req, res) => {
       .status(200)
       .json(new ApiResponse(200, { product: updatedProduct }, 'Product updated successfully'));
   } catch (error) {
+    logger.error(error, 'Failed to update product');
     throw new BadRequestError('Failed to update product');
   }
 });
 
 // delete product - for vendor
 export const deleteProduct = asyncHandler(async (req, res) => {
-  const productId = req.params.id;
+  const productId = req.params.productId;
   if (!productId) {
     throw new BadRequestError('Product ID is required');
   }
@@ -235,6 +232,7 @@ export const deleteProduct = asyncHandler(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, {}, 'Product deleted successfully'));
   } catch (error) {
+    logger.error(error, 'Failed to delete product');
     throw new BadRequestError('Failed to delete product');
   }
 });
@@ -279,6 +277,7 @@ export const toggleProductStatus = asyncHandler(async (req, res) => {
         new ApiResponse(200, { product: updatedProduct }, 'Product status updated successfully'),
       );
   } catch (error) {
+    logger.error(error, 'Failed to update product status');
     throw new BadRequestError('Failed to update product status');
   }
 });

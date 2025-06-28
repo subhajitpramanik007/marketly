@@ -16,7 +16,7 @@ export const updateProductSchema = productSchema.partial();
 
 // pagination
 export const paginationSchema = z.object({
-  page: z.number().min(1).default(1),
-  limit: z.number().min(1).max(100).default(10),
+  limit: z.string().regex(/^\d+$/).transform(Number).default('10'),
+  page: z.string().regex(/^\d+$/).transform(Number).default('1'),
   sort: z.enum(['asc', 'desc']).default('asc'),
 });
