@@ -30,7 +30,7 @@ export default function AppProvider({ children }: { children: React.ReactNode })
     if (!isAuthenticated && status !== 'loading' && pathname !== '/auth/login') {
       router.push('/auth/login');
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, status]);
 
   React.useEffect(() => {
     removeItem('session');

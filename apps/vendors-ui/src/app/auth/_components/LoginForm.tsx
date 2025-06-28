@@ -15,10 +15,15 @@ import {
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { login } from '@/services/auth.services';
+import { useRouter } from 'next/navigation';
+import { useLocalStore } from '@/hooks/useLocalStore';
 
 export const LoginForm: React.FC = () => {
+  const router = useRouter();
+  const { setItem } = useLocalStore();
+
   const form = useForm<TVendorLogin>({
     resolver: zodResolver(vendorLoginSchema),
     defaultValues: {
@@ -26,6 +31,8 @@ export const LoginForm: React.FC = () => {
       password: '',
     },
   });
+
+  const queryClient = useQueryClient();
 
   const {
     isPending,
@@ -37,6 +44,14 @@ export const LoginForm: React.FC = () => {
     mutationFn: login,
     onSuccess: () => {
       form.reset();
+      setItem('session', {
+        isAuthenticated: true,
+        lastRefreshedAt: Date.now(),
+      });
+
+      queryClient.invalidateQueries({ queryKey: ['session'] });
+
+      router.push('/');
     },
   });
 

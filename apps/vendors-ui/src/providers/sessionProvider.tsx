@@ -3,7 +3,7 @@
 import { useLocalStore } from '@/hooks/useLocalStore';
 import { refreshSession } from '@/services/auth.services';
 import { getCurrentSessionData } from '@/services/me.services';
-import { TVendor, TVendorStore } from '@/types';
+import { IVendor, IVendorStore } from '@/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 
@@ -16,8 +16,8 @@ interface InitialSession {
 
 interface AuthSession {
   status: 'Authenticated';
-  user: TVendor;
-  store: TVendorStore;
+  user: IVendor;
+  store: IVendorStore;
   isAuthenticated: true;
 }
 
@@ -39,10 +39,6 @@ function useCurrentSession() {
   return useQuery({
     queryKey: ['session'],
     queryFn: getCurrentSessionData,
-    select: data => {
-      console.log(data);
-      return data;
-    },
     enabled: isAuthenticated,
     retry: false,
     refetchOnWindowFocus: false,
@@ -51,6 +47,12 @@ function useCurrentSession() {
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   const { setItem, removeItem } = useLocalStore();
+  const [session, setSession] = React.useState<Session>({
+    status: 'loading',
+    user: null,
+    store: null,
+    isAuthenticated: false,
+  });
 
   const { mutateAsync: sessionRefresh, isSuccess } = useMutation({
     mutationKey: ['session', 'refresh'],
@@ -64,6 +66,14 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     },
     onError: () => {
       console.log('session refresh failed');
+
+      setSession({
+        status: 'Unauthenticated',
+        user: null,
+        store: null,
+        isAuthenticated: false,
+      });
+      removeItem('session');
     },
   });
 
@@ -79,30 +89,16 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(interval);
   }, [sessionRefresh]);
 
-  let session: Session = {
-    status: 'loading',
-    user: null,
-    store: null,
-    isAuthenticated: false,
-  };
-
-  if (sessionQuery.isSuccess) {
-    session = {
-      status: 'Authenticated',
-      user: sessionQuery.data.data.user,
-      store: sessionQuery.data.data.store,
-      isAuthenticated: true,
-    };
-  }
-
-  if (sessionQuery.isError) {
-    session = {
-      status: 'Unauthenticated',
-      user: null,
-      store: null,
-      isAuthenticated: false,
-    };
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      setSession({
+        status: 'Authenticated',
+        user: sessionQuery.data?.data.user,
+        store: sessionQuery.data?.data.store,
+        isAuthenticated: true,
+      });
+    }
+  }, [isSuccess, sessionQuery.data?.data]);
 
   return <SessionContext.Provider value={session}>{children}</SessionContext.Provider>;
 }
