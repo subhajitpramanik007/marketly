@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "../../",
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@marketly/config": ["../../packages/config/src"],
+      "@marketly/http": ["../../packages/http/src"],
+      "@marketly/logger": ["../../packages/logger/src"],
+      "@marketly/lib/*": ["../../packages/lib/src/*"]
+    }
+  }
+}

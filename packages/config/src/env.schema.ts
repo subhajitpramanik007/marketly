@@ -33,4 +33,10 @@ export const envSchema = z.object({
   //   Service
   API_URL: z.string().url().default('http://localhost:8080'),
   CLIENT_URL: z.string().url().default('http://localhost:3000'),
+
+  //   Cloudinary
+  CLOUDINARY_CLOUD_NAME: z.string(),
+  CLOUDINARY_API_KEY: z.string(),
+  CLOUDINARY_API_SECRET: z.string(),
+  CLOUDINARY_FOLDER: z.string().default('marketly'),
 });

@@ -63,6 +63,11 @@ const proxyServers = [
     route: '/api/products',
     targetUrl: 'http://localhost:6004/api/products',
   },
+  {
+    service: 'Uploads',
+    route: '/api/uploads',
+    targetUrl: 'http://localhost:7000/api/uploads',
+  },
 ];
 
 proxyServers.forEach(({ service, route, targetUrl }) => {
