@@ -12,5 +12,3 @@ export const healthCheck = async () => {
     console.log(response.error);
   }
 };
-
-
