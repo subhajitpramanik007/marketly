@@ -5,7 +5,7 @@ import { getProductDetails } from '@/services/product.services';
 
 export const useProductDetails = (slug: string) =>
   useQuery({
-    queryKey: ['products', slug],
+    queryKey: ['products', { slug }],
     queryFn: () => getProductDetails(slug),
     retry: false,
   });

@@ -17,10 +17,10 @@ export const addNewProduct = (
 };
 
 export const updateProduct = (
-  id: string,
+  id: string | number,
   data: UpdateProductSchema,
 ): Promise<ApiResponse<{ product: IProduct }>> => {
-  return api.put(`/products/${id}`, data);
+  return api.patch(`/products/${id}`, data);
 };
 
 export const getProductDetails = (slug: string): Promise<ApiResponse<{ product: IProduct }>> => {

@@ -1,9 +1,49 @@
-import { IProduct } from '@/types';
-import { Card, CardContent } from '@/components/ui/card';
+'use client';
+
+import React from 'react';
 import Link from 'next/link';
+import { IProduct } from '@/types';
+import { usePathname } from 'next/navigation';
+
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { useSession } from '@/hooks/useSession';
+import { usePermission } from '@/hooks/usePermision';
 
 export const ProductDetails = ({ product }: { product: IProduct }) => {
+  const pathname = usePathname();
+  const { isCanManage } = usePermission();
+
+  return (
+    <div className="max-w-4xl mx-auto rounded-2xl shadow-md p-4">
+      <div className="flex justify-between">
+        <h1 className="text-2xl font-bold mb-4">Product Details</h1>
+
+        {isCanManage ? (
+          <div className="flex gap-6">
+            {/* Edit */}
+            <Button asChild>
+              <Link href={`${pathname}?edit=true`} replace>
+                Edit Product Details
+              </Link>
+            </Button>
+            {/* Add images */}
+            <Button asChild>
+              <Link href={`${pathname}?addImages=true`} replace>
+                Add Product Images
+              </Link>
+            </Button>
+          </div>
+        ) : null}
+      </div>
+
+      <ProductDetailsCard product={product} />
+    </div>
+  );
+};
+
+export const ProductDetailsCard: React.FC<{ product: IProduct }> = ({ product }) => {
   return (
     <Card className="">
       <CardContent className="space-y-6">

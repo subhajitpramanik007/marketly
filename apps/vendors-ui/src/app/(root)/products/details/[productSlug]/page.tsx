@@ -1,8 +1,12 @@
 'use client';
 
-import { use } from 'react';
+import React, { use } from 'react';
+import { useSearchParams } from 'next/navigation';
+
 import { ProductDetails } from '@/components/products/ProductDetails';
 import { useProductDetails } from '@/hooks/products/useProductDetails';
+import { EditProductDetails } from '@/components/products/EditProductDetails';
+import { AddProductImages } from '@/components/products/AddProductImages';
 
 export default function ProductDetailsPage({
   params,
@@ -10,6 +14,19 @@ export default function ProductDetailsPage({
   params: Promise<{ productSlug: string }>;
 }) {
   const slug = use(params).productSlug;
+  const searchParams = useSearchParams();
+
+  const [action, setAction] = React.useState<'edit' | 'addImages' | null>(null);
+
+  React.useEffect(() => {
+    if (searchParams.get('edit') && searchParams.get('edit') === 'true') {
+      setAction('edit');
+    } else if (searchParams.get('addImages') && searchParams.get('addImages') === 'true') {
+      setAction('addImages');
+    } else {
+      setAction(null);
+    }
+  }, [searchParams]);
 
   const { data, isLoading, isError, error } = useProductDetails(slug);
 
@@ -18,15 +35,14 @@ export default function ProductDetailsPage({
 
   const product = data?.data.product;
 
-  if (!product) {
-    return <div>Product not found</div>;
+  if (!product) return <div>Product not found</div>;
+
+  switch (action) {
+    case 'edit':
+      return <EditProductDetails product={product} />;
+    case 'addImages':
+      return <AddProductImages product={product} />;
+    default:
+      return <ProductDetails product={product} />;
   }
-
-  return (
-    <div className="max-w-4xl mx-auto rounded-2xl shadow-md p-4">
-      <h1 className="text-2xl font-bold mb-4">Product Details</h1>
-
-      <ProductDetails product={product} />
-    </div>
-  );
 }

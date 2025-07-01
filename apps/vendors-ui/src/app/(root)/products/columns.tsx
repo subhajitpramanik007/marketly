@@ -16,6 +16,8 @@ import {
 import Link from 'next/link';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteProduct } from '@/services/product.services';
+import { usePermission } from '@/hooks/usePermision';
+import React from 'react';
 
 export const columns: ColumnDef<IProduct>[] = [
   {
@@ -124,6 +126,7 @@ export const columns: ColumnDef<IProduct>[] = [
     cell: ({ row }) => {
       const slug = row.original.slug;
       const productId = row.original.id;
+      const { isCanManage } = usePermission();
 
       const queryClient = useQueryClient();
 
@@ -147,10 +150,14 @@ export const columns: ColumnDef<IProduct>[] = [
             <DropdownMenuItem asChild>
               <Link href={`/products/details/${slug}`}>View Product</Link>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => deleteAProduct(productId)}>
-              Delete Product
-            </DropdownMenuItem>
+            {isCanManage ? (
+              <React.Fragment>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => deleteAProduct(productId)}>
+                  Delete Product
+                </DropdownMenuItem>
+              </React.Fragment>
+            ) : null}
           </DropdownMenuContent>
         </DropdownMenu>
       );
