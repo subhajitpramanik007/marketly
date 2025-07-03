@@ -10,6 +10,15 @@ import {
   toggleProductStatus,
   updateProductDetails,
 } from '@/controllers/products.controller';
+
+import {
+  addOrUpdateProductImageIds,
+  updateProductImageOrder,
+  setProductPrimaryImage,
+  deleteSingleImageOfProduct,
+  deleteAllProductImages,
+} from '@/controllers/products.image.controller';
+
 import { authenticatedVendor } from '@/middlewares';
 
 const router = Router();
@@ -32,5 +41,13 @@ router.route('/:productId').patch(updateProductDetails);
 router.route('/:productId').delete(deleteProduct);
 // is avalable or not
 router.route('/:productId/toggle-status').patch(toggleProductStatus);
+
+// products images routes
+router.route('/:productId/images').post(addOrUpdateProductImageIds); // add image ids to product image table
+router.route('/:productId/images').patch(addOrUpdateProductImageIds); // add image ids to product image table
+router.route('/:productId/images/:imgId/is-primary').post(setProductPrimaryImage); // add image as primary
+router.route('/:productId/images/:imgId/order').post(updateProductImageOrder); // change image order
+router.route('/:productId/images/:imgId').delete(deleteSingleImageOfProduct); // delete a image of product
+router.route('/:productId/images').delete(deleteAllProductImages); // delete all images of product
 
 export { router as productRoutes };
