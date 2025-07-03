@@ -1,50 +1,9 @@
 import { ApiResponse, asyncHandler, BadRequestError } from '@marketly/http';
-import { cloudinary } from './cloudinary.config';
 import { env } from '@marketly/config';
-import fs from 'fs';
+import { deleteImagesFromCloudinary, uploadImageToCloudinary } from './upload.service';
 
 const MAX_FILE_SIZE = 3;
 const ALLOWED_MIME_TYPES = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
-
-async function uploadImageToCloudinary(
-  file: Express.Multer.File,
-  folderName: string,
-  mimetype: string,
-  originalname: string,
-  size: number,
-  tags?: string[],
-) {
-  try {
-    const result = await cloudinary.uploader.upload(file.path, {
-      folder: 'marketly' + folderName,
-      resource_type: 'image',
-      tags: tags && Array.isArray(tags) ? tags : ['marketly'],
-    });
-
-    if (!result) {
-      throw new BadRequestError('Image upload failed');
-    }
-
-    const imageData = {
-      publicId: result.public_id,
-      url: result.secure_url,
-      mimetype,
-      originalname,
-      size,
-      tags,
-      width: result.width,
-      height: result.height,
-    };
-
-    // clean up from temp folder
-    if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
-
-    return imageData;
-  } catch (error) {
-    if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
-    throw new BadRequestError('Image upload failed');
-  }
-}
 
 export const uploadSingleImage = asyncHandler(async (req, res) => {
   const file = req.file;
@@ -110,14 +69,14 @@ export const multipleUpload = asyncHandler(async (req, res) => {
 });
 
 export const deleteImage = asyncHandler(async (req, res) => {
-  const { publicIds } = req.body;
+  let { publicIds } = req.body;
   if (!publicIds || publicIds.length === 0) throw new BadRequestError('Public ID is required');
 
-  if (typeof publicIds === 'string') {
-    await cloudinary.uploader.destroy(publicIds);
-  } else if (Array.isArray(publicIds)) {
-    await Promise.all(publicIds.map(publicId => cloudinary.uploader.destroy(publicId)));
+  if (!Array.isArray(publicIds) && typeof publicIds !== 'string') {
+    publicIds = [publicIds];
   }
+
+  await deleteImagesFromCloudinary(publicIds);
 
   res.status(200).json(new ApiResponse(200, {}, 'Image deleted successfully'));
 });

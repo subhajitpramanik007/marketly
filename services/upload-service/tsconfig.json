@@ -9,7 +9,8 @@
       "@marketly/config": ["../../packages/config/src"],
       "@marketly/http": ["../../packages/http/src"],
       "@marketly/logger": ["../../packages/logger/src"],
-      "@marketly/lib/*": ["../../packages/lib/src/*"]
+      "@marketly/lib/*": ["../../packages/lib/src/*"],
+      "@marketly/drizzle/*": ["../../packages/drizzle/src/*"]
     }
   }
 }
