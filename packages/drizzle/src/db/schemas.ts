@@ -67,13 +67,25 @@ export const sessionTable = pgTable(
   ],
 );
 
+type ImageMetadata = {
+  width?: number;
+  height?: number;
+  format?: string;
+  size?: number;
+  mimeType?: string;
+} & Record<string, any>;
+
 // Images Table
 export const imageTable = pgTable(
   'images',
   {
     id: serial('id').primaryKey(),
     url: varchar('url', { length: 255 }).notNull(),
-    fileId: varchar('file_id', { length: 255 }),
+    publicId: varchar('file_id', { length: 255 }).notNull(),
+    alt: varchar('alt', { length: 255 }),
+
+    metadata: json('metadata').$type<ImageMetadata>().default({}),
+
     createdAt: timestamp('created_at').defaultNow(),
   },
   table => [uniqueIndex('images_url_idx').on(table.url)],
@@ -250,22 +262,15 @@ export const productImageTable = pgTable(
   {
     id: serial('id').primaryKey(),
 
-    url: varchar('url', { length: 255 }).notNull(),
-    fileId: varchar('file_id', { length: 255 }),
-    alt: varchar('alt', { length: 255 }),
+    imageId: integer('image_id')
+      .notNull()
+      .references(() => imageTable.id, { onDelete: 'cascade' }),
 
     productId: integer('product_id')
       .notNull()
       .references(() => productTable.id, { onDelete: 'cascade' }),
     isPrimary: boolean('is_primary').notNull().default(false),
     order: integer('order').notNull().default(0),
-
-    metadata: json('metadata').$type<{
-      width?: number;
-      height?: number;
-      size?: number;
-      mimeType?: string;
-    }>(),
 
     createdAt: timestamp('created_at').defaultNow(),
   },
@@ -314,6 +319,10 @@ export const productImageRelations = relations(productImageTable, ({ one }) => (
   product: one(productTable, {
     fields: [productImageTable.productId],
     references: [productTable.id],
+  }),
+  image: one(imageTable, {
+    fields: [productImageTable.imageId],
+    references: [imageTable.id],
   }),
 }));
 
