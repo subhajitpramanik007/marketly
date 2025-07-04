@@ -7,9 +7,9 @@ import { usePathname } from 'next/navigation';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { useSession } from '@/hooks/useSession';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { usePermission } from '@/hooks/usePermision';
+import { ShowProductImages } from './ShowProductImages';
 
 export const ProductDetails = ({ product }: { product: IProduct }) => {
   const pathname = usePathname();
@@ -31,7 +31,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
             {/* Add images */}
             <Button asChild>
               <Link href={`${pathname}?addImages=true`} replace>
-                Add Product Images
+                {product.images.length > 0 ? 'Update Product Images' : 'Add Product Images'}
               </Link>
             </Button>
           </div>
@@ -46,17 +46,17 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
 export const ProductDetailsCard: React.FC<{ product: IProduct }> = ({ product }) => {
   return (
     <Card className="">
+      <CardHeader>
+        <CardTitle className="text-2xl capitalize">{product.name}</CardTitle>
+        <div className="text-sm text-muted-foreground">
+          Added by{' '}
+          <Link href={`/staffs?staffId=${product.addedBy.id}`} className="underline">
+            {product.addedBy.firstName} {product.addedBy.lastName}
+          </Link>
+        </div>
+      </CardHeader>
       <CardContent className="space-y-6">
         {/* Header */}
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">{product.name}</h1>
-          <span className="text-sm text-muted-foreground">
-            Added by{' '}
-            <Link href={`/staffs?staffId=${product.addedBy.id}`} className="underline">
-              {product.addedBy.firstName} {product.addedBy.lastName}
-            </Link>
-          </span>
-        </div>
 
         {/* Meta Info Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
@@ -105,12 +105,24 @@ export const ProductDetailsCard: React.FC<{ product: IProduct }> = ({ product })
           <p className="text-muted-foreground mt-2">{product.description}</p>
         </div>
 
+        {/* Images */}
+        <ShowProductImages
+          key={'product-images' + product.id}
+          isFile={false}
+          isDeleteBtn={false}
+          images={product.images}
+          title="Product Images"
+        />
+      </CardContent>
+
+      <CardFooter className="flex w-full justify-between">
+        <div></div>
         {/* Dates */}
         <div className="text-xs text-gray-400 text-right w-auto">
           <p>Created at: {new Date(product.createdAt).toLocaleString()}</p>
           <p>Last updated at: {new Date(product.updatedAt).toLocaleString()}</p>
         </div>
-      </CardContent>
+      </CardFooter>
     </Card>
   );
 };

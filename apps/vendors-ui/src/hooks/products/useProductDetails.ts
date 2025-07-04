@@ -8,4 +8,5 @@ export const useProductDetails = (slug: string) =>
     queryKey: ['products', { slug }],
     queryFn: () => getProductDetails(slug),
     retry: false,
+    refetchOnWindowFocus: false,
   });

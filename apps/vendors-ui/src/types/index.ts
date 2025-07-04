@@ -1,7 +1,15 @@
-interface Image {
+export interface IImage {
   id: number;
   url: string;
-  fileId: string | null;
+  alt: string;
+  publicId: string;
+  metadata: {
+    width?: number;
+    height?: number;
+    format?: string;
+    size?: number;
+    mimeType?: string;
+  } & Record<string, any>;
   createdAt: Date | null;
 }
 
@@ -11,7 +19,7 @@ export interface IVendor {
   role: 'owner' | 'manager' | 'staff';
   createdAt: Date | null;
   accountId: number;
-  avatar: Image | null;
+  avatar: IImage | null;
   firstName: string;
   lastName: string | null;
   storeId: number;
@@ -25,7 +33,7 @@ export interface IVendorStore {
   storeCategory: string;
   storeEmail: string;
   createdAt: Date | null;
-  storeLogo: Image | null;
+  storeLogo: IImage | null;
 }
 
 export interface IVendorSession {
@@ -40,14 +48,12 @@ export interface ApiResponse<T> {
 }
 
 // Product Images
-export interface IProductImage {
-  id: number;
-  url: string;
-  alt: string;
-  fileId: string | null;
-  createdAt: Date | null;
+export interface IProductImage extends IImage {
+  isPrimary: boolean;
+  order: number;
+  productId: number;
+  createdAt: Date;
 }
-
 // product types
 export interface IProduct {
   id: number;

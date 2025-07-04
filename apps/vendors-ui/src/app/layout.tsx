@@ -6,6 +6,8 @@ import { SessionProvider } from '@/providers/sessionProvider';
 import AppProvider from './_app';
 import { ThemeProvider } from '@/components/ThemeProvider';
 
+import { Toaster } from 'react-hot-toast';
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -46,6 +48,7 @@ export default function RootLayout({
               <AppProvider>
                 <div className="flex w-full bg-background min-h-screen items-center justify-center">
                   {children}
+                  <Toaster />
                 </div>
               </AppProvider>
             </SessionProvider>
