@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import { dbClient, eq, inArray } from '@marketly/drizzle/index';
+import { dbClient, inArray } from '@marketly/drizzle/index';
 import { imageTable } from '@marketly/drizzle/db/schemas';
 
 import { BadRequestError } from '@marketly/http';
@@ -56,7 +56,7 @@ export async function uploadImageToCloudinary(
       })
       .returning();
 
-    return image;
+    return image[0];
   } catch (error) {
     if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
     throw new BadRequestError('Image upload failed');

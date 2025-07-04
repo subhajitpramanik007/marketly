@@ -2,7 +2,7 @@ import { ApiResponse, asyncHandler, BadRequestError } from '@marketly/http';
 import { env } from '@marketly/config';
 import { deleteImagesFromCloudinary, uploadImageToCloudinary } from './upload.service';
 
-const MAX_FILE_SIZE = 3;
+const MAX_FILE_SIZE = 5;
 const ALLOWED_MIME_TYPES = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
 
 export const uploadSingleImage = asyncHandler(async (req, res) => {

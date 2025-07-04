@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import { env } from '@marketly/config';
 import { uploadRoutes } from './upload.routes';
@@ -15,6 +16,8 @@ app.use(
   }),
 );
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.use('/api/uploads', uploadRoutes);
 
