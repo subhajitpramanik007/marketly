@@ -46,7 +46,7 @@ router.route('/:productId/toggle-status').patch(toggleProductStatus);
 router.route('/:productId/images').post(addOrUpdateProductImageIds); // add image ids to product image table
 router.route('/:productId/images').patch(addOrUpdateProductImageIds); // add image ids to product image table
 router.route('/:productId/images/:imgId/is-primary').post(setProductPrimaryImage); // add image as primary
-router.route('/:productId/images/:imgId/order').post(updateProductImageOrder); // change image order
+router.route('/:productId/images/:imgId/order/:order').patch(updateProductImageOrder); // change image order
 router.route('/:productId/images/:imgId').delete(deleteSingleImageOfProduct); // delete a image of product
 router.route('/:productId/images').delete(deleteAllProductImages); // delete all images of product
 

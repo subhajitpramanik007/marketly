@@ -38,12 +38,14 @@ const addOrUpdateProductImageIds = asyncHandler(async (req, res) => {
   let sequence = 0;
   const productImages = await dbClient
     .insert(productImageTable)
-    .values({
-      productId: parsedProductId,
-      imageId: imageIds,
-      isPrimary: sequence === 0,
-      order: sequence++,
-    })
+    .values(
+      (imageIds as string[]).map(imgId => ({
+        productId: product.id,
+        imageId: parseInt(imgId, 10),
+        isPrimary: sequence === 0,
+        sequence: sequence++,
+      })),
+    )
     .returning();
 
   res
@@ -93,8 +95,7 @@ const setProductPrimaryImage = asyncHandler(async (req, res) => {
 
 // update image order
 const updateProductImageOrder = asyncHandler(async (req, res) => {
-  const { productId, imgId } = req.params;
-  const { order } = req.query;
+  const { productId, imgId, order } = req.params;
 
   if ([productId, imgId, order].some(item => !item || typeof item !== 'number')) {
     throw new BadRequestError('Product ID, Image ID and Order are required');

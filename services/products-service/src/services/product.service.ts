@@ -11,6 +11,8 @@ const sortProduct = (sort: 'asc' | 'desc' = 'asc') => {
   return sort === 'asc' ? asc(productTable.createdAt) : desc(productTable.createdAt);
 };
 
+// FIXME: image details
+
 /*--------------------------------- CONSUMER --------------------------------- */
 
 /**
@@ -49,9 +51,6 @@ const getAllProductsAsConsumer = async (
           limit: 1,
           columns: {
             id: true,
-            alt: true,
-            fileId: true,
-            url: true,
           },
         },
       },
@@ -117,7 +116,7 @@ const getAllProductsAsVendor = async (
  */
 const getAProductDetailsAsVendor = async (storeId: number, productSlug: string) => {
   try {
-    return await dbClient.query.productTable.findFirst({
+    const product = await dbClient.query.productTable.findFirst({
       where: and(eq(productTable.slug, productSlug), eq(productTable.storeId, storeId)),
       columns: {
         addedById: false,
@@ -125,9 +124,30 @@ const getAProductDetailsAsVendor = async (storeId: number, productSlug: string) 
       },
       with: {
         addedBy: true,
-        images: true,
+        images: {
+          with: {
+            image: true,
+          },
+        },
       },
     });
+
+    const productImages = product?.images.map(image => {
+      return {
+        id: image.id,
+        url: image.image.url,
+        alt: image.image.alt,
+        publicId: image.image.publicId,
+        isPrimary: image.isPrimary,
+        order: image.order,
+        createdAt: image.createdAt,
+      };
+    });
+
+    return {
+      ...product,
+      images: productImages,
+    };
   } catch (error) {
     throw new BadRequestError('Failed to fetch product details');
   }
