@@ -2,7 +2,7 @@ services:
   db:
     image: postgres
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
@@ -10,7 +10,7 @@ services:
     networks:
       - ecommerce
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
+      test: ['CMD', 'pg_isready', '-U', 'postgres']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -19,8 +19,84 @@ services:
     image: redis
     container_name: redis
     ports:
-      - "6379:6379"
-    command: ["redis-server", "--appendonly", "yes"]
+      - '6379:6379'
+    command: ['redis-server', '--appendonly', 'yes']
+    networks:
+      - ecommerce
+  
+  packages:
+    container_name: packages
+    build:
+      context: .
+      dockerfile: Dockerfile.packages
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+    networks:
+      - ecommerce
+
+  auth-service:
+    container_name: auth-service
+    build:
+      context: .
+      dockerfile: services/auth-service/Dockerfile
+    ports:
+      - '5999:5999'
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+      - packages
+    networks:
+      - ecommerce
+
+  vendor-service:
+    container_name: vendor-service
+    build:
+      context: .
+      dockerfile: services/vendor-service/Dockerfile
+    ports:
+      - '6002:6002'
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+      - packages
+    networks:
+      - ecommerce
+
+  upload-service:
+    container_name: upload-service
+    build:
+      context: .
+      dockerfile: services/upload-service/Dockerfile
+    ports:
+      - '7000:7000'  
+    env_file:
+      - .env  
+    depends_on:
+      - db
+      - packages
+    networks:
+      - ecommerce
+
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: .
+      dockerfile: apps/api-gateway/Dockerfile
+    ports:
+      - '8080:8080'
+    env_file:
+      - .env
+    depends_on:
+      - auth-service
+      - vendor-service
+      - upload-service
     networks:
       - ecommerce
 

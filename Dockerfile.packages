@@ -1,0 +1,19 @@
+# --- Base Stage ---
+FROM node:22-alpine3.21 AS base
+WORKDIR /usr/src/app
+RUN npm install -g pnpm
+
+# --- Package Stage ---
+FROM base AS package-layer
+
+# Copy files
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+# Copy packages
+COPY ./packages ./packages
+
+# Install only root dependencies
+RUN pnpm install --filter=.
+
+# Install packages dependencies
+RUN pnpm install --filter=./packages/*

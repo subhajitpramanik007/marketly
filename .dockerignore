@@ -1,0 +1,14 @@
+**/.turbo
+**/node_modules
+**/dist
+**/dist
+**/.next
+**/out
+**/.log
+**/.env
+**/.git
+
+packages/dashboard
+docs
+scripts
+tests
