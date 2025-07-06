@@ -44,3 +44,4 @@ tests
 
 packages/dashboard
 apps/vendors-ui/src/app/playground/
+.env*

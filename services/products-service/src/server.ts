@@ -4,7 +4,7 @@ import { PORT } from './constants';
 
 async function bootstrap() {
   try {
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       logger.info(`Products service at http://localhost:${PORT}`);
       logger.info(`Products service at http://localhost:${PORT}/api/products/health`);
     });

@@ -38,6 +38,9 @@ COPY --from=builder /usr/src/app/services/upload-service/dist ./dist
 COPY --from=builder /usr/src/app/services/upload-service/node_modules ./node_modules
 COPY --from=builder /usr/src/app/services/upload-service/package.json ./
 
+# Copy tmp uploads folder
+COPY ./services/upload-service/tmp ./tmp
+
 WORKDIR /usr/src/app
 
 # Copy files

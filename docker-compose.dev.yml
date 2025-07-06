@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres
+    container_name: marketly-db
     ports:
       - '5432:5432'
     environment:
@@ -30,7 +31,7 @@ services:
       context: .
       dockerfile: Dockerfile.packages
     env_file:
-      - .env
+      - .env.docker
     depends_on:
       - db
       - redis
@@ -45,7 +46,7 @@ services:
     ports:
       - '5999:5999'
     env_file:
-      - .env
+      - .env.docker
     depends_on:
       - db
       - redis
@@ -61,7 +62,7 @@ services:
     ports:
       - '6002:6002'
     env_file:
-      - .env
+      - .env.docker
     depends_on:
       - db
       - redis
@@ -77,7 +78,7 @@ services:
     ports:
       - '7000:7000'  
     env_file:
-      - .env  
+      - .env.docker
     depends_on:
       - db
       - packages
@@ -92,7 +93,7 @@ services:
     ports:
       - '8080:8080'
     env_file:
-      - .env
+      - .env.docker
     depends_on:
       - auth-service
       - vendor-service

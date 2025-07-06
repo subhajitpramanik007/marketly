@@ -24,11 +24,11 @@ app.use('/api/uploads', uploadRoutes);
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
 
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT ? Number(process.env.PORT) : env.UPLOAD_SERVICE_PORT;
 
 async function bootstrap() {
   try {
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`Upload service at http://localhost:${PORT}`);
     });
   } catch (error) {

@@ -12,12 +12,10 @@ const redisClient = new Redis({
 
 redisClient.on('error', error => {
   console.log('Error connecting to Redis', error);
-  process.exit(1);
 });
 
 redisClient.connect().catch(error => {
   console.log('Error connecting to Redis', error);
-  process.exit(1);
 });
 
 export { redisClient };

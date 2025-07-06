@@ -47,7 +47,7 @@ app.use(errorMiddleware);
 
 async function bootstrap() {
   try {
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       logger.info(`API Gateway at http://localhost:${PORT}`);
       logger.info(`API Gateway docs at http://localhost:${PORT}/api/docs`);
     });

@@ -1,4 +1,5 @@
 import { logger } from '@marketly/logger';
+import { env } from '@marketly/config';
 import { Router } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import swaggerUi from 'swagger-ui-express';
@@ -41,32 +42,32 @@ const proxyServers = [
   {
     service: 'Auth',
     route: '/api/auth',
-    targetUrl: 'http://localhost:5999/api/auth',
+    targetUrl: `${env.AUTH_SERVICE_URL}/api/auth`,
   },
   {
     service: 'Consumers',
     route: '/api/consumers',
-    targetUrl: 'http://localhost:6001/api/consumers',
+    targetUrl: `${env.CONSUMER_SERVICE_URL}/api/consumers`,
   },
   {
     service: 'Vendors',
     route: '/api/vendors',
-    targetUrl: 'http://localhost:6002/api/vendors',
+    targetUrl: `${env.VENDOR_SERVICE_URL}/api/vendors`,
   },
   {
     service: 'Admin',
     route: '/api/admin',
-    targetUrl: 'http://localhost:6003/api/admin',
+    targetUrl: `${env.ADMIN_SERVICE_URL}/api/admin`,
   },
   {
     service: 'Products',
     route: '/api/products',
-    targetUrl: 'http://localhost:6004/api/products',
+    targetUrl: `${env.PRODUCT_SERVICE_URL}/api/products`,
   },
   {
     service: 'Uploads',
     route: '/api/uploads',
-    targetUrl: 'http://localhost:7000/api/uploads',
+    targetUrl: `${env.UPLOAD_SERVICE_URL}/api/uploads`,
   },
 ];
 

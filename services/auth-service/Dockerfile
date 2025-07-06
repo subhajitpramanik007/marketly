@@ -40,6 +40,9 @@ COPY --from=builder /usr/src/app/services/auth-service/dist ./dist
 COPY --from=builder /usr/src/app/services/auth-service/package.json ./package.json
 COPY --from=builder /usr/src/app/services/auth-service/node_modules ./node_modules
 
+# Copy packages public files
+COPY ./services/auth-service/public ./public
+
 WORKDIR /usr/src/app
 
 COPY --from=builder /usr/src/app/node_modules ./node_modules
