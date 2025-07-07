@@ -26,13 +26,16 @@ import { vendorStaffParamsSchema, vendorStoreParamsSchema } from '@/schemas/para
 
 const router = Router();
 
-router.use(
-  authMiddleware,
-  vendorAuthMiddleware,
-  zodValidationQueryMiddleware(vendorStoreParamsSchema),
-);
+// Check if user is authenticated
+router.use(authMiddleware);
 
-router.route('/').get(
+// Check user is vendor
+router.use(vendorAuthMiddleware);
+
+// Check if store id is valid
+router.use(zodValidationQueryMiddleware(vendorStoreParamsSchema));
+
+router.route('/:storeId/staffs').get(
   /**
    * #swagger.tags = ['Vendors - Staffs']
    * #swagger.summary = 'Vendor staffs list by vendor id, only admin can access'
@@ -41,7 +44,7 @@ router.route('/').get(
   getVendorAllStaffs,
 );
 
-router.route('/').post(
+router.route('/:storeId/staffs').post(
   zodValidationMiddleware(createStaffSchema),
   canManageVendorStore,
   /**
@@ -65,7 +68,7 @@ router.route('/').post(
 );
 
 router
-  .route('/:staffId')
+  .route('/:storeId/staffs/:staffId')
   .get(
     zodValidationQueryMiddleware(vendorStaffParamsSchema),
     /**
@@ -108,7 +111,7 @@ router
     deleteVendorStaff,
   );
 
-router.route('/:staffId/permission').patch(
+router.route('/:storeId/staffs/:staffId/permission').patch(
   canManageVendorStore,
   zodValidationQueryMiddleware(vendorStaffParamsSchema),
   zodValidationMiddleware(vendorStaffPerminissionSchema),

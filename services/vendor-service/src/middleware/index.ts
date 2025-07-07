@@ -1,7 +1,8 @@
 import { getVendorStaffData } from '@/services/vendor-staff.service';
-import { getVendorStoreData } from '@/services/vendor-store.service';
+import { getVendorStoreDataByAccountId } from '@/services/vendor-store.service';
 import { vendorStaffTable, vendorStoreTable } from '@marketly/drizzle/db/schemas';
 import { ApiError, asyncHandler, ForbiddenError } from '@marketly/http';
+import { logger } from '@marketly/logger';
 
 declare global {
   namespace Express {
@@ -17,14 +18,15 @@ export const vendorAuthMiddleware = asyncHandler(async (req, res, next) => {
     if (req.role !== 'vendor') throw new ForbiddenError('Access denied');
 
     // add vendor details to request
-    const vendorStore = await getVendorStoreData(req.user.id);
-    const vendorData = await getVendorStaffData(parseInt(req.params?.storeId), req.user.id);
+    const vendorStore = await getVendorStoreDataByAccountId(req.user.id);
+    const vendorData = await getVendorStaffData(vendorStore.id, req.user.id);
 
     req.vendorStore = vendorStore;
     req.vendorStaff = vendorData;
 
     next();
   } catch (error) {
+    logger.error(error, 'Failed to authenticate vendor');
     if (error instanceof ApiError) {
       throw error;
     }

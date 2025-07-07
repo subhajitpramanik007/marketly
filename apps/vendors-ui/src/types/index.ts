@@ -25,6 +25,19 @@ export interface IVendor {
   storeId: number;
 }
 
+export type IVendorStaff = IVendor & {
+  addedBy: {
+    id: number;
+    firstName: string;
+    lastName: string;
+  };
+  removedBy: {
+    id: number;
+    firstName: string;
+    lastName: string;
+  };
+};
+
 export interface IVendorStore {
   id: number;
   createdById: number;

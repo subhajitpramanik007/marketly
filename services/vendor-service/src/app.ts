@@ -21,9 +21,17 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 
 // Routes
-import router from './routes';
+import { healthRoutes } from './routes/heathcheck.routes';
+import { profileRoutes } from './routes/profile.routes';
+import { staffsRoutes } from './routes/staffs.routes';
+import { onboardingRoutes } from './routes/onboarding.routes';
+import { meRoutes } from './routes/me.routes';
 
-app.use('/api/vendors', router);
+app.use('/api/vendors/health', healthRoutes);
+app.use('/api/vendors/onboarding', onboardingRoutes);
+app.use('/api/vendors/me', meRoutes);
+app.use('/api/vendors/:storeId/profile', profileRoutes);
+app.use('/api/vendors', staffsRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
