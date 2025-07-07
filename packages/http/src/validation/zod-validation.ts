@@ -31,7 +31,7 @@ export function zodValidationMiddleware<T>(schema: z.ZodSchema<T>) {
   };
 }
 
-export function zodValidationQueryMiddleware<T>(schema: z.ZodSchema<T>) {
+export function zodValidationQueryMiddleware(schema: z.ZodTypeAny) {
   return async (req: Request, _: Response, next: NextFunction) => {
     try {
       zodValidation(schema, req.query);

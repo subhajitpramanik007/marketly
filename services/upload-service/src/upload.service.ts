@@ -5,6 +5,7 @@ import { imageTable } from '@marketly/drizzle/db/schemas';
 
 import { BadRequestError } from '@marketly/http';
 import { cloudinary } from './cloudinary.config';
+import { logger } from '@marketly/logger';
 
 export async function uploadImageToCloudinary(
   file: Express.Multer.File,
@@ -15,11 +16,19 @@ export async function uploadImageToCloudinary(
   tags?: string[],
 ) {
   try {
-    const result = await cloudinary.uploader.upload(file.path, {
-      folder: 'marketly' + folderName,
-      resource_type: 'image',
-      tags: tags && Array.isArray(tags) ? tags : ['marketly'],
-    });
+    const result = await cloudinary.uploader.upload(
+      file.path,
+      {
+        folder: 'marketly' + folderName,
+        resource_type: 'image',
+        tags: tags && Array.isArray(tags) ? tags : ['marketly'],
+      },
+      (error, result) => {
+        if (error) {
+          logger.error(error, 'Cloudinary upload error');
+        }
+      },
+    );
 
     if (!result) {
       throw new BadRequestError('Image upload failed');

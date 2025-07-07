@@ -13,8 +13,8 @@ const router = Router();
 router.use('/health', healthRoutes);
 router.use('/onboarding', onboardingRoutes);
 router.use('/me', meRoutes);
-router.use('/:vendorId/profile', profileRoutes);
-router.use('/:vendorId/staffs', staffsRoutes);
+router.use('/:storeId/profile', profileRoutes);
+router.use('/:storeId/staffs', staffsRoutes);
 
 try {
   const docs = require('../../../../docs/services/vendors-swagger.json');

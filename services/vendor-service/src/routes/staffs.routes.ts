@@ -7,9 +7,9 @@ import {
   updateVendorStaff,
   deleteVendorStaff,
   updateVendorStaffPermission,
-} from '../controllers/staffs.controller';
+} from '@/controllers/staffs.controller';
 
-import { vendorAuthMiddleware } from '../middleware';
+import { canManageVendorStore, vendorAuthMiddleware } from '@/middleware';
 
 import {
   authMiddleware,
@@ -18,16 +18,19 @@ import {
 } from '@marketly/http';
 
 import {
-  staffOfVendorParamsSchema,
-  vendorParamsSchema,
+  createStaffSchema,
+  updateStaffSchema,
   vendorStaffPerminissionSchema,
-  vendorStaffSchema,
-  vendorStaffUpdateSchema,
-} from '@marketly/lib/schemas';
+} from '@/schemas/staffs.schema';
+import { vendorStaffParamsSchema, vendorStoreParamsSchema } from '@/schemas/params.schema';
 
 const router = Router();
 
-router.use(authMiddleware, vendorAuthMiddleware, zodValidationQueryMiddleware(vendorParamsSchema));
+router.use(
+  authMiddleware,
+  vendorAuthMiddleware,
+  zodValidationQueryMiddleware(vendorStoreParamsSchema),
+);
 
 router.route('/').get(
   /**
@@ -39,7 +42,8 @@ router.route('/').get(
 );
 
 router.route('/').post(
-  zodValidationMiddleware(vendorStaffSchema),
+  zodValidationMiddleware(createStaffSchema),
+  canManageVendorStore,
   /**
    * #swagger.tags = ['Vendors - Staffs']
    * #swagger.summary = 'Create vendor staff by vendor id, only admin can access'
@@ -60,28 +64,30 @@ router.route('/').post(
   createVendorStaff,
 );
 
-router.route('/:staffId').get(
-  zodValidationQueryMiddleware(staffOfVendorParamsSchema),
-  /**
-   * #swagger.tags = ['Vendors - Staffs']
-   * #swagger.summary = 'Vendor staff by staff id, only admin can access'
-   * #swagger.responses[200] = { description: 'Vendor staff' }
-   */
-  getVendorStaff,
-);
-
-router.route('/:staffId').patch(
-  zodValidationQueryMiddleware(staffOfVendorParamsSchema),
-  zodValidationMiddleware(vendorStaffUpdateSchema),
-  /**
-   * #swagger.tags = ['Vendors - Staffs']
+router
+  .route('/:staffId')
+  .get(
+    zodValidationQueryMiddleware(vendorStaffParamsSchema),
+    /**
+     * #swagger.tags = ['Vendors - Staffs']
+     * #swagger.summary = 'Vendor staff by staff id, only admin can access'
+     * #swagger.responses[200] = { description: 'Vendor staff' }
+     */
+    getVendorStaff,
+  )
+  .patch(
+    canManageVendorStore,
+    zodValidationQueryMiddleware(vendorStaffParamsSchema),
+    zodValidationMiddleware(updateStaffSchema),
+    /**
+     * #swagger.tags = ['Vendors - Staffs']
    * #swagger.summary = 'Update vendor staff by staff id, only admin can access'
    * #swagger.parameters['body'] = {
         in: 'body',
         description: 'Vendor staff details',
         required: true,
         schema: {
-          firstName: 'Owner Name',
+            firstName: 'Owner Name',
           lastName: 'Owner Last Name',
           email: 'rahul@example.com',
           phone: '1234567890',
@@ -89,21 +95,22 @@ router.route('/:staffId').patch(
       }
      * #swagger.responses[200] = { description: 'Vendor staff updated successfully' }
      */
-  updateVendorStaff,
-);
-
-router.route('/:staffId').delete(
-  zodValidationQueryMiddleware(staffOfVendorParamsSchema),
-  /**
-   * #swagger.tags = ['Vendors - Staffs']
-   * #swagger.summary = 'Delete vendor staff by staff id, only admin can access'
-   * #swagger.responses[200] = { description: 'Vendor staff deleted successfully' }
-   */
-  deleteVendorStaff,
-);
+    updateVendorStaff,
+  )
+  .delete(
+    canManageVendorStore,
+    zodValidationQueryMiddleware(vendorStaffParamsSchema),
+    /**
+     * #swagger.tags = ['Vendors - Staffs']
+     * #swagger.summary = 'Delete vendor staff by staff id, only admin can access'
+     * #swagger.responses[200] = { description: 'Vendor staff deleted successfully' }
+     */
+    deleteVendorStaff,
+  );
 
 router.route('/:staffId/permission').patch(
-  zodValidationQueryMiddleware(staffOfVendorParamsSchema),
+  canManageVendorStore,
+  zodValidationQueryMiddleware(vendorStaffParamsSchema),
   zodValidationMiddleware(vendorStaffPerminissionSchema),
   /**
    * #swagger.tags = ['Vendors - Staffs']
