@@ -9,6 +9,7 @@ import {
   ShoppingBasketIcon,
   User2,
   User2Icon,
+  Users2,
 } from 'lucide-react';
 
 import {
@@ -46,6 +47,11 @@ const items = [
     title: 'Products',
     url: '/products',
     icon: ShoppingBasketIcon,
+  },
+  {
+    title: 'Staffs',
+    url: '/staffs',
+    icon: Users2,
   },
   {
     title: 'Orders',
