@@ -13,7 +13,7 @@
     "swagger": "turbo run swagger && cd apps/api-gateway && pnpm run swagger-merge",
     "vendor-service": "pnpm dev --filter=vendor-service --filter=api-gateway --filter=auth-service",
     "auth-service": "pnpm dev --filter=./apps/* --filter=auth-service",
-    "dev:servers:vendors": "pnpm dev --filter=api-gateway --filter=vendor-service --filter=auth-service --filter=products-service --filter=upload-service --filter=vendors-ui",
+    "dev:servers:vendors": "pnpm start --filter=api-gateway --filter=vendor-service --filter=auth-service --filter=products-service --filter=upload-service",
     "docker:up": "docker-compose -f docker-compose.dev.yml up -d",
     "docker:down": "docker-compose -f docker-compose.dev.yml stop",
     "clean": "bash ./scripts/clean.sh",

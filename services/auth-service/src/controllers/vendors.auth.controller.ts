@@ -1,10 +1,5 @@
 import { and, dbClient, eq } from '@marketly/drizzle';
-import {
-  accountTable,
-  sessionTable,
-  vendorStaffTable,
-  vendorStoreTable,
-} from '@marketly/drizzle/db/schemas';
+import { accountTable, sessionTable } from '@marketly/drizzle/db/schemas';
 import {
   ApiResponse,
   asyncHandler,
@@ -22,12 +17,12 @@ import { checkOtpRestrictions } from '@/utils/otp.utils';
 import {
   vendorRegistrationEmailSchema,
   vendorRegistrationEmailVerificationSchema,
-  vendorRegistrationSchema,
 } from '@marketly/lib/schemas/vendor';
-import { setAuthCookies } from '@/utils/cookies.utils';
+import { removeAuthCookies, setAuthCookies } from '@/utils/cookies.utils';
 import { JwtPayload, signInJwtToken } from '@/utils/jwt.utils';
 import { userLoginSchema } from '@marketly/lib/schemas/auth';
 import { hashPassword, verifyPassword } from '@/utils/password.utils';
+import { REFRESH_TOKEN_NAMESPACE } from '@/constants/tokens.constants';
 
 export const register = asyncHandler(async (req, res) => {
   const { email } = zodValidation(vendorRegistrationEmailSchema, req.body);
@@ -132,5 +127,25 @@ export const login = asyncHandler(async (req, res) => {
 });
 
 export const logout = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    throw new UnauthorizedError('You are not logged in');
+  }
+
+  const refreshToken = req.cookies[REFRESH_TOKEN_NAMESPACE];
+  if (!refreshToken || typeof refreshToken !== 'string') throw new Error('Refresh token not found');
+
+  //   remove refresh token from db
+  await dbClient
+    .update(sessionTable)
+    .set({ revokedAt: new Date() })
+    .where(
+      and(
+        eq(sessionTable.refreshToken, refreshToken), // check if refresh token is valid
+        eq(sessionTable.role, 'vendor'), // check role
+        eq(sessionTable.accountId, req.user.id), // check account
+      ),
+    );
+
+  await removeAuthCookies(res);
   res.status(200).json(new ApiResponse(200, null, 'Logout successful'));
 });

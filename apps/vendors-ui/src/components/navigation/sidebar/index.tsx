@@ -36,6 +36,7 @@ import {
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { useSession } from '@/hooks/useSession';
+import { DisplayThis } from '@/components/DisplayThis';
 
 const items = [
   {
@@ -72,7 +73,7 @@ const items = [
 
 export function ASidebar() {
   const { themes, theme: currentTheme, setTheme } = useTheme();
-  const { user } = useSession();
+  const { user, isAuthenticated, logout } = useSession();
 
   return (
     <Sidebar>
@@ -107,7 +108,8 @@ export function ASidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> {user?.firstName}
+                  <User2 />{' '}
+                  {isAuthenticated ? <span>{user?.firstName}</span> : <span>Anonymous</span>}
                   <ChevronRight className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
@@ -116,9 +118,15 @@ export function ASidebar() {
                 sideOffset={12}
                 className="w-[--radix-popper-anchor-width]"
               >
-                <DropdownMenuItem>
-                  <Link href="/profile">Profile</Link>
-                </DropdownMenuItem>
+                {isAuthenticated ? (
+                  <DropdownMenuItem>
+                    <Link href="/profile">Profile</Link>
+                  </DropdownMenuItem>
+                ) : (
+                  <DropdownMenuItem>
+                    <Link href="/auth/login">Login</Link>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
                   <DropdownMenuSubContent sideOffset={8}>
@@ -134,9 +142,11 @@ export function ASidebar() {
                     ))}
                   </DropdownMenuSubContent>
                 </DropdownMenuSub>
-                <DropdownMenuItem>
-                  <span>Log out</span>
-                </DropdownMenuItem>
+                <DisplayThis when={isAuthenticated}>
+                  <DropdownMenuItem onClick={logout}>
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DisplayThis>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>

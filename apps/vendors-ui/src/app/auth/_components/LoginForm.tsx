@@ -19,6 +19,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { login } from '@/services/auth.services';
 import { useRouter } from 'next/navigation';
 import { useLocalStore } from '@/hooks/useLocalStore';
+import toast from 'react-hot-toast';
 
 export const LoginForm: React.FC = () => {
   const router = useRouter();
@@ -36,7 +37,7 @@ export const LoginForm: React.FC = () => {
 
   const {
     isPending,
-    mutate: loginMutation,
+    mutateAsync: loginMutation,
     isError,
     error,
   } = useMutation({
@@ -49,14 +50,18 @@ export const LoginForm: React.FC = () => {
         lastRefreshedAt: Date.now(),
       });
 
-      queryClient.invalidateQueries({ queryKey: ['session'] });
+      queryClient.resetQueries();
 
       router.push('/');
     },
   });
 
   const onSubmit = (data: TVendorLogin) => {
-    loginMutation(data);
+    toast.promise(loginMutation(data), {
+      loading: 'Logging in...',
+      success: 'Logged in successfully',
+      error: 'Failed to login',
+    });
   };
 
   return (

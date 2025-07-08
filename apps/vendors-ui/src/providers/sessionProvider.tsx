@@ -1,11 +1,12 @@
 'use client';
 
 import { useLocalStore } from '@/hooks/useLocalStore';
-import { refreshSession } from '@/services/auth.services';
+import { logout as logoutSession, refreshSession } from '@/services/auth.services';
 import { getCurrentSessionData } from '@/services/me.services';
 import { IVendor, IVendorStore } from '@/types';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 interface InitialSession {
   status: 'loading';
@@ -29,8 +30,9 @@ interface UnAuthSession {
 }
 
 type Session = InitialSession | AuthSession | UnAuthSession;
+type SessionContext = Session & { logout: () => void };
 
-export const SessionContext = React.createContext<Session | undefined>(undefined);
+export const SessionContext = React.createContext<SessionContext | undefined>(undefined);
 
 function useCurrentSession() {
   const { getItem } = useLocalStore();
@@ -54,6 +56,40 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     isAuthenticated: false,
   });
 
+  function clearSession() {
+    setSession({
+      status: 'Unauthenticated',
+      user: null,
+      store: null,
+      isAuthenticated: false,
+    });
+    removeItem('session');
+  }
+
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: logoutMutation } = useMutation({
+    mutationKey: ['session', 'logout'],
+    mutationFn: logoutSession,
+    onSuccess: () => {
+      queryClient.resetQueries({
+        queryKey: ['session', 'refresh'],
+      });
+      clearSession();
+    },
+    onError: error => {
+      toast.error(error.message);
+    },
+  });
+
+  function logout() {
+    toast.promise(logoutMutation(), {
+      loading: 'Logging out...',
+      success: 'Logged out successfully',
+      error: 'Error logging out',
+    });
+  }
+
   const { mutateAsync: sessionRefresh, isSuccess } = useMutation({
     mutationKey: ['session', 'refresh'],
     mutationFn: refreshSession,
@@ -66,14 +102,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     },
     onError: () => {
       console.log('session refresh failed');
-
-      setSession({
-        status: 'Unauthenticated',
-        user: null,
-        store: null,
-        isAuthenticated: false,
-      });
-      removeItem('session');
+      clearSession();
     },
   });
 
@@ -100,7 +129,9 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     }
   }, [isSuccess, sessionQuery.data?.data]);
 
-  return <SessionContext.Provider value={session}>{children}</SessionContext.Provider>;
+  return (
+    <SessionContext.Provider value={{ ...session, logout }}>{children}</SessionContext.Provider>
+  );
 }
 
 SessionContext.displayName = 'SessionContext';

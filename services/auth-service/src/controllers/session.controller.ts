@@ -1,7 +1,7 @@
 import { REFRESH_TOKEN_NAMESPACE } from '@/constants/tokens.constants';
 import { setAuthCookies } from '@/utils/cookies.utils';
 import { JwtPayload, signInJwtToken } from '@/utils/jwt.utils';
-import { dbClient, eq } from '@marketly/drizzle';
+import { and, dbClient, eq } from '@marketly/drizzle';
 import { accountTable, sessionTable } from '@marketly/drizzle/db/schemas';
 import { ApiResponse, asyncHandler } from '@marketly/http';
 
@@ -10,10 +10,18 @@ export const refreshSession = asyncHandler(async (req, res) => {
   if (!refreshToken) throw new Error('Refresh token not found');
 
   const refreshTokenData = await dbClient.query.sessionTable.findFirst({
-    where: eq(sessionTable.refreshToken, refreshToken),
+    where: and(eq(sessionTable.refreshToken, refreshToken)),
   });
 
   if (!refreshTokenData) throw new Error('Refresh token not found');
+  //   isExpired
+  if (new Date(refreshTokenData.expiresAt) < new Date()) {
+    throw new Error('Refresh token expired');
+  }
+  // is revoked
+  if (refreshTokenData.revokedAt) {
+    throw new Error('Refresh token revoked');
+  }
 
   const account = await dbClient.query.accountTable.findFirst({
     where: eq(accountTable.id, refreshTokenData.accountId),
