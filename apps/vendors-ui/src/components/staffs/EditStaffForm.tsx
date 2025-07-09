@@ -1,13 +1,9 @@
 'use client';
 
-import * as React from 'react';
-import toast from 'react-hot-toast';
-import { useSession } from '@/hooks/useSession';
-
-import { StaffSchema, staffSchema } from '@/schemas/staff.schemas';
+import { StaffUpdateSchema, staffUpdateSchema } from '@/schemas/staff.schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import * as React from 'react';
 import { useForm } from 'react-hook-form';
-
 import {
   Form,
   FormControl,
@@ -19,40 +15,44 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createStaff } from '@/services/staffs.services';
+import { updateStaff } from '@/services/staffs.services';
+import { useSession } from '@/hooks/useSession';
+import toast from 'react-hot-toast';
+import { IVendorStaff } from '@/types';
+import { useRouter } from 'next/navigation';
 
-export const CreateStaffForm: React.FC<{
-  onClose: () => void;
-}> = ({ onClose }) => {
+export const EditStaffForm: React.FC<{ staff: IVendorStaff }> = ({ staff }) => {
   const { store } = useSession();
-  const form = useForm<StaffSchema>({
-    resolver: zodResolver(staffSchema),
+  const router = useRouter();
+
+  const form = useForm<StaffUpdateSchema>({
+    resolver: zodResolver(staffUpdateSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phoneNumber: '',
-      password: '',
+      firstName: staff.firstName,
+      lastName: staff.lastName || '',
+      email: staff.email,
+      phoneNumber: staff.phoneNumber.toString(),
     },
   });
 
   const queryClient = useQueryClient();
 
-  const { mutateAsync: createStaffMutation, isPending } = useMutation({
-    mutationKey: ['staffs', 'create'],
-    mutationFn: (data: StaffSchema) => createStaff(store!.id, data),
+  const { mutateAsync: updateStaffMutation, isPending } = useMutation({
+    mutationKey: ['staffs', 'update', { staffId: staff.id }],
+    mutationFn: (data: StaffUpdateSchema) => updateStaff(store!.id, staff.id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['staffs'] });
+      queryClient.invalidateQueries({ queryKey: ['staff', { staffId: staff.id }] });
       form.reset();
-      onClose();
+      router.back();
     },
   });
 
-  const onSubmit = (data: StaffSchema) => {
-    toast.promise(createStaffMutation(data), {
-      loading: 'Creating staff...',
-      success: 'Staff created successfully',
-      error: 'Failed to create staff',
+  const onSubmit = (data: StaffUpdateSchema) => {
+    toast.promise(updateStaffMutation(data), {
+      loading: 'Updating staff...',
+      success: 'Staff updated successfully',
+      error: 'Failed to update staff',
     });
   };
 
@@ -115,24 +115,10 @@ export const CreateStaffForm: React.FC<{
               </FormItem>
             )}
           />
-
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input placeholder="Password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
 
         <Button type="submit" className="w-full" disabled={isPending}>
-          Add New Staff
+          Edit Staff
         </Button>
       </form>
     </Form>

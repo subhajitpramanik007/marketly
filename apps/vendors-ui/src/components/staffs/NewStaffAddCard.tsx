@@ -23,7 +23,7 @@ export const NewStaffAddCard: React.FC = () => {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Card>
-          <CardContent className="flex flex-col gap-4 items-center justify-center h-full">
+          <CardContent className="flex flex-col gap-4 items-center justify-center h-full min-h-[14rem]">
             <Plus className="size-12" />
             Add New Staff
           </CardContent>

@@ -26,12 +26,13 @@ export interface IVendor {
 }
 
 export type IVendorStaff = IVendor & {
-  addedBy: {
+  phoneNumber: number;
+  addedByStaff: {
     id: number;
     firstName: string;
     lastName: string;
   };
-  removedBy: {
+  removedByStaff: {
     id: number;
     firstName: string;
     lastName: string;
