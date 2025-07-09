@@ -67,6 +67,41 @@ const getVendorStaffData = async (storeId: number, staffId: number) => {
   return staffData;
 };
 
+const getVendorStaffCompleteData = async (storeId: number, staffId: number) => {
+  return await dbClient.query.vendorStaffTable.findFirst({
+    where: and(
+      eq(vendorStaffTable.id, staffId), // check staffId
+      eq(vendorStaffTable.storeId, storeId), // check storeId
+    ),
+    with: {
+      avatar: {
+        columns: {
+          id: true,
+          url: true,
+          alt: true,
+          publicId: true,
+        },
+      },
+      addedByStaff: {
+        columns: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          role: true,
+        },
+      },
+      removedByStaff: {
+        columns: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          role: true,
+        },
+      },
+    },
+  });
+};
+
 const createNewVendorStaff = async (
   storeId: number,
   currentStaffAccountId: number,
@@ -140,6 +175,31 @@ const updateVendorStaffData = async (
   return updatedVendorStaff[0];
 };
 
+// change permission
+const changeVendorStaffPermission = async (
+  storeId: number,
+  staffId: number,
+  havePermission: TCreateVendorStaff['permission'],
+  assignPermission: TCreateVendorStaff['permission'],
+) => {
+  if (havePermission === assignPermission) {
+    throw new BadRequestError('Same permission');
+  }
+
+  await dbClient
+    .update(vendorStaffTable)
+    .set({
+      role: assignPermission,
+    })
+    .where(
+      and(
+        eq(vendorStaffTable.id, staffId), // check staffId
+        eq(vendorStaffTable.storeId, storeId), // check storeId
+        eq(vendorStaffTable.role, havePermission),
+      ),
+    );
+};
+
 const deleteVendorStaff = async (storeId: number, staffId: number) => {
   await dbClient.delete(vendorStaffTable).where(
     and(
@@ -152,7 +212,9 @@ const deleteVendorStaff = async (storeId: number, staffId: number) => {
 export {
   getAllVendorStaffs,
   getVendorStaffData,
+  getVendorStaffCompleteData,
   createNewVendorStaff,
   updateVendorStaffData,
+  changeVendorStaffPermission,
   deleteVendorStaff,
 };

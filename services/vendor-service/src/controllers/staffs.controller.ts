@@ -12,8 +12,10 @@ import {
   TVendorStaffPermission,
 } from '@/schemas/staffs.schema';
 import {
+  changeVendorStaffPermission,
   createNewVendorStaff,
   getAllVendorStaffs,
+  getVendorStaffCompleteData,
   getVendorStaffData,
   updateVendorStaffData,
 } from '@/services/vendor-staff.service';
@@ -69,7 +71,7 @@ export const getVendorStaff = asyncHandler(async (req, res) => {
   try {
     const { staffId, storeId } = req.params as unknown as VendorAndStaffParams;
 
-    const staffData = await getVendorStaffData(storeId, staffId);
+    const staffData = await getVendorStaffCompleteData(storeId, staffId);
 
     res
       .status(200)
@@ -171,7 +173,7 @@ export const updateVendorStaffPermission = asyncHandler(async (req, res) => {
       throw new UnauthorizedError('Access denied');
     }
 
-    await updateVendorStaffData(storeId, staffData.id, data);
+    await changeVendorStaffPermission(storeId, staffData.id, staffData.role, data.permission);
 
     res.status(200).json(new ApiResponse(200, {}, 'Vendor staff permission updated successfully'));
   } catch (error) {
