@@ -3,8 +3,11 @@
 import * as React from 'react';
 import Link from 'next/link';
 
-import { Badge } from '@/components/ui/badge';
 import { useStaffData } from '@/hooks/staffs/useStaffData';
+import { StaffRole } from './StaffRole';
+import { Button } from '../ui/button';
+import { BackButtonInStaff } from './BackButton';
+import { HasPermission } from '../HasPermission';
 
 export const StaffData: React.FC<{ staffId: number }> = ({ staffId }) => {
   const { staff, isPending, isError, error } = useStaffData(staffId);
@@ -20,53 +23,73 @@ export const StaffData: React.FC<{ staffId: number }> = ({ staffId }) => {
   if (!staff) {
     return <div>Staff not found</div>;
   }
-  
+
   return (
     <div>
       {/* heading */}
-      <h1 className="text-2xl font-bold mb-8 text-center">Staff Data</h1>
+      <div className="relative">
+        <BackButtonInStaff text="Back to Staffs" link="/staffs" />
+        <h1 className="text-2xl font-bold mb-8 text-center">Staff Data</h1>
+      </div>
 
       {/* data */}
-      <div className="flex flex-col gap-2 w-full sm:w-md rounded-md mx-auto m-4 p-2 bg-muted/20">
-        {/* Id */}
-        <StaffDataRow keyName="id">{staff?.id}</StaffDataRow>
+      <div className="flex flex-col gap-2 w-full sm:w-md rounded-md mx-auto m-4 p-2">
+        <div className="flex flex-col gap-2 w-full bg-muted/20 p-3 rounded-md ring-1 ring-muted shadow-md">
+          {/* Id */}
+          <StaffDataRow keyName="id">{staff?.id}</StaffDataRow>
 
-        {/* Name */}
-        <StaffDataRow keyName="name">{staff?.firstName + ' ' + staff?.lastName}</StaffDataRow>
+          {/* Name */}
+          <StaffDataRow keyName="name">{staff?.firstName + ' ' + staff?.lastName}</StaffDataRow>
 
-        {/* Email */}
-        <StaffDataRow keyName="email">{staff?.email}</StaffDataRow>
+          {/* Email */}
+          <StaffDataRow keyName="email">{staff?.email}</StaffDataRow>
 
-        {/* Phone */}
-        <StaffDataRow keyName="phone">{staff?.phoneNumber}</StaffDataRow>
+          {/* Phone */}
+          <StaffDataRow keyName="phone">{staff?.phoneNumber}</StaffDataRow>
 
-        {/* Role */}
-        <StaffDataRow keyName="role">
-          <Badge variant="default">{staff.role}</Badge>
-        </StaffDataRow>
-
-        {/* Added By */}
-        {staff.addedByStaff && (
-          <StaffDataRow keyName="added by">
-            <Link href={`/staffs?staffId=${staff.addedByStaff.id}`} className="hover:underline">
-              {staff?.addedByStaff.firstName + ' ' + staff?.addedByStaff.lastName}
-            </Link>
+          {/* Role */}
+          <StaffDataRow keyName="role">
+            <StaffRole role={staff.role} />
           </StaffDataRow>
-        )}
 
-        {/* Removed By */}
-        {staff.removedByStaff && (
-          <StaffDataRow keyName="removed by">
-            <Link href={`/staffs?staffId=${staff.removedByStaff.id}`} className="hover:underline">
-              {staff?.removedByStaff.firstName + ' ' + staff?.removedByStaff.lastName}
-            </Link>
+          {/* Added By */}
+          {staff.addedByStaff && (
+            <StaffDataRow keyName="added by">
+              <Link href={`/staffs?staffId=${staff.addedByStaff.id}`} className="hover:underline">
+                {staff?.addedByStaff.firstName + ' ' + staff?.addedByStaff.lastName}
+              </Link>
+            </StaffDataRow>
+          )}
+
+          {/* Removed By */}
+          {staff.removedByStaff && (
+            <StaffDataRow keyName="removed by">
+              <Link href={`/staffs?staffId=${staff.removedByStaff.id}`} className="hover:underline">
+                {staff?.removedByStaff.firstName + ' ' + staff?.removedByStaff.lastName}
+              </Link>
+            </StaffDataRow>
+          )}
+
+          {/* Created At and Updated At */}
+          <StaffDataRow keyName="created at">
+            <span>{staff.createdAt!.toLocaleString()}</span>
           </StaffDataRow>
-        )}
+        </div>
+        <div className="flex justify-end gap-4">
+          <HasPermission permission="manage_staff" targetRole={staff.role}>
+            <Button asChild>
+              <Link href={`/staffs?staffId=${staff.id}&edit=true`}>Edit Staff Details</Link>
+            </Button>
+          </HasPermission>
 
-        {/* Created At and Updated At */}
-        <StaffDataRow keyName="created at">
-          <span>{staff.createdAt!.toLocaleString()}</span>
-        </StaffDataRow>
+          <HasPermission permission="add_avatar">
+            <Button asChild>
+              <Link href={`/staffs?staffId=${staff.id}&add-avatar=true`}>
+                {staff.avatar ? 'Change Avatar' : 'Add Avatar'}
+              </Link>
+            </Button>
+          </HasPermission>
+        </div>
       </div>
     </div>
   );

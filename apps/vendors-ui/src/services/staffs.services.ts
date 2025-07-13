@@ -39,3 +39,7 @@ export const updateStaffPermission = (
 ): Promise<ApiResponse<{ staff: IVendorStaff }>> => {
   return api.patch(`/vendors/${storeId}/staffs/${staffId}/permission`, data);
 };
+
+export const updateStaffAvatar = (storeId: number, staffId: number, data: { imageId: number }) => {
+  return api.post(`/vendors/${storeId}/staffs/${staffId}/avatar`, data);
+};

@@ -7,28 +7,37 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { MoreHorizontalIcon, User2Icon } from 'lucide-react';
 
 import { ImageWithFallback } from '@/components/ImageWithFallback';
 import Link from 'next/link';
-import { usePermission } from '@/hooks/usePermision';
-import { DisplayThis } from '../DisplayThis';
 import { useStaffPermissionChange } from '@/hooks/staffs/useStaffPermissionChange';
+import { HasPermission } from '../HasPermission';
+import { DisplayThis } from '../DisplayThis';
+import { useSession } from '@/hooks/useSession';
+import { StaffRole } from './StaffRole';
+import React from 'react';
+import { StaffDeleteConfirmDialog } from './StaffDeleteConfirmDialog';
 
 export const StaffCard: React.FC<{ staff: IVendorStaff }> = ({ staff }) => {
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+  const { mutate: changePermission } = useStaffPermissionChange(staff.id);
+
   return (
     <Card className="relative group">
-      <StaffCardActions staff={staff} />
+      <StaffCardActions
+        staff={staff}
+        onDelete={() => setOpenDeleteDialog(true)}
+        onChangePermission={changePermission}
+      />
       <CardHeader className="flex flex-col items-center gap-4">
         <ImageWithFallback
           fallback={<User2Icon className="size-24 rounded-full bg-muted ring-1 ring-muted" />}
@@ -38,7 +47,7 @@ export const StaffCard: React.FC<{ staff: IVendorStaff }> = ({ staff }) => {
           alt={staff.firstName}
           className="w-24  h-24  rounded-full object-cover"
         />
-        <Badge>{staff.role}</Badge>
+        <StaffRole role={staff.role} />
       </CardHeader>
       <CardContent className="text-center">
         <h2 className="text-lg font-semibold">
@@ -51,14 +60,27 @@ export const StaffCard: React.FC<{ staff: IVendorStaff }> = ({ staff }) => {
           Since {new Date(staff.createdAt!).toLocaleDateString()}
         </p>
       </CardFooter>
+
+      <StaffDeleteConfirmDialog
+        open={openDeleteDialog}
+        setOpen={setOpenDeleteDialog}
+        staff={staff}
+        onCancel={() => setOpenDeleteDialog(false)}
+      />
     </Card>
   );
 };
 
-function StaffCardActions({ staff }: { staff: IVendorStaff }) {
-  const { isOwner, isCanManage } = usePermission();
-
-  const { mutate: changePermission } = useStaffPermissionChange(staff.id);
+function StaffCardActions({
+  staff,
+  onDelete,
+  onChangePermission,
+}: {
+  staff: IVendorStaff;
+  onDelete: () => void;
+  onChangePermission: (role: 'manager' | 'staff') => void;
+}) {
+  const { user } = useSession();
 
   return (
     <DropdownMenu>
@@ -79,57 +101,63 @@ function StaffCardActions({ staff }: { staff: IVendorStaff }) {
           </Link>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator />
-        {/* Add staff avatar */}
-        <DropdownMenuItem>
-          <Link href={`/staffs?staffId=${staff.id}&add-avatar=true`} className="w-full">
-            <span>{staff.avatar ? 'Change Avatar' : 'Add Avatar'}</span>
-          </Link>
-        </DropdownMenuItem>
+        <HasPermission permission="add_avatar">
+          <DropdownMenuSeparator />
+          {/* Add staff avatar */}
+          <DropdownMenuItem>
+            <Link href={`/staffs?staffId=${staff.id}&add-avatar=true`} className="w-full">
+              <span>{staff.avatar ? 'Change Avatar' : 'Add Avatar'}</span>
+            </Link>
+          </DropdownMenuItem>
+        </HasPermission>
 
         {/* Only owner and manager can edit staff */}
-        <DisplayThis when={isCanManage || (isOwner && staff.role !== 'owner')}>
+        <HasPermission permission="manage_staff" targetRole={staff.role}>
           <DropdownMenuItem className="w-full">
             <Link href={`/staffs?staffId=${staff.id}&edit=true`}>Edit Staff</Link>
           </DropdownMenuItem>
-          {/* TODO: add change password */}
+        </HasPermission>
+        {/* TODO: add change password */}
+
+        <HasPermission permission="manage_staff" targetRole={staff.role}>
           <DropdownMenuItem>
             <Link href={`/staffs?staffId=${staff.id}&change-password=true`}>Change Password</Link>
           </DropdownMenuItem>
+        </HasPermission>
 
-          {/* Only owner can change role */}
-          <DisplayThis when={isOwner && staff.role !== 'owner'}>
+        {/* Only owner can change role */}
+        <DisplayThis when={user?.id !== staff.id}>
+          <HasPermission permission="manage_roles">
             <DropdownMenuItem asChild>
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>Assign as</DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
                   <DropdownMenuCheckboxItem
-                    checked={staff.role === 'owner'}
-                    onClick={() => changePermission('owner')}
-                  >
-                    Partner
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
                     checked={staff.role === 'manager'}
-                    onClick={() => changePermission('manager')}
+                    onClick={() => onChangePermission('manager')}
                   >
                     Manager
                   </DropdownMenuCheckboxItem>
                   <DropdownMenuCheckboxItem
                     checked={staff.role === 'staff'}
-                    onClick={() => changePermission('staff')}
+                    onClick={() => onChangePermission('staff')}
                   >
                     Staff
                   </DropdownMenuCheckboxItem>
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
             </DropdownMenuItem>
-          </DisplayThis>
-          <DisplayThis when={staff.role !== 'owner'}>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">Delete Staff</DropdownMenuItem>
-          </DisplayThis>
+          </HasPermission>
         </DisplayThis>
+
+        {/* Only owner can delete */}
+        <HasPermission permission="delete_staff" targetRole={staff.role}>
+          <DisplayThis when={user?.id !== staff.id}>
+            <DropdownMenuItem variant="destructive" onClick={onDelete}>
+              Delete Staff
+            </DropdownMenuItem>
+          </DisplayThis>
+        </HasPermission>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -8,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function StaffsLayout({ children }: { children: React.ReactNode }) {
-  return <StaffPageWrapper>{children}</StaffPageWrapper>;
+  return (
+    <StaffPageWrapper>
+      <div className="relative w-full">{children}</div>
+    </StaffPageWrapper>
+  );
 }
