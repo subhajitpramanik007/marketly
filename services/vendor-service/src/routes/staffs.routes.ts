@@ -7,6 +7,7 @@ import {
   updateVendorStaff,
   deleteVendorStaff,
   updateVendorStaffPermission,
+  updateVendorStaffAvatar,
 } from '@/controllers/staffs.controller';
 
 import { canManageVendorStore, vendorAuthMiddleware } from '@/middleware';
@@ -110,6 +111,18 @@ router
      */
     deleteVendorStaff,
   );
+
+//   change or add avatar
+router.route('/:storeId/staffs/:staffId/avatar').post(
+  canManageVendorStore,
+  zodValidationQueryMiddleware(vendorStaffParamsSchema),
+  /**
+   * #swagger.tags = ['Vendors - Staffs']
+   * #swagger.summary = 'Update vendor staff avatar by staff id, only admin can access'
+   * #swagger.responses[200] = { description: 'Vendor staff avatar updated successfully' }
+   */
+  updateVendorStaffAvatar,
+);
 
 router.route('/:storeId/staffs/:staffId/permission').patch(
   canManageVendorStore,

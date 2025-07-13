@@ -12,8 +12,10 @@ import {
   TVendorStaffPermission,
 } from '@/schemas/staffs.schema';
 import {
+  changeStaffAvatar,
   changeVendorStaffPermission,
   createNewVendorStaff,
+  deleteStaff,
   getAllVendorStaffs,
   getVendorStaffCompleteData,
   getVendorStaffData,
@@ -144,6 +146,8 @@ export const deleteVendorStaff = asyncHandler(async (req, res) => {
       throw new UnauthorizedError('Access denied');
     }
 
+    await deleteStaff(storeId, staffData.id);
+
     res.status(200).json(new ApiResponse(200, {}, 'Vendor staff deleted successfully'));
   } catch (error) {
     logger.error(error, 'Failed to delete vendor staff');
@@ -180,5 +184,28 @@ export const updateVendorStaffPermission = asyncHandler(async (req, res) => {
     logger.error(error, 'Failed to update vendor staff permission');
     if (error instanceof ApiError) throw error;
     throw new InternalServerError('Failed to update vendor staff permission');
+  }
+});
+
+// Update or add vendor avatar
+export const updateVendorStaffAvatar = asyncHandler(async (req, res) => {
+  try {
+    const { staffId, storeId } = req.params as unknown as VendorAndStaffParams;
+    const imageId = req.body.imageId;
+    if (!imageId) throw new BadRequestError('Please provide image id');
+
+    const staffData = await getVendorStaffData(storeId, staffId);
+
+    if (!staffData) throw new BadRequestError('Vendor staff not found');
+
+    if (staffData.avatar) {
+      //TODO: delete old avatar
+    }
+
+    await changeStaffAvatar(storeId, staffData.id, imageId);
+  } catch (error) {
+    logger.error(error, 'Failed to update vendor staff avatar');
+    if (error instanceof ApiError) throw error;
+    throw new InternalServerError('Failed to update vendor staff avatar');
   }
 });

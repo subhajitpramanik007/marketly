@@ -35,6 +35,12 @@ const getAllVendorStaffs = async (storeId: number) => {
   });
 };
 
+const getVendorStaffDataByAccountId = async (accountId: number) => {
+  return await dbClient.query.vendorStaffTable.findFirst({
+    where: eq(vendorStaffTable.accountId, accountId),
+  });
+};
+
 const getVendorStaffData = async (storeId: number, staffId: number) => {
   const staffData = await dbClient.query.vendorStaffTable.findFirst({
     where: and(
@@ -200,7 +206,7 @@ const changeVendorStaffPermission = async (
     );
 };
 
-const deleteVendorStaff = async (storeId: number, staffId: number) => {
+const deleteStaff = async (storeId: number, staffId: number) => {
   await dbClient.delete(vendorStaffTable).where(
     and(
       eq(vendorStaffTable.id, staffId), // check staffId
@@ -209,12 +215,28 @@ const deleteVendorStaff = async (storeId: number, staffId: number) => {
   );
 };
 
+const changeStaffAvatar = async (storeId: number, staffId: number, imageId: number) => {
+  await dbClient
+    .update(vendorStaffTable)
+    .set({
+      avatarId: imageId,
+    })
+    .where(
+      and(
+        eq(vendorStaffTable.id, staffId), // check staffId
+        eq(vendorStaffTable.storeId, storeId), // check storeId
+      ),
+    );
+};
+
 export {
   getAllVendorStaffs,
+  getVendorStaffDataByAccountId,
   getVendorStaffData,
   getVendorStaffCompleteData,
   createNewVendorStaff,
   updateVendorStaffData,
   changeVendorStaffPermission,
-  deleteVendorStaff,
+  deleteStaff,
+  changeStaffAvatar,
 };

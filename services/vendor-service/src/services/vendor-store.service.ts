@@ -1,13 +1,14 @@
 import { dbClient, eq } from '@marketly/drizzle';
 import { vendorStoreTable } from '@marketly/drizzle/db/schemas';
 import { ApiError, BadRequestError } from '@marketly/http';
+import { logger } from '@marketly/logger';
 
 export const getVendorStoreData = async (
-  vendorId: number,
+  storeId: number,
 ): Promise<typeof vendorStoreTable.$inferSelect> => {
   try {
     const vendorStore = await dbClient.query.vendorStoreTable.findFirst({
-      where: eq(vendorStoreTable.id, vendorId),
+      where: eq(vendorStoreTable.id, storeId),
     });
 
     if (!vendorStore) {

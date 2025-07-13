@@ -31,7 +31,6 @@ export const getCurrentVendorData = asyncHandler(async (req, res) => {
           storePhoneNumber: false,
           updatedAt: false,
           storeLogoId: false,
-          createdById: false,
         },
         with: {
           storeLogo: true,
