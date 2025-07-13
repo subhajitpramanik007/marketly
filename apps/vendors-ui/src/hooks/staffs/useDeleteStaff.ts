@@ -6,8 +6,8 @@ import toast from 'react-hot-toast';
 
 export const useDeleteStaff = (role: Role) => {
   const hasPermission = useHasPermission('delete_staff', role);
-  
-  const queryClient = useQueryClient()
+
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['staff', 'delete'],

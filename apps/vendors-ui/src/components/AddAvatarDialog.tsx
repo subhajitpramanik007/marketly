@@ -70,7 +70,7 @@ export const AddAvatarDialog: React.FC<{
         </DialogHeader>
 
         {/* Content */}
-        <div className='space-y-4'>
+        <div className="space-y-4">
           {oldAvatarUrl ? (
             <Image
               src={oldAvatarUrl}
@@ -81,7 +81,7 @@ export const AddAvatarDialog: React.FC<{
             />
           ) : null}
 
-          <div className='space-y-4'>
+          <div className="space-y-4">
             {avatar ? (
               <div className="mt-4 space-y-4">
                 <Image
