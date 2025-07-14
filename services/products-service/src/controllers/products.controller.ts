@@ -1,37 +1,43 @@
-import { asyncHandler } from '@marketly/http';
-import { and, asc, dbClient, desc, eq, sql } from '@marketly/drizzle/index';
-import {
-  accountTable,
-  productImageTable,
-  productTable,
-  vendorStaffTable,
-} from '@marketly/drizzle/db/schemas';
+import { ApiError, asyncHandler, InternalServerError } from '@marketly/http';
+import { and, dbClient, eq } from '@marketly/drizzle/index';
+import { productTable } from '@marketly/drizzle/db/schemas';
 import { newProductSchema, paginationSchema, updateProductSchema } from '@/schemas';
 import { ApiResponse, BadRequestError, UnauthorizedError, zodValidation } from '@marketly/http';
 import { logger } from '@marketly/logger';
 import { getAllProductsAsVendor, getAProductDetailsAsVendor } from '@/services/product.service';
+import { getProductsQuery, getNoOfProductsQuery } from '@/services/product.consumer.service';
 
 // get all products - for public
 export const getProducts = asyncHandler(async (req, res) => {
-  const { limit, page, sort } = zodValidation(paginationSchema, req.query);
+  let options = zodValidation(paginationSchema, req.query);
+  const { limit, page } = options;
 
   try {
-    const products = await dbClient.query.productTable.findMany({
-      limit: limit,
-      offset: (page - 1) * limit,
-      orderBy: [sort === 'asc' ? asc(productTable.createdAt) : desc(productTable.createdAt)],
-      with: {
-        images: {
-          where: eq(productImageTable.isPrimary, true),
-          limit: 1,
-        },
-      },
-    });
+    const products = await getProductsQuery({ ...req.query });
 
-    res.status(200).json(new ApiResponse(200, { products }, 'Products fetched successfully'));
+    let noOfProductsQuery = await getNoOfProductsQuery({ ...req.query });
+
+    const noOfProducts: number = noOfProductsQuery[0]?.noOfProducts ?? 0;
+
+    res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          products,
+          metaData: {
+            noOfProducts: noOfProducts,
+            noOfPages: Math.ceil(noOfProducts / limit),
+            currentPage: page,
+            limit,
+          },
+        },
+        'Products fetched successfully',
+      ),
+    );
   } catch (error) {
     logger.error(error, 'Failed to fetch products');
-    throw new BadRequestError('Failed to fetch products');
+    if (error instanceof ApiError) throw error;
+    throw new InternalServerError('Failed to fetch products');
   }
 });
 

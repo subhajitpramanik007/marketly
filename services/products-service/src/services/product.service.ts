@@ -11,55 +11,6 @@ const sortProduct = (sort: 'asc' | 'desc' = 'asc') => {
   return sort === 'asc' ? asc(productTable.createdAt) : desc(productTable.createdAt);
 };
 
-// FIXME: image details
-
-/*--------------------------------- CONSUMER --------------------------------- */
-
-/**
- * Get all products
- *
- * - minimal details with primary image - for consumer
- *
- * @param limit
- * @param page
- * @param sort
- */
-const getAllProductsAsConsumer = async (
-  limit: number,
-  page: number,
-  sort: 'asc' | 'desc' = 'asc',
-) => {
-  try {
-    return await dbClient.query.productTable.findMany({
-      where: and(eq(productTable.isAvailable, true), eq(productTable.isDeleted, false)),
-      limit: limit,
-      offset: (page - 1) * limit,
-      orderBy: [sortProduct(sort)],
-      columns: {
-        addedById: false,
-        images: false,
-        isAvailable: false,
-        updatedAt: false,
-        isDeleted: false,
-      },
-      extras: {
-        storeName: sql`${vendorStoreTable.storeName}`.as('storeName'),
-      },
-      with: {
-        images: {
-          where: eq(productImageTable.isPrimary, true),
-          limit: 1,
-          columns: {
-            id: true,
-          },
-        },
-      },
-    });
-  } catch (error) {
-    throw new BadRequestError('Failed to fetch products');
-  }
-};
-
 /*-------------------- VENDOR ONLY ---------------------------- */
 
 /**
@@ -153,4 +104,4 @@ const getAProductDetailsAsVendor = async (storeId: number, productSlug: string) 
   }
 };
 
-export { getAllProductsAsConsumer, getAllProductsAsVendor, getAProductDetailsAsVendor };
+export { getAllProductsAsVendor, getAProductDetailsAsVendor };
