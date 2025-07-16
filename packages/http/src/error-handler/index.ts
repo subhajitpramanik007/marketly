@@ -28,6 +28,6 @@ export const errorMiddleware = (err: Error, req: Request, res: Response, _: Next
   res.status(500).json({
     statusCode: 500,
     status: 'error',
-    message: err.message,
+    message: 'Internal server error',
   });
 };

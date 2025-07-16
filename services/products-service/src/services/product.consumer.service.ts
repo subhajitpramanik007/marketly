@@ -1,55 +1,30 @@
+import { TProductsQuerySchema } from '@/schemas';
 import {
+  cartTable,
   imageTable,
   productImageTable,
+  productRatingTable,
   productTable,
   vendorStoreTable,
+  wishlistTable,
 } from '@marketly/drizzle/db/schemas';
-import {
-  and,
-  asc,
-  dbClient,
-  desc,
-  eq,
-  gt,
-  gte,
-  ilike,
-  lt,
-  lte,
-  or,
-  sql,
-} from '@marketly/drizzle/index';
+import { and, asc, dbClient, desc, eq, gte, ilike, lte, or, sql } from '@marketly/drizzle/index';
+import { NotFoundError } from '@marketly/http/api-error';
 
-type GetProductsQueryOptions = {
-  limit?: number;
-  page?: number;
-  sort?: 'asc' | 'desc';
-  onlyAvailable?: boolean;
-  onlyNotDeleted?: boolean;
+interface GetProductsQueryOptions extends TProductsQuerySchema {
   search?: string;
   category?: string;
-  tags?: string;
-  minPrice?: number;
-  maxPrice?: number;
-};
+  tags?: string[];
+}
 
 const productQueryOptions = (options: GetProductsQueryOptions) => {
-  let {
-    limit = 10,
-    page = 1,
-    sort = 'desc',
-    onlyAvailable = true,
-    search,
-    category,
-    tags,
-    minPrice,
-    maxPrice,
-  } = options;
+  let { limit, page, sort = 'desc', isAvailable, search, category, tags, min, max } = options;
 
   let whereConditions = [
     eq(productTable.isDeleted, false), // check if product is not deleted
   ];
 
-  if (onlyAvailable) {
+  if (isAvailable) {
     whereConditions.push(eq(productTable.isAvailable, true)); // check if product is available
   }
 
@@ -57,15 +32,32 @@ const productQueryOptions = (options: GetProductsQueryOptions) => {
     whereConditions.push(eq(productTable.category, category)); // search by product category
   }
 
-  if (tags) {
-    const tagsArray = tags
-      .split(',')
-      .map(tag => tag.trim())
-      .filter(Boolean); // remove empty strings
+  if (search) {
+    whereConditions.push(
+      or(
+        ilike(productTable.name, `%${search}%`), // search by product name
+        ilike(productTable.description, `%${search}%`), // search by product description
+      ) as any,
+    );
+  }
 
-    if (tagsArray.length > 0) {
-      const pgArrayLiteral = `'{${tagsArray.join(',')}}'`; // e.g. '{toy,new}'
-      whereConditions.push(sql`${productTable.tags} && ${sql.raw(pgArrayLiteral)}::text[]`);
+  if (min || max) {
+    if (min && max) {
+      whereConditions.push(and(gte(productTable.price, min), lte(productTable.price, max)) as any); // search by product price
+    } else if (min) {
+      whereConditions.push(gte(productTable.price, min)); // search by product price
+    } else if (max) {
+      whereConditions.push(lte(productTable.price, max)); // search by product price
+    }
+  }
+
+  if (tags) {
+    if (tags.length > 0) {
+      const tagFilters = tags.map(
+        tag => sql`${sql.raw('("products"."tags"::jsonb)')} @> ${sql.raw(`'["${tag}"]'::jsonb`)}`, // search by product tags
+      );
+
+      whereConditions.push(or(...tagFilters) as any);
     }
   }
 
@@ -74,9 +66,6 @@ const productQueryOptions = (options: GetProductsQueryOptions) => {
     page,
     sort,
     whereConditions,
-    search,
-    minPrice,
-    maxPrice,
   };
 };
 
@@ -85,9 +74,8 @@ const productQueryOptions = (options: GetProductsQueryOptions) => {
  *
  * - minimal details query - for public
  */
-export const getProductsQuery = (options: GetProductsQueryOptions) => {
-  const { limit, page, sort, search, whereConditions, minPrice, maxPrice } =
-    productQueryOptions(options);
+export const getProductsQuery = (options: GetProductsQueryOptions, accountId?: number) => {
+  const { limit, page, sort, whereConditions } = productQueryOptions(options);
 
   const query = dbClient
     .select({
@@ -104,6 +92,11 @@ export const getProductsQuery = (options: GetProductsQueryOptions) => {
       imageUrl: imageTable.url,
       storeName: vendorStoreTable.storeName,
       storeId: vendorStoreTable.id,
+      isInWishlist: wishlistTable.id,
+      cart: {
+        exists: cartTable.id,
+        quantity: cartTable.quantity,
+      },
     })
     .from(productTable)
     .leftJoin(
@@ -121,19 +114,21 @@ export const getProductsQuery = (options: GetProductsQueryOptions) => {
       vendorStoreTable,
       eq(productTable.storeId, vendorStoreTable.id), // get store details
     )
-    .where(
+    .leftJoin(
+      wishlistTable,
       and(
-        ...whereConditions,
-        search
-          ? or(
-              ilike(productTable.name, `%${search}%`), // search by product name
-              ilike(productTable.description, `%${search}%`), // search by product description
-            )
-          : undefined,
-        minPrice ? gte(productTable.price, minPrice.toString()) : undefined, // search by min price
-        maxPrice ? lte(productTable.price, maxPrice.toString()) : undefined, // search by max price
+        eq(wishlistTable.productId, productTable.id), // check if product is in wishlist
+        eq(wishlistTable.accountId, accountId!),
       ),
     )
+    .leftJoin(
+      cartTable,
+      and(
+        eq(cartTable.productId, productTable.id), // check if product is in cart
+        eq(cartTable.accountId, accountId!),
+      ),
+    )
+    .where(and(...whereConditions))
     .limit(limit)
     .offset((page - 1) * limit)
     .orderBy(
@@ -146,24 +141,83 @@ export const getProductsQuery = (options: GetProductsQueryOptions) => {
   return query;
 };
 
-export const getNoOfProductsQuery = (options: GetProductsQueryOptions) => {
-  const { whereConditions, search, minPrice, maxPrice } = productQueryOptions(options);
-  return dbClient
+export const getNoOfProductsQuery = async (options: GetProductsQueryOptions): Promise<number> => {
+  const { whereConditions } = productQueryOptions(options);
+  const query = await dbClient
     .select({
       noOfProducts: sql<number>`count(*)`,
     })
     .from(productTable)
-    .where(
-      and(
-        ...whereConditions,
-        search
-          ? or(
-              ilike(productTable.name, `%${search}%`),
-              ilike(productTable.description, `%${search}%`),
-            )
-          : undefined,
-        minPrice ? gte(productTable.price, minPrice.toString()) : undefined,
-        maxPrice ? lte(productTable.price, maxPrice.toString()) : undefined,
-      ),
-    );
+    .where(and(...whereConditions));
+
+  return query[0].noOfProducts ?? 0;
+};
+
+// Get product details for consumer
+export const getProductBySlug = async (slug: string) => {
+  const product = await dbClient.query.productTable.findFirst({
+    where: and(
+      eq(productTable.slug, slug), // search by product slug
+      eq(productTable.isDeleted, false), // check if product is not deleted
+    ),
+    columns: {
+      addedById: false,
+      images: false,
+      isDeleted: false,
+      isAvailable: false,
+    },
+    with: {
+      store: {
+        columns: {
+          id: true,
+          storeName: true,
+          isVerified: true,
+        },
+        with: {
+          storeLogo: {
+            columns: {
+              url: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!product) {
+    throw new NotFoundError('Product not found');
+  }
+
+  const productImages = await dbClient
+    .select({
+      id: productImageTable.id,
+      url: imageTable.url,
+      alt: imageTable.alt,
+      order: productImageTable.order,
+      metadata: imageTable.metadata,
+    })
+    .from(productImageTable)
+    .leftJoin(imageTable, eq(productImageTable.imageId, imageTable.id))
+    .where(eq(productImageTable.productId, product.id))
+    .orderBy(asc(productImageTable.order));
+
+  const ratings = await dbClient
+    .select({
+      rating: productRatingTable.rating,
+    })
+    .from(productRatingTable)
+    .where(eq(productRatingTable.productId, product.id));
+
+  const avgRating = ratings.reduce((acc, rating) => acc + rating.rating, 0) / ratings.length;
+
+  return {
+    ...product,
+    images: productImages,
+    rating: avgRating,
+    noOfRatings: ratings.length,
+    store: {
+      ...product.store,
+      storeLogoUrl: product.store?.storeLogo?.url,
+    },
+  };
 };
