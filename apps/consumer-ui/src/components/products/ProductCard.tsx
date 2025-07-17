@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Link } from '@tanstack/react-router';
 
-import type { Product } from '@/types/product.types';
+import type { IProduct } from '@/types/product.types';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Heart, ShoppingCart, ShoppingCartIcon } from 'lucide-react';
 
-export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
+export const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   return (
     <Card className="pt-0 relative">
       {/* like */}
@@ -39,7 +39,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
       </div>
 
       <CardContent className="p-0">
-        <Link to={`/products/$product`} params={{ product: product.slug }}>
+        <Link to={`/$product`} params={{ product: product.slug }}>
           <img
             src={product?.imageUrl ?? 'no-image.png'}
             alt={product?.name}
