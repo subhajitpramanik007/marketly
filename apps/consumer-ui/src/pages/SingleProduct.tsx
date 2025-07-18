@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useSingleProduct } from '@/hooks/products/useSingleProduct';
-import { SingleProduct } from '@/components/products/SingleProduct';
+import { SingleProduct } from '@/components/products/SingleProduct/SingleProduct';
 
 interface _props {
   slug: string;
@@ -17,7 +17,7 @@ export const SingleProductPage: React.FC<_props> = ({ slug }) => {
     return <div className="p-4">Loading...</div>;
   }
 
-  if(!data?.product) {
+  if (!data?.product) {
     return <div className="p-4">Product not found</div>;
   }
 
