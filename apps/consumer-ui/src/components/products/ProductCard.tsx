@@ -49,7 +49,11 @@ export const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
       </CardContent>
       <CardFooter className="flex flex-col w-full items-start gap-1 px-2">
         <h2 className="font-semibold text-muted-foreground">{product?.name}</h2>
-        <Badge className="hover:cursor-pointer">#{product?.category}</Badge>
+        <Badge className="hover:cursor-pointer">
+          <Link to={`/category/$category`} params={{ category: product?.category }}>
+            #{product?.category}
+          </Link>
+        </Badge>
         <p className="flex items-center gap-1">
           <span>₹</span>
           <span className="font-semibold text-xl">{product.price}</span>
