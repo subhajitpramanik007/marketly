@@ -1,16 +1,17 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "resolveJsonModule": true,
+    "rootDir": "../../",
     "outDir": "dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowJs": true,
-    "baseUrl": "."
-  },
-  "include": ["src/**/*"]
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@marketly/http": ["../../packages/http/src"],
+      "@marketly/config": ["../../packages/config/src"],
+      "@marketly/drizzle": ["../../packages/drizzle/src"],
+      "@marketly/drizzle/*": ["../../packages/drizzle/src/*"],
+      "@marketly/lib/*": ["../../packages/lib/src/*"],
+      "@marketly/logger": ["../../packages/logger/src"]
+    }
+  }
 }
