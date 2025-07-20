@@ -15,7 +15,12 @@ export const consumerRegistrationSchema = z.object({
   otp: z.string().optional(),
 });
 
-export const consumerRegistrationEmailVerificationSchema = consumerRegistrationSchema.extend({
+export const resendEmailSchema = z.object({
+  email: zodString('Email').email(),
+});
+
+export const consumerRegistrationEmailVerificationSchema = z.object({
+  email: zodString('Email').email(),
   otp: otpType(6),
 });
 

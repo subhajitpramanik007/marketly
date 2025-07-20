@@ -8,6 +8,7 @@ import {
   userResetPasswordSchema,
   vendorRegistrationEmailVerificationSchema,
   vendorRegistrationSchema,
+  resendEmailSchema,
 } from './auth.schema';
 
 export type TUserType = z.infer<typeof EUserTypeEnum>;
@@ -26,3 +27,5 @@ export type TUserLogin = z.infer<typeof userLoginSchema>;
 
 export type TUserForgotPassword = z.infer<typeof userForgotPasswordSchema>;
 export type TUserResetPassword = z.infer<typeof userResetPasswordSchema>;
+
+export type TResendEmail = z.infer<typeof resendEmailSchema>;
