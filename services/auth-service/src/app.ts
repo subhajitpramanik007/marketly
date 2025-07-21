@@ -22,14 +22,10 @@ app.use(cookieParser());
 
 // Routes
 import { healthRoutes } from './routes/healthcheck.routes.js';
-import { vendorAuthRoutes } from './routes/vendor.auth.routes.js';
-import { sessionRoutes } from './routes/session.routes.js';
-import { consumerAuthRoutes } from './routes/comsumer.auth.routes.js';
+import { authRoutes } from './routes/auth.routes.js';
 
 app.use('/api/auth/health', healthRoutes);
-app.use('/api/auth', consumerAuthRoutes);
-app.use('/api/auth/vendors', vendorAuthRoutes);
-app.use('/api/auth/sessions', sessionRoutes);
+app.use('/api/auth', authRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
