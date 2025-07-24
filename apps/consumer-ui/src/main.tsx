@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 
@@ -9,6 +8,7 @@ import { routeTree } from './routeTree.gen';
 
 import './styles.css';
 import reportWebVitals from './reportWebVitals.ts';
+import { SessionProvider } from './providers/SessionProvider.tsx';
 
 // Create a new router instance
 const router = createRouter({
@@ -34,11 +34,13 @@ const rootElement = document.getElementById('app');
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
-    <StrictMode>
-      <TanStackQueryProvider.Provider>
+    <TanStackQueryProvider.Provider>
+      <SessionProvider>
         <RouterProvider router={router} />
-      </TanStackQueryProvider.Provider>
-    </StrictMode>,
+      </SessionProvider>
+    </TanStackQueryProvider.Provider>,
+    // <StrictMode>
+    // </StrictMode>,
   );
 }
 

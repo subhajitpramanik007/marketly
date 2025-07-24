@@ -1,5 +1,4 @@
-import { AuthCardWrapper } from '@/components/auth/AuthCardWrapper';
-import { LoginForm } from '@/components/auth/LoginForm';
+import Login from '@/pages/Login';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/auth/login')({
@@ -7,13 +6,5 @@ export const Route = createFileRoute('/auth/login')({
 });
 
 function RouteComponent() {
-  return (
-    <AuthCardWrapper
-      headerText="Login to your account"
-      footerText="Don't have an account?"
-      footerLink={{ href: '/auth/register', text: 'Register' }}
-    >
-      <LoginForm />
-    </AuthCardWrapper>
-  );
+  return <Login />;
 }

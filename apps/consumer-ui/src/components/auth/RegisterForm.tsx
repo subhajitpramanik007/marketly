@@ -15,9 +15,7 @@ import { PasswordInput } from '@/components/PasswordInput';
 
 import { useRegisterForm } from '@/hooks/auth/useRegisterForm';
 
-interface RegisterFormProps {}
-
-export const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
+export const RegisterForm: React.FC = () => {
   const { form, isPending, onSubmit } = useRegisterForm();
 
   return (

@@ -12,9 +12,7 @@ type DisplayThisWithoutValueProps = {
   children: React.ReactNode;
 };
 
-type DisplayThisProps<TValue> =
-  | DisplayThisWithValueProps<TValue>
-  | DisplayThisWithoutValueProps;
+type DisplayThisProps<TValue> = DisplayThisWithValueProps<TValue> | DisplayThisWithoutValueProps;
 
 export const DisplayThis = <TValue,>(props: DisplayThisProps<TValue>) => {
   const condition = props.condition ?? 'showWithoutValue';

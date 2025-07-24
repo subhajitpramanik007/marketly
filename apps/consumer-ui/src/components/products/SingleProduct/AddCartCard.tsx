@@ -6,6 +6,7 @@ import { MinusIcon, Plus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import toast from 'react-hot-toast';
+import { IsLoggedIn, IsLogout } from '@/components/auth';
 
 interface AddCartCardProps {
   id: number;
@@ -64,12 +65,27 @@ export const AddCartCard: React.FC<AddCartCardProps> = ({ id, price }) => {
             </div>
           </div>
 
-          <Button className="w-full" onClick={handleAddToCart}>
-            ADD TO CART
-          </Button>
-          <Button variant={'outline'} className="w-full" onClick={handleAddToWishlist}>
-            ADD TO WISHLIST
-          </Button>
+          <IsLogout asToast>
+            <Button className="w-full" onClick={handleAddToCart}>
+              ADD TO CART
+            </Button>
+          </IsLogout>
+          <IsLoggedIn>
+            <Button className="w-full" onClick={handleAddToCart}>
+              ADD TO CART
+            </Button>
+          </IsLoggedIn>
+
+          <IsLogout asToast>
+            <Button variant={'outline'} className="w-full" onClick={handleAddToWishlist}>
+              ADD TO WISHLIST
+            </Button>
+          </IsLogout>
+          <IsLoggedIn>
+            <Button variant={'outline'} className="w-full" onClick={handleAddToWishlist}>
+              ADD TO WISHLIST
+            </Button>
+          </IsLoggedIn>
         </div>
       </CardContent>
     </Card>

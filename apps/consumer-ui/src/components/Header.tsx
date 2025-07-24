@@ -1,4 +1,6 @@
 import { Link } from '@tanstack/react-router';
+import { IsLogout } from './auth';
+import { Button } from './ui/button';
 
 export default function Header() {
   return (
@@ -9,7 +11,11 @@ export default function Header() {
 
       <nav className="flex flex-row"></nav>
 
-      <div></div>
+      <div>
+        <IsLogout>
+          <Button>Login</Button>
+        </IsLogout>
+      </div>
     </header>
   );
 }

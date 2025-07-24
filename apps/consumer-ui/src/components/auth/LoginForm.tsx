@@ -13,7 +13,7 @@ import { Spinner } from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
 import { PasswordInput } from '@/components/PasswordInput';
 
-import { useLoginForm } from '@/hooks/auth/useLoginForm';
+import { useLoginForm } from '@/hooks/auth';
 
 export const LoginForm: React.FC = () => {
   const { form, isPending, onSubmit } = useLoginForm();

@@ -4,39 +4,14 @@ import { Link } from '@tanstack/react-router';
 import type { IProduct } from '@/types/product.types';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { ProductButtons } from './ProductButtons';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Heart, ShoppingCart, ShoppingCartIcon } from 'lucide-react';
 
-export const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
+const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   return (
     <Card className="pt-0 relative">
       {/* like */}
-      <div className="absolute top-2 right-2 flex flex-col gap-2">
-        <Button variant="outline">
-          {product.isInWishlist ? (
-            <Heart className="text-red-500 fill-red-500" />
-          ) : (
-            <Heart className="text-muted-foreground" />
-          )}
-        </Button>
-
-        {/* Cart */}
-        <Button variant="outline" className="relative">
-          {product.cart ? (
-            <div>
-              <ShoppingCart />
-              {product.cart.quantity > 0 && (
-                <div className="absolute top-0 right-0 w-4 h-4 rounded-full flex items-center justify-center text-xs">
-                  {product.cart.quantity}
-                </div>
-              )}
-            </div>
-          ) : (
-            <ShoppingCartIcon className="text-muted-foreground" />
-          )}
-        </Button>
-      </div>
+      <ProductButtons isInWishlist={!!product.isInWishlist} cart={product.cart} />
 
       <CardContent className="p-0">
         <Link to={`/$product`} params={{ product: product.slug }}>
@@ -62,3 +37,5 @@ export const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
     </Card>
   );
 };
+
+export default React.memo(ProductCard);

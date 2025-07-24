@@ -20,7 +20,7 @@ api.interceptors.response.use(
   response => response.data,
   error => {
     if (error instanceof axios.AxiosError) {
-      return Promise.reject(error.response?.data.message || error.message);
+      return Promise.reject(error.response?.data || error);
     }
 
     return Promise.reject(error);

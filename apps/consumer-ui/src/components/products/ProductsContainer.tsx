@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { IProduct } from '@/types/product.types';
 
-import { ProductCard } from './ProductCard';
+import ProductCard from './ProductCard';
 
 interface ProductsSkeletonContainerProps {
   products?: IProduct[];

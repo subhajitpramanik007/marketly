@@ -13,7 +13,7 @@ const registerResendOtpSchema = z.object({
 
 const userVerifySchema = z.object({
   email: z.string().email(),
-  otp: z.preprocess(val => (typeof val === 'string' ? parseInt(val, 10) : val), z.number()),
+  otp: z.string().min(6).max(6),
 });
 
 const loginSchema = z.object({
