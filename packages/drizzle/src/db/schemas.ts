@@ -117,6 +117,18 @@ export const consumerTable = pgTable(
   ],
 );
 
+// Relations of consumers
+export const consumerRelations = relations(consumerTable, ({ one }) => ({
+  account: one(accountTable, {
+    fields: [consumerTable.accountId],
+    references: [accountTable.id],
+  }),
+  avatar: one(imageTable, {
+    fields: [consumerTable.avatarId],
+    references: [imageTable.id],
+  }),
+}));
+
 // Enum for staff roles
 export const vendorStaffRoleEnum = pgEnum('vendor_staff_roles', ['owner', 'manager', 'staff']);
 
