@@ -1,3 +1,4 @@
+import { REFRESH_TOKEN_NAMESPACE } from '@/constants/tokens.constants';
 import {
   checkAccountExist,
   sendVerificationOtp,
@@ -9,6 +10,7 @@ import {
   getConsumerByEmail,
   markerConsumerAsVerified,
 } from '@/services/consumer.service';
+import { createNewSession, deleteSessionByRefreshToken } from '@/services/session.service';
 import { removeAuthCookies, setAuthCookies } from '@/utils/cookies.utils';
 import { JwtPayload, signInJwtToken } from '@/utils/jwt.utils';
 import { checkOtpRestrictions } from '@/utils/otp.utils';
@@ -41,6 +43,8 @@ export const registerConsumerCtrl = asyncHandler(async (req, res) => {
   const refreshToken = await signInJwtToken(jwtPayload, 'consumer', 'refresh');
 
   await setAuthCookies(res, accessToken, refreshToken, 'consumer');
+
+  await createNewSession(req, createdAccount.id, 'consumer', refreshToken);
 
   res
     .status(201)
@@ -107,6 +111,8 @@ export const loginConsumerCtrl = asyncHandler(async (req, res) => {
 
   await setAuthCookies(res, accessToken, refreshToken, 'consumer');
 
+  await createNewSession(req, consumerAccount.id, 'consumer', refreshToken);
+
   res.status(200).json(new ApiResponse(200, { accessToken }, 'Login successful'));
 });
 
@@ -116,6 +122,8 @@ export const logoutConsumerCtrl = asyncHandler(async (req, res) => {
   }
 
   await removeAuthCookies(res);
+
+  await deleteSessionByRefreshToken('consumer', req.cookies[REFRESH_TOKEN_NAMESPACE]);
 
   res.status(200).json(new ApiResponse(200, null, 'Logout successful'));
 });

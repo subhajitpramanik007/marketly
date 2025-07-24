@@ -39,6 +39,6 @@ router.route('/vendors/logout').post(authMiddleware, vendorAuthController.logout
 /**
  * For Session
  */
-router.route('/refresh').post(refreshSession);
+router.route('/sessions/refresh').post(refreshSession);
 
 export { router as authRoutes };
