@@ -1,15 +1,14 @@
 import { Router } from 'express';
 import swaggerUi from 'swagger-ui-express';
 
-import { authRoutes } from './auth.routes';
 import { healthRoutes } from './heathcheck.routes';
 import { logger } from '@marketly/logger';
+import { meRoutes } from './me.routes';
 
 const router = Router();
 
 router.use('/health', healthRoutes);
-router.use('/auth', authRoutes);
-
+router.use('/me', meRoutes);
 // Docs
 try {
   const docs = require('../../../../docs/services/consumers-swagger.json');
