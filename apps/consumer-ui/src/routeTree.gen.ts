@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CategoryCategoryRouteImport } from './routes/category.$category'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as UserWishlistsRouteImport } from './routes/_user/wishlists'
 
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
@@ -52,12 +53,18 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const UserWishlistsRoute = UserWishlistsRouteImport.update({
+  id: '/_user/wishlists',
+  path: '/wishlists',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/$product': typeof ProductRoute
   '/profile': typeof ProfileRoute
+  '/wishlists': typeof UserWishlistsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/category/$category': typeof CategoryCategoryRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
   '/$product': typeof ProductRoute
   '/profile': typeof ProfileRoute
+  '/wishlists': typeof UserWishlistsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/category/$category': typeof CategoryCategoryRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/$product': typeof ProductRoute
   '/profile': typeof ProfileRoute
+  '/_user/wishlists': typeof UserWishlistsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/category/$category': typeof CategoryCategoryRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/$product'
     | '/profile'
+    | '/wishlists'
     | '/auth/login'
     | '/auth/register'
     | '/category/$category'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/$product'
     | '/profile'
+    | '/wishlists'
     | '/auth/login'
     | '/auth/register'
     | '/category/$category'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/$product'
     | '/profile'
+    | '/_user/wishlists'
     | '/auth/login'
     | '/auth/register'
     | '/category/$category'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   ProductRoute: typeof ProductRoute
   ProfileRoute: typeof ProfileRoute
+  UserWishlistsRoute: typeof UserWishlistsRoute
   CategoryCategoryRoute: typeof CategoryCategoryRoute
 }
 
@@ -170,6 +183,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_user/wishlists': {
+      id: '/_user/wishlists'
+      path: '/wishlists'
+      fullPath: '/wishlists'
+      preLoaderRoute: typeof UserWishlistsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -192,6 +212,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   ProductRoute: ProductRoute,
   ProfileRoute: ProfileRoute,
+  UserWishlistsRoute: UserWishlistsRoute,
   CategoryCategoryRoute: CategoryCategoryRoute,
 }
 export const routeTree = rootRouteImport

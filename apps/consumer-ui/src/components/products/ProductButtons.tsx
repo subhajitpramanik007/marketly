@@ -7,9 +7,14 @@ import { Heart, ShoppingCartIcon } from 'lucide-react';
 interface ProductButtonsProps {
   isInWishlist: boolean;
   cart: IProduct['cart'];
+  onToggleToWishlist: () => void;
 }
 
-export const ProductButtons: React.FC<ProductButtonsProps> = ({ isInWishlist, cart }) => {
+export const ProductButtons: React.FC<ProductButtonsProps> = ({
+  isInWishlist,
+  cart,
+  onToggleToWishlist,
+}) => {
   return (
     <div className="absolute top-2 right-2 flex flex-col gap-2">
       <IsLogout asToast>
@@ -18,7 +23,7 @@ export const ProductButtons: React.FC<ProductButtonsProps> = ({ isInWishlist, ca
         </Button>
       </IsLogout>
       <IsLoggedIn>
-        <Button variant="outline" size="icon">
+        <Button variant="outline" size="icon" onClick={onToggleToWishlist}>
           <span>
             {isInWishlist ? (
               <Heart className="text-red-500 fill-red-500" />

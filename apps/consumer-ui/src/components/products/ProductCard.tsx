@@ -6,12 +6,19 @@ import type { IProduct } from '@/types/product.types';
 import { Badge } from '@/components/ui/badge';
 import { ProductButtons } from './ProductButtons';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { useToggleWishlist } from '@/hooks/wishlists/useToggleWishlist';
 
 const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
+  const { mutate: toggleToWishlist } = useToggleWishlist(product.id, product.isInWishlist);
+
   return (
     <Card className="pt-0 relative">
       {/* like */}
-      <ProductButtons isInWishlist={!!product.isInWishlist} cart={product.cart} />
+      <ProductButtons
+        isInWishlist={!!product.isInWishlist}
+        cart={product.cart}
+        onToggleToWishlist={toggleToWishlist}
+      />
 
       <CardContent className="p-0">
         <Link to={`/$product`} params={{ product: product.slug }}>

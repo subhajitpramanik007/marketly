@@ -14,7 +14,7 @@ export interface IProduct {
   imageUrl: string | null;
   storeName: string;
   storeId: number;
-  isInWishlist: number | null;
+  isInWishlist: boolean;
   cart: {
     exists: number;
     quantity: number;

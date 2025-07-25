@@ -5,13 +5,17 @@ import ProductCard from './ProductCard';
 
 interface ProductsSkeletonContainerProps {
   products?: IProduct[];
+  emptyMsg?: string;
 }
 
-export const ProductsContainer: React.FC<ProductsSkeletonContainerProps> = ({ products }) => {
+export const ProductsContainer: React.FC<ProductsSkeletonContainerProps> = ({
+  products,
+  emptyMsg,
+}) => {
   if (!products || products.length === 0) {
     return (
       <div>
-        <p>No products found</p>
+        <p>{emptyMsg ?? 'No products found'}</p>
       </div>
     );
   }
