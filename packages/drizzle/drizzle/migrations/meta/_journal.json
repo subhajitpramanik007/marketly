@@ -71,6 +71,20 @@
       "when": 1751553378551,
       "tag": "0009_unusual_ink",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1753375231815,
+      "tag": "0010_flawless_kid_colt",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1753375551150,
+      "tag": "0011_little_mongoose",
+      "breakpoints": true
     }
   ]
 }
