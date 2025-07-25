@@ -17,7 +17,7 @@ import {
   deleteAllProductImages,
 } from '@/controllers/products.image.controller';
 
-import { authenticatedVendor } from '@/middlewares';
+import { authenticatedVendor, optionalAuthOfConsumer } from '@/middlewares';
 import {
   getProduct,
   getProducts,
@@ -29,7 +29,7 @@ import {
 const router = Router();
 
 // for public route
-router.route('/').get(getProducts);
+router.route('/').get(optionalAuthOfConsumer, getProducts);
 router.route('/category/:category').get(getProductsByCategory);
 router.route('/tags').get(getProductsByTags);
 router.route('/search').get(getProductsBySearch);

@@ -29,7 +29,7 @@ const getProducts = asyncHandler(async (req, res) => {
     return;
   }
 
-  const products = await getProductsQuery(options);
+  const products = await getProductsQuery(options, req.user?.id);
 
   res.status(200).json(
     new ApiResponse(

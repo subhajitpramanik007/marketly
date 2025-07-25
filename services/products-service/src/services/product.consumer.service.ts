@@ -74,10 +74,10 @@ const productQueryOptions = (options: GetProductsQueryOptions) => {
  *
  * - minimal details query - for public
  */
-export const getProductsQuery = (options: GetProductsQueryOptions, accountId?: number) => {
+export const getProductsQuery = async (options: GetProductsQueryOptions, accountId?: number) => {
   const { limit, page, sort, whereConditions } = productQueryOptions(options);
 
-  const query = dbClient
+  const productsData = await dbClient
     .select({
       id: productTable.id,
       name: productTable.name,
@@ -138,7 +138,9 @@ export const getProductsQuery = (options: GetProductsQueryOptions, accountId?: n
       ),
     );
 
-  return query;
+  return productsData.map(p => {
+    return { ...p, isInWishlist: !!p.isInWishlist };
+  });
 };
 
 export const getNoOfProductsQuery = async (options: GetProductsQueryOptions): Promise<number> => {

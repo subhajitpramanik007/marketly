@@ -55,3 +55,21 @@ export const authenticatedVendor = asyncHandler(async (req, res, next) => {
     throw new ForbiddenError('You are not authorized to access this resource');
   }
 });
+
+export const optionalAuthOfConsumer = asyncHandler(async (req, res, next) => {
+  try {
+    const accessToken = req.cookies['_accessToken'] || req.headers['authorization']?.split(' ')[1];
+
+    if (accessToken) {
+      const payload = await verifyAccessToken(accessToken);
+
+      if (payload) {
+        req.user = payload;
+      }
+    }
+
+    next();
+  } catch {
+    next();
+  }
+});
