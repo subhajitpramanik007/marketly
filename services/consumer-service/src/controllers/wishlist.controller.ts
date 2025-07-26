@@ -9,6 +9,23 @@ export const getWishlists = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, { products }));
 });
 
+export const addToWishlist = asyncHandler(async (req, res) => {
+  const accountId = req.consumer?.accountId;
+
+  const productId = parseInt(req.params?.productId);
+  if (!productId) throw new BadRequestError('Product id is required');
+
+  const alreadyAddedInWishlist = await wishlistService.getWishlist(accountId, productId);
+
+  if (alreadyAddedInWishlist) {
+    throw new BadRequestError('Product already added in wishlist');
+  }
+
+  await wishlistService.addToWishlist(accountId, productId);
+
+  res.status(200).json(new ApiResponse(200, {}, 'Product add in wishlist'));
+});
+
 export const toggleWishlist = asyncHandler(async (req, res) => {
   const accountId = parseInt(req.consumer?.accountId);
 

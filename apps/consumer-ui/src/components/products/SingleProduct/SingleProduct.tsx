@@ -10,7 +10,7 @@ export const SingleProduct = ({ product }: { product: ISingleProduct }) => {
       <div className="w-full md:basis-1/2">
         <ImageSection images={product.images} />
       </div>
-      <div className="flex flex-col gap-4 w-full md:basis-1/2">
+      <div className="flex flex-col md:flex-row gap-4 w-full md:basis-1/2">
         <ProductDetailSection product={product} />
         <AddCartCard id={product.id} price={product.price} />
       </div>

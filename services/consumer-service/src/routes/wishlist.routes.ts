@@ -8,6 +8,7 @@ const router = Router();
 router.use(isAuthenticated);
 
 router.route('/').get(wishlistCtrl.getWishlists); // get all product of wishlist
-router.route('/:productId').post(wishlistCtrl.toggleWishlist); // for toggle
+router.route('/:productId').post(wishlistCtrl.addToWishlist); // add to wishlist if not already added
+router.route('/toggle/:productId').post(wishlistCtrl.toggleWishlist); // for toggle
 
 export default router;

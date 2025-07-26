@@ -6,6 +6,10 @@ export const getWishlistProducts = async (): Promise<IApiResponse<{ products: IP
   return api.get('/consumers/wishlists');
 };
 
-export const toggeleWishlist = async (productId: number) => {
+export const addToWishList = async (productId: number) => {
   return api.post(`/consumers/wishlists/${productId}`);
+};
+
+export const toggeleWishlist = async (productId: number) => {
+  return api.post(`/consumers/wishlists/toggle/${productId}`);
 };
