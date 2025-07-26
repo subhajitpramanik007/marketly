@@ -5,3 +5,4 @@ export * from './useResendVerificationOtp';
 export * from './useSession';
 export * from './useSessionRefresh';
 export * from './useVerifyUser';
+export * from './useLogout';

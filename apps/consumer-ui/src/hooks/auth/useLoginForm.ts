@@ -23,13 +23,12 @@ export const useLoginForm = () => {
   const { mutateAsync: userLogin, isPending } = useMutation({
     mutationKey: ['login'],
     mutationFn: loginService,
-    onSuccess: data => {
+    onSuccess: async () => {
       toast.success('Login successful');
-
       form.reset();
-      queryClient.invalidateQueries({ queryKey: ['session', 'me'] });
+      queryClient.clear();
 
-      router.navigate({ to: '/' });
+      router.navigate({ to: '/', reloadDocument: true });
     },
     onError: () => {
       toast.error('Login failed');

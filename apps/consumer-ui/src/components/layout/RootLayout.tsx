@@ -1,4 +1,4 @@
-import Header from '@/components/Header.tsx';
+import { Header } from '@/components/navigation/header';
 import { motion } from 'motion/react';
 import { Toaster } from 'react-hot-toast';
 import { Outlet } from '@tanstack/react-router';

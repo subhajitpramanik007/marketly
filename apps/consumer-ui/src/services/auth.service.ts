@@ -44,7 +44,7 @@ export const loginService = async (values: TLoginSchema) => {
 };
 
 export const logoutService = async () => {
-  return await axios.post('/logout');
+  return await api.post('/logout');
 };
 
 export const refreshService = async () => {

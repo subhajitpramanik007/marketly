@@ -1,8 +1,9 @@
 import { Link } from '@tanstack/react-router';
-import { IsLogout } from './auth';
-import { Button } from './ui/button';
+import { IsLoggedIn, IsLogout } from '@/components/auth';
+import { Button } from '@/components/ui/button';
+import { UserButton } from './UserButton';
 
-export default function Header() {
+export function Header() {
   return (
     <header className="py-2 bg-primary/10 border-b flex items-center justify-between px-4">
       <Link to="/">
@@ -15,6 +16,10 @@ export default function Header() {
         <IsLogout>
           <Button>Login</Button>
         </IsLogout>
+
+        <IsLoggedIn>
+          <UserButton />
+        </IsLoggedIn>
       </div>
     </header>
   );

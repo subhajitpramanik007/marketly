@@ -28,7 +28,7 @@ export const useVerifyUser = () => {
     mutationFn: registerVerifyService,
     onSuccess: () => {
       toast.success('Email verified successfully');
-      router.navigate({ to: '/' });
+      router.navigate({ to: '/', reloadDocument: true });
     },
     onError: () => {
       toast.error('Email verification failed');

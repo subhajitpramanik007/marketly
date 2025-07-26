@@ -7,7 +7,7 @@ import { getConsumerByAccountId } from '@/data/user.data';
 declare global {
   namespace Express {
     interface Request {
-      consumer: any
+      consumer: any;
     }
   }
 }
