@@ -7,9 +7,11 @@ import { Badge } from '@/components/ui/badge';
 import { ProductButtons } from './ProductButtons';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { useToggleWishlist } from '@/hooks/wishlists/useToggleWishlist';
+import { useAddToCart } from '@/hooks/cart';
 
 const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   const { mutate: toggleToWishlist } = useToggleWishlist(product.id, product.isInWishlist);
+  const { mutate: addToCart } = useAddToCart(product.id);
 
   return (
     <Card className="pt-0 relative">
@@ -18,6 +20,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
         isInWishlist={!!product.isInWishlist}
         cart={product.cart}
         onToggleToWishlist={toggleToWishlist}
+        onAddToCart={addToCart}
       />
 
       <CardContent className="p-0">

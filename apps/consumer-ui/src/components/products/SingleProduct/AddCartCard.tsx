@@ -82,17 +82,25 @@ export const AddCartCard: React.FC<AddCartCardProps> = ({ id, price }) => {
           </div>
 
           <IsLogout asToast>
-            <Button className="w-full">ADD TO CART</Button>
+            <Button className="w-full bg-amber-500 hover:bg-amber-500/90">Add to Card</Button>
           </IsLogout>
           <IsLoggedIn>
-            <Button className="w-full" onClick={handleAddToCart}>
-              ADD TO CART
+            <Button className="w-full bg-amber-500 hover:bg-amber-500/90" onClick={handleAddToCart}>
+              Add to Card
             </Button>
           </IsLoggedIn>
 
           <IsLogout asToast>
+            <Button className="w-full">Buy now</Button>
+          </IsLogout>
+          {/* TODO: add buy now functionality */}
+          <IsLoggedIn>
+            <Button className="w-full">Buy now</Button>
+          </IsLoggedIn>
+
+          <IsLogout asToast>
             <Button variant={'outline'} className="w-full">
-              ADD TO WISHLIST
+              Add to wishlist
             </Button>
           </IsLogout>
           <IsLoggedIn>
@@ -102,7 +110,7 @@ export const AddCartCard: React.FC<AddCartCardProps> = ({ id, price }) => {
               onClick={handleAddToWishlist}
               disabled={addWishlistMutation.isPending}
             >
-              ADD TO WISHLIST
+              Add to wishlist
             </Button>
           </IsLoggedIn>
         </div>

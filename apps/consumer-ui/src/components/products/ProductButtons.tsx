@@ -8,12 +8,14 @@ interface ProductButtonsProps {
   isInWishlist: boolean;
   cart: IProduct['cart'];
   onToggleToWishlist: () => void;
+  onAddToCart: (quantity?: number) => void;
 }
 
 export const ProductButtons: React.FC<ProductButtonsProps> = ({
   isInWishlist,
   cart,
   onToggleToWishlist,
+  onAddToCart,
 }) => {
   return (
     <div className="absolute top-2 right-2 flex flex-col gap-2">
@@ -41,12 +43,12 @@ export const ProductButtons: React.FC<ProductButtonsProps> = ({
         </Button>
       </IsLogout>
       <IsLoggedIn>
-        <Button variant="outline" size="icon" className="relative">
+        <Button variant="outline" size="icon" className="relative" onClick={() => onAddToCart()}>
           <div>
             <ShoppingCartIcon />
             <span>
               {cart && cart.quantity > 0 && (
-                <div className="absolute top-0 right-0 w-4 h-4 rounded-full flex items-center justify-center text-xs">
+                <div className="absolute top-0 right-0 w-4 h-4 rounded-full flex items-center justify-center text-xs text-white bg-primary">
                   {cart.quantity}
                 </div>
               )}

@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { IsLoggedIn, IsLogout } from '@/components/auth';
 import { Button } from '@/components/ui/button';
 import { UserButton } from './UserButton';
+import { Cart } from './Cart';
 
 export function Header() {
   return (
@@ -18,7 +19,10 @@ export function Header() {
         </IsLogout>
 
         <IsLoggedIn>
-          <UserButton />
+          <div className="flex items-center gap-6">
+            <Cart />
+            <UserButton />
+          </div>
         </IsLoggedIn>
       </div>
     </header>

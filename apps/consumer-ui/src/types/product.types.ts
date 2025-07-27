@@ -1,3 +1,4 @@
+import type { ICart } from './cart.types';
 import type { IImage } from './image.types';
 
 export interface IProduct {
@@ -15,10 +16,7 @@ export interface IProduct {
   storeName: string;
   storeId: number;
   isInWishlist: boolean;
-  cart: {
-    exists: number;
-    quantity: number;
-  } | null;
+  cart: ICart | null;
 }
 
 export interface IProductImage extends IImage {

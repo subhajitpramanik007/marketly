@@ -32,6 +32,9 @@ export const UserButton: React.FC<{}> = ({}) => {
         <DropdownMenuItem asChild>
           <Link to="/wishlists">My Wishlists</Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/cart">My Cart</Link>
+        </DropdownMenuItem>
 
         <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
