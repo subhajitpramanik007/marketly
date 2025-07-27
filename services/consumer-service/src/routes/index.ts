@@ -6,12 +6,14 @@ import { logger } from '@marketly/logger';
 import { healthRoutes } from './heathcheck.routes';
 import { meRoutes } from './me.routes';
 import wishlistRoutes from './wishlist.routes';
+import cartsRoutes from './cart.routes';
 
 const router = Router();
 
 router.use('/health', healthRoutes);
 router.use('/me', meRoutes);
 router.use('/wishlists', wishlistRoutes);
+router.use('/carts', cartsRoutes);
 
 // Docs
 try {

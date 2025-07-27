@@ -40,3 +40,6 @@ export type ResendUserRegistrationOtpSchema = z.infer<typeof resendUserRegistrat
 export type VerifyUserRegistrationOtpSchema = z.infer<typeof verifyUserRegistrationOtpSchema>;
 export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
+
+// Export cart schemas
+export * from './cart.schemas';
