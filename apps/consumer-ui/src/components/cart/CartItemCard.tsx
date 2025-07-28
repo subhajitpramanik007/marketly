@@ -1,18 +1,18 @@
 import * as React from 'react';
+import { cn } from '@/lib/utils';
+import toast from 'react-hot-toast';
 import { Link } from '@tanstack/react-router';
 
 import type { ICartWithProduct } from '@/types';
 
 import { Image } from '@/components/Image';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Separator } from '@/components/ui/separator';
 import { Card, CardContent } from '@/components/ui/card';
 import { MinusIcon, PlusIcon, TrashIcon } from 'lucide-react';
 
-import { Button } from '../ui/button';
-import { Separator } from '../ui/separator';
-import { useDeleteItemFromCart } from '@/hooks/cart/useDeleteItemFromCart';
-import { Spinner } from '../Spinner';
-import { useCartItemQuantity } from '@/hooks/cart';
+import { useCartItemQuantity, useDeleteItemFromCart } from '@/hooks/cart';
 
 interface CartItemCardProps extends React.HTMLAttributes<HTMLDivElement> {
   cartItem: ICartWithProduct;
@@ -29,8 +29,34 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
   const { removeFromCart, isPending } = useDeleteItemFromCart(id);
   const { mutate: updateCartItemQuantity } = useCartItemQuantity(id, product.id);
 
+  function handleChangeQuantity(type: 'increment' | 'decrement') {
+    let newQuantity = quantity;
+    if (type === 'increment') {
+      newQuantity += 1;
+    } else {
+      newQuantity -= 1;
+    }
+
+    if (newQuantity === 0) {
+      removeFromCart();
+      return;
+    }
+
+    if (newQuantity > product.stock) {
+      toast.error('Out of stock');
+      return;
+    }
+
+    if (newQuantity === 10) {
+      toast.error('Maximum quantity reached');
+      return;
+    }
+
+    updateCartItemQuantity(newQuantity);
+  }
+
   return (
-    <Card {...props}>
+    <Card {...props} className={cn(isPending && 'animate-pulse', props.className)}>
       <CardContent className="flex gap-4">
         <div>
           <Checkbox checked={selected} onCheckedChange={() => onItemSelection(id)} />
@@ -69,7 +95,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
               <button
                 className="cursor-pointer disabled:cursor-not-allowed"
                 disabled={quantity === 0}
-                onClick={() => updateCartItemQuantity(quantity - 1)}
+                onClick={() => handleChangeQuantity('decrement')}
               >
                 {quantity === 1 ? (
                   <TrashIcon className="size-4 text-destructive" />
@@ -81,7 +107,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
               <button
                 className="cursor-pointer disabled:cursor-not-allowed"
                 disabled={quantity === 10}
-                onClick={() => updateCartItemQuantity(quantity + 1)}
+                onClick={() => handleChangeQuantity('increment')}
               >
                 <PlusIcon className="size-4 text-muted-foreground" />
               </button>
@@ -95,7 +121,6 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
               className="text-destructive text-sm p-0"
               onClick={() => removeFromCart()}
             >
-              <Spinner isLoading={isPending} />
               Delete
             </Button>
 
