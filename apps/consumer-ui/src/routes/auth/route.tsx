@@ -1,6 +1,17 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/auth')({
+  beforeLoad(ctx) {
+    if (ctx.context.session.isAuthenticated) {
+      const search = ctx.location.search as {
+        callback: string;
+      };
+      const callback = search?.callback || '/';
+      throw redirect({
+        to: `${callback}`,
+      });
+    }
+  },
   component: RouteComponent,
 });
 

@@ -9,11 +9,14 @@ import { routeTree } from './routeTree.gen';
 import './styles.css';
 import reportWebVitals from './reportWebVitals.ts';
 import { SessionProvider } from './providers/SessionProvider.tsx';
+import { useSession } from './hooks/auth/index.ts';
+import { RootLoading } from './components/RootLoading.tsx';
 
 // Create a new router instance
 const router = createRouter({
   routeTree,
   context: {
+    session: undefined!,
     ...TanStackQueryProvider.getContext(),
   },
   defaultPreload: 'intent',
@@ -29,19 +32,33 @@ declare module '@tanstack/react-router' {
   }
 }
 
-// Render the app
-const rootElement = document.getElementById('app');
-if (rootElement && !rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(
+function InnerApp() {
+  const session = useSession();
+
+  if (session.status === 'Loading') {
+    return <RootLoading />;
+  }
+
+  return <RouterProvider router={router} context={{ session }} />;
+}
+
+function App() {
+  return (
     <TanStackQueryProvider.Provider>
       <SessionProvider>
-        <RouterProvider router={router} />
+        <InnerApp />
       </SessionProvider>
-    </TanStackQueryProvider.Provider>,
-    // <StrictMode>
-    // </StrictMode>,
+    </TanStackQueryProvider.Provider>
   );
+}
+
+// Render the app
+const rootElement = document.getElementById('app');
+
+if (rootElement && !rootElement.innerHTML) {
+  const root = ReactDOM.createRoot(rootElement);
+
+  root.render(<App />);
 }
 
 // If you want to start measuring performance in your app, pass a function

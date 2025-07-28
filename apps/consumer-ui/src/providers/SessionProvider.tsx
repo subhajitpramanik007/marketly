@@ -17,7 +17,7 @@ type Actions = {
   logout: () => void;
 };
 
-type SessionContextType = State & Actions;
+export type SessionContextType = State & Actions;
 
 export const SessionContext = React.createContext<SessionContextType | undefined>(undefined);
 

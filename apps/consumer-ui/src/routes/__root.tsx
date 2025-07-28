@@ -5,18 +5,24 @@ import TanStackQueryLayout from '../integrations/tanstack-query/layout.tsx';
 
 import type { QueryClient } from '@tanstack/react-query';
 import RootLayout from '@/components/layout/RootLayout.tsx';
+import type { SessionContextType } from '@/providers/SessionProvider.tsx';
 
 interface MyRouterContext {
   queryClient: QueryClient;
+  session: SessionContextType;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  component: () => (
+  component: Root,
+});
+
+function Root() {
+  return (
     <>
       <RootLayout />
       <TanStackRouterDevtools />
 
       <TanStackQueryLayout />
     </>
-  ),
-});
+  );
+}
