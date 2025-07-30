@@ -460,7 +460,8 @@ export const paymentTable = pgTable('payments', {
   status: paymentStatusEnum('status').notNull().default('pending'),
   method: varchar('method', { length: 100 }).notNull(),
 
-  transactionId: varchar('transaction_id', { length: 255 }).unique(),
+  razorpayOrderId: varchar('razorpay_order_id', { length: 255 }).unique(),
+  razorpayPaymentId: varchar('razorpay_payment_id', { length: 255 }).unique(),
   provider: varchar('provider', { length: 255 }).notNull(),
 
   amount: decimal('amount', { precision: 10, scale: 2 }).notNull(),
