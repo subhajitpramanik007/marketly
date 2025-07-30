@@ -9,24 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ProfileRouteImport } from './routes/_user/profile';
 import { Route as ProductRouteImport } from './routes/$product'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
-import { Route as UserRouteRouteImport } from './routes/_user/route';
+import { Route as UserRouteRouteImport } from './routes/_user/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StoresStoreIdRouteImport } from './routes/stores.$storeId'
 import { Route as CategoryCategoryRouteImport } from './routes/category.$category'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as UserWishlistsRouteImport } from './routes/_user/wishlists'
+import { Route as UserProfileRouteImport } from './routes/_user/profile'
 import { Route as UserCheckoutRouteImport } from './routes/_user/checkout'
 import { Route as UserCartRouteImport } from './routes/_user/cart'
 
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ProductRoute = ProductRouteImport.update({
   id: '/$product',
   path: '/$product',
@@ -40,7 +35,7 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
 const UserRouteRoute = UserRouteRouteImport.update({
   id: '/_user',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -70,25 +65,30 @@ const UserWishlistsRoute = UserWishlistsRouteImport.update({
   id: '/wishlists',
   path: '/wishlists',
   getParentRoute: () => UserRouteRoute,
-} as any);
+} as any)
+const UserProfileRoute = UserProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => UserRouteRoute,
+} as any)
 const UserCheckoutRoute = UserCheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
   getParentRoute: () => UserRouteRoute,
-} as any);
+} as any)
 const UserCartRoute = UserCartRouteImport.update({
   id: '/cart',
   path: '/cart',
   getParentRoute: () => UserRouteRoute,
-} as any);
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/$product': typeof ProductRoute
-  '/profile': typeof ProfileRoute
   '/cart': typeof UserCartRoute
   '/checkout': typeof UserCheckoutRoute
+  '/profile': typeof UserProfileRoute
   '/wishlists': typeof UserWishlistsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
@@ -99,9 +99,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/$product': typeof ProductRoute
-  '/profile': typeof ProfileRoute
   '/cart': typeof UserCartRoute
   '/checkout': typeof UserCheckoutRoute
+  '/profile': typeof UserProfileRoute
   '/wishlists': typeof UserWishlistsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
@@ -109,175 +109,178 @@ export interface FileRoutesByTo {
   '/stores/$storeId': typeof StoresStoreIdRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  '/': typeof IndexRoute;
-  '/_user': typeof UserRouteRouteWithChildren;
-  '/auth': typeof AuthRouteRouteWithChildren;
-  '/$product': typeof ProductRoute;
-  '/profile': typeof ProfileRoute;
-  '/_user/cart': typeof UserCartRoute;
-  '/_user/checkout': typeof UserCheckoutRoute;
-  '/_user/wishlists': typeof UserWishlistsRoute;
-  '/auth/login': typeof AuthLoginRoute;
-  '/auth/register': typeof AuthRegisterRoute;
-  '/category/$category': typeof CategoryCategoryRoute;
-  '/stores/$storeId': typeof StoresStoreIdRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/_user': typeof UserRouteRouteWithChildren
+  '/auth': typeof AuthRouteRouteWithChildren
+  '/$product': typeof ProductRoute
+  '/_user/cart': typeof UserCartRoute
+  '/_user/checkout': typeof UserCheckoutRoute
+  '/_user/profile': typeof UserProfileRoute
+  '/_user/wishlists': typeof UserWishlistsRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/category/$category': typeof CategoryCategoryRoute
+  '/stores/$storeId': typeof StoresStoreIdRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
     | '/$product'
-    | '/profile'
     | '/cart'
     | '/checkout'
+    | '/profile'
     | '/wishlists'
     | '/auth/login'
     | '/auth/register'
     | '/category/$category'
-    | '/stores/$storeId';
-  fileRoutesByTo: FileRoutesByTo;
+    | '/stores/$storeId'
+  fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/$product'
-    | '/profile'
     | '/cart'
     | '/checkout'
+    | '/profile'
     | '/wishlists'
     | '/auth/login'
     | '/auth/register'
     | '/category/$category'
-    | '/stores/$storeId';
+    | '/stores/$storeId'
   id:
     | '__root__'
     | '/'
     | '/_user'
     | '/auth'
     | '/$product'
-    | '/profile'
     | '/_user/cart'
     | '/_user/checkout'
+    | '/_user/profile'
     | '/_user/wishlists'
     | '/auth/login'
     | '/auth/register'
     | '/category/$category'
-    | '/stores/$storeId';
-  fileRoutesById: FileRoutesById;
+    | '/stores/$storeId'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  UserRouteRoute: typeof UserRouteRouteWithChildren;
-  AuthRouteRoute: typeof AuthRouteRouteWithChildren;
-  ProductRoute: typeof ProductRoute;
-  ProfileRoute: typeof ProfileRoute;
-  CategoryCategoryRoute: typeof CategoryCategoryRoute;
-  StoresStoreIdRoute: typeof StoresStoreIdRoute;
+  IndexRoute: typeof IndexRoute
+  UserRouteRoute: typeof UserRouteRouteWithChildren
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  ProductRoute: typeof ProductRoute
+  CategoryCategoryRoute: typeof CategoryCategoryRoute
+  StoresStoreIdRoute: typeof StoresStoreIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/profile': {
-      id: '/profile';
-      path: '/profile';
-      fullPath: '/profile';
-      preLoaderRoute: typeof ProfileRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
     '/$product': {
-      id: '/$product';
-      path: '/$product';
-      fullPath: '/$product';
-      preLoaderRoute: typeof ProductRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/$product'
+      path: '/$product'
+      fullPath: '/$product'
+      preLoaderRoute: typeof ProductRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
-      id: '/auth';
-      path: '/auth';
-      fullPath: '/auth';
-      preLoaderRoute: typeof AuthRouteRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_user': {
-      id: '/_user';
-      path: '';
-      fullPath: '';
-      preLoaderRoute: typeof UserRouteRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/_user'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof UserRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
-      id: '/';
-      path: '/';
-      fullPath: '/';
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/stores/$storeId': {
-      id: '/stores/$storeId';
-      path: '/stores/$storeId';
-      fullPath: '/stores/$storeId';
-      preLoaderRoute: typeof StoresStoreIdRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/stores/$storeId'
+      path: '/stores/$storeId'
+      fullPath: '/stores/$storeId'
+      preLoaderRoute: typeof StoresStoreIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/category/$category': {
-      id: '/category/$category';
-      path: '/category/$category';
-      fullPath: '/category/$category';
-      preLoaderRoute: typeof CategoryCategoryRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/category/$category'
+      path: '/category/$category'
+      fullPath: '/category/$category'
+      preLoaderRoute: typeof CategoryCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/register': {
-      id: '/auth/register';
-      path: '/register';
-      fullPath: '/auth/register';
-      preLoaderRoute: typeof AuthRegisterRouteImport;
-      parentRoute: typeof AuthRouteRoute;
-    };
+      id: '/auth/register'
+      path: '/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/auth/login': {
-      id: '/auth/login';
-      path: '/login';
-      fullPath: '/auth/login';
-      preLoaderRoute: typeof AuthLoginRouteImport;
-      parentRoute: typeof AuthRouteRoute;
-    };
+      id: '/auth/login'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_user/wishlists': {
-      id: '/_user/wishlists';
-      path: '/wishlists';
-      fullPath: '/wishlists';
-      preLoaderRoute: typeof UserWishlistsRouteImport;
-      parentRoute: typeof UserRouteRoute;
-    };
+      id: '/_user/wishlists'
+      path: '/wishlists'
+      fullPath: '/wishlists'
+      preLoaderRoute: typeof UserWishlistsRouteImport
+      parentRoute: typeof UserRouteRoute
+    }
+    '/_user/profile': {
+      id: '/_user/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof UserProfileRouteImport
+      parentRoute: typeof UserRouteRoute
+    }
     '/_user/checkout': {
-      id: '/_user/checkout';
-      path: '/checkout';
-      fullPath: '/checkout';
-      preLoaderRoute: typeof UserCheckoutRouteImport;
-      parentRoute: typeof UserRouteRoute;
-    };
+      id: '/_user/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof UserCheckoutRouteImport
+      parentRoute: typeof UserRouteRoute
+    }
     '/_user/cart': {
-      id: '/_user/cart';
-      path: '/cart';
-      fullPath: '/cart';
-      preLoaderRoute: typeof UserCartRouteImport;
-      parentRoute: typeof UserRouteRoute;
-    };
+      id: '/_user/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof UserCartRouteImport
+      parentRoute: typeof UserRouteRoute
+    }
   }
 }
 
 interface UserRouteRouteChildren {
-  UserCartRoute: typeof UserCartRoute;
-  UserCheckoutRoute: typeof UserCheckoutRoute;
-  UserWishlistsRoute: typeof UserWishlistsRoute;
+  UserCartRoute: typeof UserCartRoute
+  UserCheckoutRoute: typeof UserCheckoutRoute
+  UserProfileRoute: typeof UserProfileRoute
+  UserWishlistsRoute: typeof UserWishlistsRoute
 }
 
 const UserRouteRouteChildren: UserRouteRouteChildren = {
   UserCartRoute: UserCartRoute,
   UserCheckoutRoute: UserCheckoutRoute,
+  UserProfileRoute: UserProfileRoute,
   UserWishlistsRoute: UserWishlistsRoute,
-};
+}
 
-const UserRouteRouteWithChildren = UserRouteRoute._addFileChildren(UserRouteRouteChildren);
+const UserRouteRouteWithChildren = UserRouteRoute._addFileChildren(
+  UserRouteRouteChildren,
+)
 
 interface AuthRouteRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
@@ -298,10 +301,9 @@ const rootRouteChildren: RootRouteChildren = {
   UserRouteRoute: UserRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   ProductRoute: ProductRoute,
-  ProfileRoute: ProfileRoute,
   CategoryCategoryRoute: CategoryCategoryRoute,
   StoresStoreIdRoute: StoresStoreIdRoute,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
