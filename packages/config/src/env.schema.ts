@@ -59,4 +59,9 @@ export const envSchema = z.object({
   CLOUDINARY_API_KEY: z.string(),
   CLOUDINARY_API_SECRET: z.string(),
   CLOUDINARY_FOLDER: z.string().default('marketly'),
+
+  //   Razorpay
+  RAZORPAY_KEY_ID: z.string(),
+  RAZORPAY_KEY_SECRET: z.string(),
+  RAZORPAY_WEBHOOK_SECRET: z.string(),
 });
