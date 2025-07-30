@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router } from 'express';
 
 import * as cartCtrl from '@/controllers/cart.controller';
 import { isAuthenticated } from '@/middlewares/isAuthenticated';

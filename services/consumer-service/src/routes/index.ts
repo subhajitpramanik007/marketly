@@ -7,6 +7,7 @@ import { healthRoutes } from './heathcheck.routes';
 import { meRoutes } from './me.routes';
 import wishlistRoutes from './wishlist.routes';
 import cartsRoutes from './cart.routes';
+import checkoutRoutes from './checkout.routes';
 
 const router = Router();
 
@@ -14,6 +15,7 @@ router.use('/health', healthRoutes);
 router.use('/me', meRoutes);
 router.use('/wishlists', wishlistRoutes);
 router.use('/carts', cartsRoutes);
+router.use('/checkout', checkoutRoutes);
 
 // Docs
 try {
