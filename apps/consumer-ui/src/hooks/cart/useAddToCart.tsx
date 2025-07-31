@@ -18,7 +18,7 @@ export const useAddToCart = (productId: number) => {
       //   toast.success('Product added to cart');
 
       toast(
-        (t) => (
+        t => (
           <div>
             <span className="flex items-center gap-2">
               <p>Product added to cart</p>

@@ -3,7 +3,7 @@ import { useSession } from '../auth';
 
 import { useRazorpay } from 'react-razorpay';
 import { useRouter } from '@tanstack/react-router';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { checkoutService, type RazorpayPaymentVerifiactionData } from '@/services/checkout.service';
 
 export const useCheckoutPayment = () => {
@@ -30,6 +30,7 @@ export const useCheckoutPayment = () => {
 };
 export const useCheckoutPaymentVerify = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['checkout', 'payment', 'verify'],
@@ -37,16 +38,35 @@ export const useCheckoutPaymentVerify = () => {
     onSuccess: () => {
       toast.success('Payment successful');
 
+      // invalidate queries
+      queryClient.invalidateQueries({
+        predicate(query) {
+          return query.queryKey[0] === 'products';
+        },
+      });
+
+      queryClient.invalidateQueries({
+        predicate(query) {
+          return query.queryKey[0] === 'cart';
+        },
+      });
+
+      queryClient.invalidateQueries({
+        predicate(query) {
+          return query.queryKey[0] === 'orders';
+        },
+      });
+
       setTimeout(() => {
         toast.success('Order placed successfully');
-        router.navigate({ to: '..' });
+        router.navigate({ to: '/orders' });
       }, 2000);
     },
     onError: () => {
       toast.error('Payment failed');
 
       setTimeout(() => {
-        router.navigate({ to: '..' });
+        router.navigate({ to: '/cart' });
       }, 2000);
     },
   });
