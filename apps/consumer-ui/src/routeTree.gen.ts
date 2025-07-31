@@ -19,6 +19,7 @@ import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as UserWishlistsRouteImport } from './routes/_user/wishlists'
 import { Route as UserProfileRouteImport } from './routes/_user/profile'
+import { Route as UserOrdersRouteImport } from './routes/_user/orders'
 import { Route as UserCheckoutRouteImport } from './routes/_user/checkout'
 import { Route as UserCartRouteImport } from './routes/_user/cart'
 
@@ -71,6 +72,11 @@ const UserProfileRoute = UserProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => UserRouteRoute,
 } as any)
+const UserOrdersRoute = UserOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => UserRouteRoute,
+} as any)
 const UserCheckoutRoute = UserCheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/$product': typeof ProductRoute
   '/cart': typeof UserCartRoute
   '/checkout': typeof UserCheckoutRoute
+  '/orders': typeof UserOrdersRoute
   '/profile': typeof UserProfileRoute
   '/wishlists': typeof UserWishlistsRoute
   '/auth/login': typeof AuthLoginRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/$product': typeof ProductRoute
   '/cart': typeof UserCartRoute
   '/checkout': typeof UserCheckoutRoute
+  '/orders': typeof UserOrdersRoute
   '/profile': typeof UserProfileRoute
   '/wishlists': typeof UserWishlistsRoute
   '/auth/login': typeof AuthLoginRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/$product': typeof ProductRoute
   '/_user/cart': typeof UserCartRoute
   '/_user/checkout': typeof UserCheckoutRoute
+  '/_user/orders': typeof UserOrdersRoute
   '/_user/profile': typeof UserProfileRoute
   '/_user/wishlists': typeof UserWishlistsRoute
   '/auth/login': typeof AuthLoginRoute
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/$product'
     | '/cart'
     | '/checkout'
+    | '/orders'
     | '/profile'
     | '/wishlists'
     | '/auth/login'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/$product'
     | '/cart'
     | '/checkout'
+    | '/orders'
     | '/profile'
     | '/wishlists'
     | '/auth/login'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/$product'
     | '/_user/cart'
     | '/_user/checkout'
+    | '/_user/orders'
     | '/_user/profile'
     | '/_user/wishlists'
     | '/auth/login'
@@ -247,6 +259,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserProfileRouteImport
       parentRoute: typeof UserRouteRoute
     }
+    '/_user/orders': {
+      id: '/_user/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof UserOrdersRouteImport
+      parentRoute: typeof UserRouteRoute
+    }
     '/_user/checkout': {
       id: '/_user/checkout'
       path: '/checkout'
@@ -267,6 +286,7 @@ declare module '@tanstack/react-router' {
 interface UserRouteRouteChildren {
   UserCartRoute: typeof UserCartRoute
   UserCheckoutRoute: typeof UserCheckoutRoute
+  UserOrdersRoute: typeof UserOrdersRoute
   UserProfileRoute: typeof UserProfileRoute
   UserWishlistsRoute: typeof UserWishlistsRoute
 }
@@ -274,6 +294,7 @@ interface UserRouteRouteChildren {
 const UserRouteRouteChildren: UserRouteRouteChildren = {
   UserCartRoute: UserCartRoute,
   UserCheckoutRoute: UserCheckoutRoute,
+  UserOrdersRoute: UserOrdersRoute,
   UserProfileRoute: UserProfileRoute,
   UserWishlistsRoute: UserWishlistsRoute,
 }

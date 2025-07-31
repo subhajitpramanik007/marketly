@@ -4,6 +4,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -29,12 +30,20 @@ export const UserButton: React.FC<{}> = ({}) => {
         <DropdownMenuItem asChild>
           <Link to="/profile">Profile</Link>
         </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
         <DropdownMenuItem asChild>
           <Link to="/wishlists">My Wishlists</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/cart">My Cart</Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/orders">My Orders</Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
 
         <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
