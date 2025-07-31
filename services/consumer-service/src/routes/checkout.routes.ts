@@ -12,6 +12,6 @@ router.use(isAuthenticated);
 router.route('/summary').post(checkoutCtrl.getCheckoutSummary);
 router.route('/process-payment').post(checkoutCtrl.processCheckoutPayment);
 router.route('/verify-payment').post(checkoutCtrl.verifyPayment);
-// router.route('/cancel').post(checkoutCtrl.cancelCheckoutSession);
+router.route('/cancel').post(checkoutCtrl.cancelCheckoutSession);
 
 export default router;

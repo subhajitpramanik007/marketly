@@ -155,7 +155,7 @@ export const createNewOrder = async (
   const cartItemsForOrder: (typeof orderItemTable.$inferInsert)[] = cartItems.map(item => ({
     orderId: order.id,
     productId: item.id,
-    priceAtPurchase: item.totalPrice,
+    priceAtPurchase: item.price,
     quantity: item.quantity,
   }));
 

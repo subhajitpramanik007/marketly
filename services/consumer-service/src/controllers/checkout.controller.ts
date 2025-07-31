@@ -94,12 +94,14 @@ export const verifyPayment = asyncHandler(async (req, res) => {
 
   await checkoutService.verifyPayment(validatedData);
 
+  res.status(200).json({ message: 'ok' });
+
   const paymentData = await checkoutService.getPaymentdataByRazorOrderId(razorpay_order_id);
   if (paymentData && paymentData.status === 'pending') {
     await checkoutService.onPaymentDone(razorpay_order_id, razorpay_payment_id);
   }
 
-  res.status(200).json({ message: 'ok' });
+  // update product quantity
 });
 
 //
@@ -126,5 +128,7 @@ export const handleCheckoutWebhook = asyncHandler(async (req, res) => {
 });
 
 export const cancelCheckoutSession = asyncHandler(async (req, res) => {
+  await checkoutService.clearCheckoutSession(req.consumer?.accountId);
+
   res.status(200).json({});
 });
