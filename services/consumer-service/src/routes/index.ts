@@ -8,6 +8,7 @@ import { meRoutes } from './me.routes';
 import wishlistRoutes from './wishlist.routes';
 import cartsRoutes from './cart.routes';
 import checkoutRoutes from './checkout.routes';
+import orderRoutes from './order.routes';
 
 const router = Router();
 
@@ -16,6 +17,7 @@ router.use('/me', meRoutes);
 router.use('/wishlists', wishlistRoutes);
 router.use('/carts', cartsRoutes);
 router.use('/checkout', checkoutRoutes);
+router.use('/orders', orderRoutes);
 
 // Docs
 try {
