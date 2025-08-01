@@ -46,6 +46,3 @@ export * from './cart.schemas';
 
 // Export order schemas
 export * from './order.schemas';
-
-// Export payment schemas
-export * from './payment.schemas';

@@ -4,9 +4,6 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
-  "scripts": {
-    "build": "tsc"
-  },
   "dependencies": {
     "@marketly/config": "workspace:*",
     "pino": "^8.0.0",
